@@ -1,0 +1,32 @@
+/* PROJECT THEME LAYER — this is the file a consuming product overrides.
+   Nothing else in the system needs to change to re-brand it.
+
+   The source kit is brand-agnostic: its own accent is the iOS system blue
+   (rgb(0,136,255) light / rgb(0,145,255) dark), which is what these default to.
+   Point --theme-accent at your product colour and the whole library follows. */
+
+:root {
+  --theme-accent: var(--accents-blue);
+  --theme-accent-content: var(--grays-white);
+  --theme-accent-tint: var(--miscellaneous-button-tinted-fill);
+
+  /* supporting palette — defaults to the system accent ramp */
+  --theme-support-1: var(--accents-indigo);
+  --theme-support-2: var(--accents-teal);
+  --theme-support-3: var(--accents-orange);
+
+  /* typography — the brand faces, self-hosted in fonts/ (see fonts.css).
+     Set these back to var(--font-system) for a screen that must match iOS chrome exactly. */
+  --theme-font-display: var(--font-thmanyah-display);
+  --theme-font-text: var(--font-thmanyah-sans);
+  --theme-font-reading: var(--font-thmanyah-text);
+  --theme-font-arabic: var(--font-thmanyah-sans);
+
+  /* Alternate wired families, available by pointing the three vars above at them:
+     --font-brand (Montserrat) · --font-brand-arabic (IBM Plex Sans Arabic)
+     · var(--font-system) for chrome that must match iOS exactly. */
+
+  /* geometry — the kit is fully pill-shaped; a squarer brand can dial this back */
+  --theme-control-radius: var(--radius-pill);
+  --theme-surface-radius: var(--radius-34);
+}

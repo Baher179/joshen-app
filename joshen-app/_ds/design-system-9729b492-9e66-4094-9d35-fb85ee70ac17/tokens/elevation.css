@@ -1,0 +1,15 @@
+/* Shadows and opacity — the kit uses very few, all soft and neutral. */
+
+:root {
+  --shadow-knob: 0px 0.5px 4px 0px rgba(0,0,0,0.12), 0px 6px 13px 0px rgba(0,0,0,0.12);
+  --shadow-glass: 0px 8px 40px 0px rgba(0,0,0,0.12);
+  --shadow-floating-pill: 0px 8px 40px 0px rgba(0,0,0,0.08);
+  --shadow-sidebar-drag: 0px 8px 40px 0px rgba(0,0,0,0.2);
+  --shadow-none: none;
+
+  --opacity-disabled: 0.3; /* @kind other */
+  --opacity-pressed: 0.4; /* @kind other */
+  --opacity-secondary: 0.6; /* @kind other */
+  --opacity-overlay-scrim: 0.2; /* @kind other */
+  --opacity-inactive-icon: 0.5; /* @kind other */
+}

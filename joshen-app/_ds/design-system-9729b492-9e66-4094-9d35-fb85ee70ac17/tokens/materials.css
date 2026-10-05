@@ -1,0 +1,62 @@
+/* Materials — blur / translucency / vibrancy, verbatim from the "Materials" page.
+   Each material is a background + a backdrop-filter. Apply both:
+     background: var(--material-regular-bg); backdrop-filter: var(--material-regular-blur);
+   Light values sit on :root; .dark overrides them. Increased-contrast modes in the source
+   use the same material values, so no IC override is needed. */
+
+:root {
+  --material-ultrathin-bg: linear-gradient(rgba(255,255,255,0.03),rgba(255,255,255,0.03)), linear-gradient(rgba(255,255,255,0.07),rgba(255,255,255,0.07)); /* @kind other */
+  --material-thin-bg: linear-gradient(rgba(255,255,255,0.4),rgba(255,255,255,0.4)), linear-gradient(rgba(255,255,255,0.05),rgba(255,255,255,0.05)); /* @kind other */
+  --material-regular-bg: linear-gradient(rgba(255,255,255,0.6),rgba(255,255,255,0.6)), linear-gradient(rgba(255,255,255,0.25),rgba(255,255,255,0.25)); /* @kind other */
+  --material-thick-bg: linear-gradient(rgba(255,255,255,0.84),rgba(255,255,255,0.84)), linear-gradient(rgba(255,255,255,0.34),rgba(255,255,255,0.34)); /* @kind other */
+  --material-chrome-bg: rgba(255,255,255,0.75);
+
+  --material-ultrathin-blur: blur(100px); /* @kind other */
+  --material-thin-blur: blur(100px); /* @kind other */
+  --material-regular-blur: blur(100px); /* @kind other */
+  --material-thick-blur: blur(100px); /* @kind other */
+  --material-chrome-blur: blur(50px); /* @kind other */
+
+  /* Liquid Glass — the kit's elevated control surface (small/medium/large share a recipe) */
+  --glass-bg: linear-gradient(rgba(247,247,247,1),rgba(247,247,247,1)), linear-gradient(rgba(221,221,221,1),rgba(221,221,221,1)), linear-gradient(rgba(255,255,255,0.65),rgba(255,255,255,0.65)); /* @kind other */
+  --glass-medium-bg: linear-gradient(rgba(245,245,245,0.6),rgba(245,245,245,0.6)), linear-gradient(rgb(38,38,38),rgb(38,38,38)); /* @kind other */
+  --glass-large-bg: linear-gradient(rgba(250,250,250,0.7),rgba(250,250,250,0.7)), linear-gradient(rgb(38,38,38),rgb(38,38,38)); /* @kind other */
+  --glass-tinted-bg: rgb(0,145,255);
+  --glass-shadow: 0px 8px 40px 0px rgba(0,0,0,0.12);
+  --glass-shadow-layer: 0px 8px 40px 0px rgba(0,0,0,0.12);
+  --glass-blur: blur(16px); /* @kind other */
+
+  /* Liquid Glass numeric parameters, straight from the "Liquid Glass" variable collection */
+  --glass-frost-regular: 7; /* @kind other */
+  --glass-frost-medium: 12; /* @kind other */
+  --glass-frost-large: 14; /* @kind other */
+  --glass-depth-regular: 16; /* @kind other */
+  --glass-depth-medium-large: 16; /* @kind other */
+  --glass-splay-regular: 6; /* @kind other */
+  --glass-splay-medium-large: 6; /* @kind other */
+  --glass-refraction: 100; /* @kind other */
+  --glass-dispersion: 0; /* @kind other */
+  --glass-light-angle: -45; /* @kind other */
+  --glass-opacity: 60; /* @kind other */
+  --glass-shadow-blur-bg: 80; /* @kind other */
+  --glass-shadow-blur-layer: 40;
+
+  /* scroll-edge effect — the soft/hard fades under bars */
+  --scroll-edge-blur: blur(10px); /* @kind other */
+  --scroll-edge-blur-hard: blur(60px); /* @kind other */
+  --scroll-edge-radius: 10px;
+  --scroll-edge-gradient-top: linear-gradient(180deg, rgb(0,0,0) 0%, rgba(0,0,0,0) 100%); /* @kind other */
+  --scroll-edge-gradient-bottom: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%); /* @kind other */
+}
+
+.dark, [data-theme="dark"] {
+  --material-ultrathin-bg: rgba(0,0,0,0.02);
+  --material-thin-bg: rgba(0,0,0,0.26);
+  --material-regular-bg: rgba(0,0,0,0.41);
+  --material-thick-bg: rgba(0,0,0,0.6);
+  --material-chrome-bg: linear-gradient(rgb(124,124,124),rgb(124,124,124)), linear-gradient(rgba(28,28,28,0.9),rgba(28,28,28,0.9)); /* @kind other */
+
+  --glass-bg: linear-gradient(rgba(255,255,255,0.06),rgba(255,255,255,0.06)), linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)), linear-gradient(rgba(204,204,204,0.5),rgba(204,204,204,0.5)); /* @kind other */
+  --glass-medium-bg: linear-gradient(rgba(255,255,255,0.06),rgba(255,255,255,0.06)), linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)), linear-gradient(rgb(204,204,204),rgb(204,204,204)); /* @kind other */
+  --glass-large-bg: linear-gradient(rgba(255,255,255,0.06),rgba(255,255,255,0.06)), linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.8)), linear-gradient(rgb(204,204,204),rgb(204,204,204)); /* @kind other */
+}

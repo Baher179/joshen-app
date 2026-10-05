@@ -1,0 +1,75 @@
+/* Semantic layer — the only names components should reference.
+   Every value here aliases a primitive from colors.css / materials.css, so a project
+   re-themes by overriding theme.css, never by editing components. */
+
+:root {
+  /* content */
+  --content-primary: var(--labels-primary);
+  --content-secondary: var(--labels-secondary);
+  --content-tertiary: var(--labels-tertiary);
+  --content-quaternary: var(--labels-quaternary);
+  --content-on-accent: var(--grays-white);
+  --content-disabled: var(--labels-tertiary);
+  --content-vibrant-primary: var(--labels-vibrant-primary);
+  --content-vibrant-secondary: var(--labels-vibrant-secondary);
+  --content-vibrant-tertiary: var(--labels-vibrant-tertiary);
+  --content-link: var(--theme-accent);
+  --content-destructive: var(--accents-red);
+
+  /* surfaces */
+  --surface-base: var(--backgrounds-primary);
+  --surface-raised: var(--backgrounds-secondary);
+  --surface-overlay: var(--backgrounds-tertiary);
+  --surface-elevated: var(--backgrounds-primary-elevated);
+  --surface-grouped-base: var(--backgrounds-grouped-primary);
+  --surface-grouped-card: var(--backgrounds-grouped-secondary);
+  --surface-grouped-nested: var(--backgrounds-grouped-tertiary);
+
+  /* fills — for control backgrounds that sit on any surface */
+  --fill-primary: var(--fills-primary);
+  --fill-secondary: var(--fills-secondary);
+  --fill-tertiary: var(--fills-tertiary);
+  --fill-quaternary: var(--fills-quaternary);
+
+  /* borders and separators */
+  --border-separator: var(--separators-non-opaque);
+  --border-separator-opaque: var(--separators-opaque);
+  --border-separator-vibrant: var(--separators-vibrant);
+  --border-bar: var(--miscellaneous-bar-border);
+  --border-field: var(--miscellaneous-text-field-outline);
+
+  /* actions */
+  --action-accent: var(--theme-accent);
+  --action-accent-content: var(--content-on-accent);
+  --action-secondary-fill: var(--fill-tertiary);
+  --action-tinted-fill: var(--miscellaneous-button-tinted-fill);
+  --action-destructive-fill: var(--miscellaneous-buttons-bg-destructive);
+  --action-destructive-fill-prominent: var(--miscellaneous-buttons-bg-destructive-prominent);
+  --action-destructive-content: var(--accents-red);
+  --action-destructive-content-disabled: var(--miscellaneous-buttons-label-destructive-disabled);
+  --action-disabled-fill: var(--fill-tertiary);
+  --action-disabled-content: var(--labels-tertiary);
+
+  /* selection */
+  --selected-fill: var(--miscellaneous-segmented-control-selected-fill);
+  --selected-content: var(--theme-accent);
+  --selected-tab-content: var(--miscellaneous-tab-bar-selection);
+  --unselected-tab-content: var(--miscellaneous-tab-unselected);
+  --selected-sidebar-fill: var(--miscellaneous-sidebar-fill-selected);
+  --selected-sidebar-content: var(--miscellaneous-sidebar-text-selected);
+
+  /* feedback */
+  --feedback-success: var(--accents-green);
+  --feedback-warning: var(--accents-orange);
+  --feedback-error: var(--accents-red);
+  --feedback-info: var(--theme-accent);
+
+  /* overlays */
+  --overlay-scrim: var(--overlays-default);
+  --overlay-alert-scrim: var(--miscellaneous-alert-overlay);
+  --overlay-activity-scrim: var(--overlays-activity-view-controller);
+
+  /* field */
+  --field-bg: var(--miscellaneous-text-field-bg);
+  --field-placeholder: var(--labels-tertiary);
+}

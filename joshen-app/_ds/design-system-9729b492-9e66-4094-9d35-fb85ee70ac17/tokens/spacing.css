@@ -1,0 +1,74 @@
+/* Spacing, layout and sizing — values read off the source frames. */
+
+:root {
+  --space-1: 1px;
+  --space-2: 2px;
+  --space-3: 3px;
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-11: 11px;
+  --space-12: 12px;
+  --space-14: 14px;
+  --space-16: 16px;
+  --space-18: 18px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-25: 25px;
+  --space-28: 28px;
+  --space-32: 32px;
+  --space-34: 34px;
+  --space-36: 36px;
+
+  /* screen margins */
+  --layout-margin-iphone: 16px;      /* list / nav bar horizontal inset */
+  --layout-margin-iphone-wide: 25px; /* floating tab bar & bottom-search inset */
+  --layout-margin-ipad: 20px;
+  --layout-gutter: 8px;
+
+  /* safe areas — iPhone (Dynamic Island class, 402pt-wide canvas in the kit) */
+  --safe-area-top: 27px;             /* Kit variable "top" */
+  --safe-area-bottom: 62px;          /* Kit variable "bottom" */
+  --status-bar-height: 54px;
+  --home-indicator-height: 34px;
+
+  /* canonical device canvas used throughout the kit */
+  --canvas-iphone-width: 402px;
+  --canvas-iphone-height: 874px;
+
+  /* component heights */
+  --size-control-small: 28px;
+  --size-control-medium: 34px;
+  --size-control-regular: 32px;   /* segmented control, stepper */
+  --size-control-large: 50px;
+  --size-bar-button: 44px;
+  --size-glass-button: 48px;
+  --size-glass-button-tall: 52px;
+  --size-list-row-regular: 52px;
+  --size-list-row-tall: 60px;
+  --size-list-section-header: 39px;
+  --size-nav-bar: 44px;
+  --size-nav-bar-large-title: 125px;
+  --size-tab-bar: 95px;
+  --size-tab-bar-pill: 62px;
+  --size-tab-button: 36px;
+  --size-search-field: 48px;
+  --size-menu-row: 40px;
+  --size-toggle-width: 64px;
+  --size-toggle-height: 28px;
+  --size-toggle-knob: 39px;
+  --size-slider-track: 6px;
+  --size-slider-knob-width: 38px;
+  --size-slider-knob-height: 24px;
+  --size-separator: 1px;
+
+  /* icon sizes (SF Symbol point sizes used in the kit) */
+  --icon-small: 15px;
+  --icon-medium: 17px;
+  --icon-large: 18px;
+  --icon-xlarge: 22px;
+
+  /* touch targets — never below 44×44 */
+  --touch-target-min: 44px;
+}

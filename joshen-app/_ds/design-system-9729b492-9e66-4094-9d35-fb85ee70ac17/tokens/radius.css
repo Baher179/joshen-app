@@ -1,0 +1,22 @@
+/* Corner radii — transcribed from the source, including its odd values. */
+
+:root {
+  --radius-none: 0px;
+  --radius-3: 3px;      /* slider / progress track */
+  --radius-5: 5px;      /* kit spec-sheet frames */
+  --radius-20: 20px;    /* segmented control selection pill */
+  --radius-26: 26px;    /* grouped text-field block in an alert */
+  --radius-34: 34px;    /* glass small/medium surface, iPhone sheet top */
+  --radius-38: 38px;    /* iPad sheet */
+  --radius-44: 44px;    /* full-screen content container */
+  --radius-58: 58px;    /* iPhone sheet bottom */
+  --radius-pill: 100px; /* buttons, toggles, tab pills — the kit's default */
+  --radius-capsule: 500px;
+
+  --sheet-radius-iphone-top: 34px;
+  --sheet-radius-iphone-bottom: 58px;
+  --sheet-radius-ipad: 38px;
+
+  --border-hairline: 1px;
+  --border-width-control: 1px;
+}

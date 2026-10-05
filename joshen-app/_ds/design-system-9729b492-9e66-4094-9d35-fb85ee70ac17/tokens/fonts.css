@@ -1,0 +1,160 @@
+/* FONTS
+
+   Brand faces — self-hosted from files the user uploaded into fonts/.
+   Montserrat is the display/text face (variable, 100–900, plus a matching italic axis).
+   IBM Plex Sans Arabic covers Arabic text at seven static weights.
+
+   The source iOS kit itself sets type in SF Pro / SF Compact / SF Compact Rounded.
+   Those are Apple system faces, not redistributable, so no binaries ship for them; the
+   --font-system stack below resolves to the real faces on Apple platforms via
+   -apple-system and falls back to the platform UI face elsewhere. SF Symbols are drawn
+   as private-use codepoints in SF Pro and likewise render only where it is installed. */
+
+/* ── Apple system faces (local only, no binaries) ──────────────────
+   SF Pro, SF Compact and SF Compact Rounded are the faces the source kit draws in.
+   They are Apple-licensed and cannot be redistributed, so these rules carry no url() —
+   only local() sources, which resolve from the operating system where the faces are
+   installed and fall through to each token's fallback stack everywhere else.
+   Do not substitute a different family for them; the tokens must keep naming the real
+   faces so an Apple-platform render matches the source pixel for pixel. */
+@font-face {
+  font-family: "SF Pro Text";
+  src: local("SF Pro Text"), local("SFProText-Regular"), local("SF Pro"), local("-apple-system");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SF Pro Text";
+  src: local("SF Pro Text Italic"), local("SFProText-RegularItalic"), local("SF Pro");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SF Pro";
+  src: local("SF Pro"), local("SFPro-Regular"), local("SF Pro Display"), local("-apple-system");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SF Compact";
+  src: local("SF Compact"), local("SFCompact-Regular"), local("SF Compact Text"), local("-apple-system");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SF Compact Text";
+  src: local("SF Compact Text"), local("SFCompactText-Regular"), local("SF Compact");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SF Compact Rounded";
+  src: local("SF Compact Rounded"), local("SFCompactRounded-Regular"), local("SF Pro Rounded");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SF Pro Rounded";
+  src: local("SF Pro Rounded"), local("SFProRounded-Regular"), local("SF Compact Rounded");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SF Mono";
+  src: local("SF Mono"), local("SFMono-Regular"), local("Menlo");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Montserrat (variable) ─────────────────────────────────────── */
+@font-face {
+  font-family: "Montserrat";
+  src: url("../fonts/Montserrat-VariableFont_wght.ttf") format("truetype-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Montserrat";
+  src: url("../fonts/Montserrat-Italic-VariableFont_wght.ttf") format("truetype-variations");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Static Montserrat instances — for engines that ignore the variable axis. */
+@font-face { font-family: "Montserrat Static"; src: url("../fonts/Montserrat-Thin.ttf") format("truetype"); font-weight: 100; font-style: normal; font-display: swap }
+@font-face { font-family: "Montserrat Static"; src: url("../fonts/Montserrat-ThinItalic.ttf") format("truetype"); font-weight: 100; font-style: italic; font-display: swap }
+@font-face { font-family: "Montserrat Static"; src: url("../fonts/Montserrat-ExtraLight.ttf") format("truetype"); font-weight: 200; font-style: normal; font-display: swap }
+@font-face { font-family: "Montserrat Static"; src: url("../fonts/Montserrat-ExtraLightItalic.ttf") format("truetype"); font-weight: 200; font-style: italic; font-display: swap }
+@font-face { font-family: "Montserrat Static"; src: url("../fonts/Montserrat-Light.ttf") format("truetype"); font-weight: 300; font-style: normal; font-display: swap }
+@font-face { font-family: "Montserrat Static"; src: url("../fonts/Montserrat-LightItalic.ttf") format("truetype"); font-weight: 300; font-style: italic; font-display: swap }
+@font-face { font-family: "Montserrat Static"; src: url("../fonts/Montserrat-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap }
+@font-face { font-family: "Montserrat Static"; src: url("../fonts/Montserrat-Italic.ttf") format("truetype"); font-weight: 400; font-style: italic; font-display: swap }
+@font-face { font-family: "Montserrat Static"; src: url("../fonts/Montserrat-Medium.ttf") format("truetype"); font-weight: 500; font-style: normal; font-display: swap }
+@font-face { font-family: "Montserrat Static"; src: url("../fonts/Montserrat-MediumItalic.ttf") format("truetype"); font-weight: 500; font-style: italic; font-display: swap }
+@font-face { font-family: "Montserrat Static"; src: url("../fonts/Montserrat-SemiBold.ttf") format("truetype"); font-weight: 600; font-style: normal; font-display: swap }
+@font-face { font-family: "Montserrat Static"; src: url("../fonts/Montserrat-SemiBoldItalic.ttf") format("truetype"); font-weight: 600; font-style: italic; font-display: swap }
+@font-face { font-family: "Montserrat Static"; src: url("../fonts/Montserrat-Bold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap }
+@font-face { font-family: "Montserrat Static"; src: url("../fonts/Montserrat-BoldItalic.ttf") format("truetype"); font-weight: 700; font-style: italic; font-display: swap }
+@font-face { font-family: "Montserrat Static"; src: url("../fonts/Montserrat-ExtraBold.ttf") format("truetype"); font-weight: 800; font-style: normal; font-display: swap }
+@font-face { font-family: "Montserrat Static"; src: url("../fonts/Montserrat-ExtraBoldItalic.ttf") format("truetype"); font-weight: 800; font-style: italic; font-display: swap }
+@font-face { font-family: "Montserrat Static"; src: url("../fonts/Montserrat-Black.ttf") format("truetype"); font-weight: 900; font-style: normal; font-display: swap }
+@font-face { font-family: "Montserrat Static"; src: url("../fonts/Montserrat-BlackItalic.ttf") format("truetype"); font-weight: 900; font-style: italic; font-display: swap }
+
+/* Montserrat Arabic — the uploaded Arabic companion to Montserrat (Regular only). */
+@font-face {
+  font-family: "Montserrat Arabic";
+  src: url("../fonts/Montserrat-Arabic-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── IBM Plex Sans Arabic ──────────────────────────────────────── */
+@font-face { font-family: "IBM Plex Sans Arabic"; src: url("../fonts/IBMPlexSansArabic-Thin.ttf") format("truetype"); font-weight: 100; font-style: normal; font-display: swap }
+@font-face { font-family: "IBM Plex Sans Arabic"; src: url("../fonts/IBMPlexSansArabic-ExtraLight.ttf") format("truetype"); font-weight: 200; font-style: normal; font-display: swap }
+@font-face { font-family: "IBM Plex Sans Arabic"; src: url("../fonts/IBMPlexSansArabic-Light.ttf") format("truetype"); font-weight: 300; font-style: normal; font-display: swap }
+@font-face { font-family: "IBM Plex Sans Arabic"; src: url("../fonts/IBMPlexSansArabic-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap }
+@font-face { font-family: "IBM Plex Sans Arabic"; src: url("../fonts/IBMPlexSansArabic-Medium.ttf") format("truetype"); font-weight: 500; font-style: normal; font-display: swap }
+@font-face { font-family: "IBM Plex Sans Arabic"; src: url("../fonts/IBMPlexSansArabic-SemiBold.ttf") format("truetype"); font-weight: 600; font-style: normal; font-display: swap }
+@font-face { font-family: "IBM Plex Sans Arabic"; src: url("../fonts/IBMPlexSansArabic-Bold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap }
+
+
+/* ── Thmanyah (brand family: Sans · Serif Display · Serif Text) ─────
+   The user's primary brand family — a matched Arabic/Latin trio. Sans for UI chrome
+   and controls, Serif Display for large titles, Serif Text for long-form reading. */
+@font-face { font-family: "Thmanyah Sans"; src: url("../fonts/thmanyahsans-Light.otf") format("opentype"); font-weight: 300; font-style: normal; font-display: swap }
+@font-face { font-family: "Thmanyah Sans"; src: url("../fonts/thmanyahsans-Regular.otf") format("opentype"); font-weight: 400; font-style: normal; font-display: swap }
+@font-face { font-family: "Thmanyah Sans"; src: url("../fonts/thmanyahsans-Medium.otf") format("opentype"); font-weight: 500; font-style: normal; font-display: swap }
+@font-face { font-family: "Thmanyah Sans"; src: url("../fonts/thmanyahsans-Bold.otf") format("opentype"); font-weight: 700; font-style: normal; font-display: swap }
+@font-face { font-family: "Thmanyah Sans"; src: url("../fonts/thmanyahsans-Black.otf") format("opentype"); font-weight: 900; font-style: normal; font-display: swap }
+
+@font-face { font-family: "Thmanyah Serif Display"; src: url("../fonts/thmanyahserifdisplay-Light.otf") format("opentype"); font-weight: 300; font-style: normal; font-display: swap }
+@font-face { font-family: "Thmanyah Serif Display"; src: url("../fonts/thmanyahserifdisplay-Regular.otf") format("opentype"); font-weight: 400; font-style: normal; font-display: swap }
+@font-face { font-family: "Thmanyah Serif Display"; src: url("../fonts/thmanyahserifdisplay-Medium.otf") format("opentype"); font-weight: 500; font-style: normal; font-display: swap }
+@font-face { font-family: "Thmanyah Serif Display"; src: url("../fonts/thmanyahserifdisplay-Bold.otf") format("opentype"); font-weight: 700; font-style: normal; font-display: swap }
+@font-face { font-family: "Thmanyah Serif Display"; src: url("../fonts/thmanyahserifdisplay-Black.otf") format("opentype"); font-weight: 900; font-style: normal; font-display: swap }
+
+@font-face { font-family: "Thmanyah Serif Text"; src: url("../fonts/thmanyahseriftext-Light.otf") format("opentype"); font-weight: 300; font-style: normal; font-display: swap }
+@font-face { font-family: "Thmanyah Serif Text"; src: url("../fonts/thmanyahseriftext-Regular.otf") format("opentype"); font-weight: 400; font-style: normal; font-display: swap }
+@font-face { font-family: "Thmanyah Serif Text"; src: url("../fonts/thmanyahseriftext-Medium.otf") format("opentype"); font-weight: 500; font-style: normal; font-display: swap }
+@font-face { font-family: "Thmanyah Serif Text"; src: url("../fonts/thmanyahseriftext-Bold.otf") format("opentype"); font-weight: 700; font-style: normal; font-display: swap }
+@font-face { font-family: "Thmanyah Serif Text"; src: url("../fonts/thmanyahseriftext-Black.otf") format("opentype"); font-weight: 900; font-style: normal; font-display: swap }
+
+:root {
+  /* brand stacks */
+  --font-thmanyah-sans: "Thmanyah Sans", var(--font-system);
+  --font-thmanyah-display: "Thmanyah Serif Display", Georgia, "Times New Roman", serif;
+  --font-thmanyah-text: "Thmanyah Serif Text", Georgia, "Times New Roman", serif;
+  --font-brand: "Montserrat", "Montserrat Static", "Montserrat Arabic", var(--font-system);
+  --font-brand-arabic: "IBM Plex Sans Arabic", "Montserrat Arabic", var(--font-system);
+}

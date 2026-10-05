@@ -1,0 +1,60 @@
+/* Type — the iOS Dynamic Type ladder as it appears in the source kit.
+   Sizes, line-heights and tracking are transcribed from the file (e.g. Body 17/22 at -0.43,
+   Subheadline 15/20 at -0.23, Footnote 13/18 at -0.08, Caption2 11/13).
+   The kit draws in SF Pro / SF Compact / SF Compact Rounded. Those faces are Apple-licensed and
+   are NOT bundled here — see fonts.css for the stack and the substitution note. */
+
+:root {
+  /* families */
+  --font-system: "SF Pro Text", "SF Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-system-compact: "SF Compact", "SF Compact Text", var(--font-system);
+  --font-system-rounded: "SF Compact Rounded", "SF Pro Rounded", var(--font-system);
+  --font-system-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* weights — Figma reports SF Pro's optical weights; these are the numeric equivalents */
+  --font-weight-regular: 400; /* @kind other */
+  --font-weight-medium: 510; /* @kind other */
+  --font-weight-semibold: 590; /* @kind other */
+  --font-weight-bold: 700; /* @kind other */
+  --font-weight-heavy: 800;
+
+  /* size / line-height / tracking, Dynamic Type "Large" (the kit's default) */
+  --type-large-title-size: 34px;   --type-large-title-line: 41px;  --type-large-title-tracking: 0.374px;
+  --type-title1-size: 28px;        --type-title1-line: 34px;       --type-title1-tracking: 0.364px;
+  --type-title2-size: 22px;        --type-title2-line: 28px;       --type-title2-tracking: 0.352px;
+  --type-title3-size: 20px;        --type-title3-line: 25px;       --type-title3-tracking: 0.38px;
+  --type-headline-size: 17px;      --type-headline-line: 22px;     --type-headline-tracking: -0.43px;
+  --type-body-size: 17px;          --type-body-line: 22px;         --type-body-tracking: -0.43px;
+  --type-callout-size: 16px;       --type-callout-line: 21px;      --type-callout-tracking: -0.31px;
+  --type-subheadline-size: 15px;   --type-subheadline-line: 20px;  --type-subheadline-tracking: -0.23px;
+  --type-footnote-size: 13px;      --type-footnote-line: 18px;     --type-footnote-tracking: -0.08px;
+  --type-caption1-size: 12px;      --type-caption1-line: 16px;     --type-caption1-tracking: 0px;
+  --type-caption2-size: 11px;      --type-caption2-line: 13px;     --type-caption2-tracking: 0.066px;
+
+  /* Dynamic Type body size per content-size category (used to scale a whole screen) */
+  --dynamic-type-xsmall: 12px;
+  --dynamic-type-small: 13px;
+  --dynamic-type-medium: 14px;
+  --dynamic-type-large: 17px;
+  --dynamic-type-xlarge: 19px;
+  --dynamic-type-xxlarge: 21px;
+  --dynamic-type-xxxlarge: 23px;
+  --dynamic-type-ax1: 28px;
+  --dynamic-type-ax2: 33px;
+  --dynamic-type-ax3: 40px;
+  --dynamic-type-ax4: 47px;
+  --dynamic-type-ax5: 53px;
+}
+
+/* Ready-made text-style classes — one per style in the ladder. */
+.ios-large-title{font:var(--font-weight-bold) var(--type-large-title-size)/var(--type-large-title-line) var(--theme-font-text);letter-spacing:var(--type-large-title-tracking)}
+.ios-title1{font:var(--font-weight-bold) var(--type-title1-size)/var(--type-title1-line) var(--theme-font-text);letter-spacing:var(--type-title1-tracking)}
+.ios-title2{font:var(--font-weight-bold) var(--type-title2-size)/var(--type-title2-line) var(--theme-font-text);letter-spacing:var(--type-title2-tracking)}
+.ios-title3{font:var(--font-weight-semibold) var(--type-title3-size)/var(--type-title3-line) var(--theme-font-text);letter-spacing:var(--type-title3-tracking)}
+.ios-headline{font:var(--font-weight-semibold) var(--type-headline-size)/var(--type-headline-line) var(--theme-font-text);letter-spacing:var(--type-headline-tracking)}
+.ios-body{font:var(--font-weight-regular) var(--type-body-size)/var(--type-body-line) var(--theme-font-text);letter-spacing:var(--type-body-tracking)}
+.ios-callout{font:var(--font-weight-regular) var(--type-callout-size)/var(--type-callout-line) var(--theme-font-text);letter-spacing:var(--type-callout-tracking)}
+.ios-subheadline{font:var(--font-weight-regular) var(--type-subheadline-size)/var(--type-subheadline-line) var(--theme-font-text);letter-spacing:var(--type-subheadline-tracking)}
+.ios-footnote{font:var(--font-weight-regular) var(--type-footnote-size)/var(--type-footnote-line) var(--theme-font-text);letter-spacing:var(--type-footnote-tracking)}
+.ios-caption1{font:var(--font-weight-regular) var(--type-caption1-size)/var(--type-caption1-line) var(--theme-font-text);letter-spacing:var(--type-caption1-tracking)}
+.ios-caption2{font:var(--font-weight-semibold) var(--type-caption2-size)/var(--type-caption2-line) var(--theme-font-text);letter-spacing:var(--type-caption2-tracking)}

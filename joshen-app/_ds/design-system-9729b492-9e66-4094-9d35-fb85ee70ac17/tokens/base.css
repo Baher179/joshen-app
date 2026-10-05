@@ -1,0 +1,7 @@
+/* Minimal element defaults so a bare screen looks right. */
+
+:root { color-scheme: light dark; }
+
+a { color: var(--content-link); text-decoration: none; }
+a:hover { opacity: 0.7; }
+a:active { opacity: var(--motion-press-opacity); }

@@ -1,0 +1,11 @@
+.DS_Store
+.vercel
+.env
+.env.*
+node_modules/
+
+# ملف البناء المدمج — يُولّد من المصدر ولا يُتتبّع
+joshen-app/dist/
+
+# إعدادات محلية (تحتوي مسارات الجهاز)
+.claude/
