@@ -676,6 +676,32 @@
                 <span style="font-size:11px;font-weight:700;color:#2F7A5A;background:#E6F5EE;padding:6px 11px;border-radius:999px;">{{ pkgSave }}</span>
               </div>
               <div style="background:#FBF8FD;border:1px dashed #E0CFEB;border-radius:18px;padding:14px;font-size:11.5px;color:#6E6178;line-height:1.85;">{{ pkgFixedNote }}</div>
+              <div style="background:#fff;border:1.5px solid #E7DAEA;border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:13px;">
+                <div style="display:flex;align-items:center;gap:11px;">
+                  <span style="width:38px;height:38px;border-radius:14px;background:#F6F1FB;color:#6B3F9E;display:grid;place-items:center;flex:none;">{{ icUsersMd }}</span>
+                  <span style="flex:1;min-width:0;">
+                    <span style="display:block;font-weight:700;font-size:14px;">عدد الأفراد</span>
+                    <span style="display:block;font-size:11.5px;color:#6E6178;margin-top:4px;line-height:1.7;">تتكرّر الباقة بالكامل لكل فرد، في نفس الموعد والمكان ومع {{ pkgProvName }}</span>
+                  </span>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+                  <div style="display:flex;align-items:center;gap:12px;">
+                    <button onClick="{{ pkgQtyDec }}" aria-label="إنقاص عدد الأفراد" style="{{ pkgQtyDecStyle }}">−</button>
+                    <span style="min-width:58px;text-align:center;">
+                      <span style="display:block;font-weight:700;font-size:20px;color:#241A2E;">{{ pkgQty }}</span>
+                      <span style="display:block;font-size:10.5px;color:#9A90A3;margin-top:2px;">{{ pkgQtyWord }}</span>
+                    </span>
+                    <button onClick="{{ pkgQtyInc }}" aria-label="زيادة عدد الأفراد" style="{{ pkgQtyIncStyle }}">+</button>
+                  </div>
+                  <span style="text-align:left;">
+                    <span style="display:block;font-size:11px;color:#9A90A3;">{{ pkgUnitLabel }}</span>
+                    <span style="display:block;font-weight:700;font-size:17px;color:#6B3F9E;margin-top:4px;">{{ pkgQtyTotal }}</span>
+                  </span>
+                </div>
+                <sc-if value="{{ pkgMulti }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:#F6F1FB;border-radius:14px;padding:11px 13px;font-size:11.5px;color:#4A3B55;line-height:1.75;">كل فرد يحصل على كامل خدمات الباقة — ورسوم التوصيل تُحتسب مرة واحدة للطلب.</div>
+                </sc-if>
+              </div>
               <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="large" variant="prominent" full-width="{{ true }}" on-click="{{ pkgBook }}" hint-size="100%,50px">متابعة حجز الباقة</x-import>
             </div>
           </div>
@@ -3899,6 +3925,7 @@ class Component extends DCLogic {
     query: '', kind: 'sub', catId: 'makeup', subId: 'm1', opts: {}, optError: false,
     gPeople: [], gPersonSel: null, gSvcOpen: null, gCat: 'makeup', gNextPid: 1, gErr: false,
     bnIndex: 0, bnTimer: null,
+    pkgQty: 1,
     serviceId: null, providerId: null, loadingProviders: false,
     instantAlertOpen: false, schedState: 'idle', chatUnlocked: false,
     locOpen: false, locTmp: null, locGps: false, logoutOpen: false,
@@ -4561,7 +4588,7 @@ class Component extends DCLogic {
     });
     return pool.slice().sort((a, b) => (b.featured - a.featured) || (a.dist - b.dist));
   }
-  basePrice() { const s = this.svc(), p = this.prov(); return s.kind === 'group' ? this.gBase() : s.kind === 'pkg' ? s.num : Math.round(s.num * p.factor); }
+  basePrice() { const s = this.svc(), p = this.prov(); return s.kind === 'group' ? this.gBase() : s.kind === 'pkg' ? s.num * this.state.pkgQty : Math.round(s.num * p.factor); }
   optsPrice() {
     if (this.state.kind === 'group') return this.gOpts();
     const s = this.svc(); if (s.kind !== 'sub') return 0;
@@ -4582,7 +4609,7 @@ class Component extends DCLogic {
     return (s.sub.options || []).every(g => !!this.state.opts[g.id]);
   }
   deliveryFee() { return Math.round(8 + this.prov().dist * 2.5); }
-  discountAmt() { const s = this.svc(); return s.kind === 'pkg' ? (s.pkg.wasNum - s.pkg.num) : 0; }
+  discountAmt() { const s = this.svc(); return s.kind === 'pkg' ? (s.pkg.wasNum - s.pkg.num) * this.state.pkgQty : 0; }
   totalNum() { return this.basePrice() + this.optsPrice() + this.deliveryFee() - this.couponAmt(); }
   couponKey() { const s = this.svc(); return s.kind + ':' + s.id + ':' + this.prov().id; }
   couponAmt() {
@@ -4613,7 +4640,13 @@ class Component extends DCLogic {
 
   openCat(id) { this.setState({ catId: id, kind: 'sub' }); this.go('cat'); }
   openSub(catId, subId) { this.setState({ kind: 'sub', catId: catId, subId: subId, opts: {}, optError: false, providerId: null }); this.go('sub'); }
-  openPkg(id) { this.setState({ kind: 'pkg', serviceId: id }); this.go('pkg'); }
+  openPkg(id) { this.setState({ kind: 'pkg', serviceId: id, pkgQty: 1 }); this.go('pkg'); }
+  pkgQtyStep(d) {
+    const n = this.state.pkgQty + d;
+    if (n < 1) { this.flash('الحد الأدنى فرد واحد'); return; }
+    if (n > 6) { this.flash('الحد الأقصى ٦ أفراد للباقة الواحدة'); return; }
+    this.setState({ pkgQty: n });
+  }
   goProviders() {
     if (!this.optsComplete()) { this.setState({ optError: true }); this.flash('حدّدي الاختيارات المطلوبة أولاً'); return; }
     this.setState({ optError: false, loadingProviders: true, providerId: null });
@@ -4645,6 +4678,8 @@ class Component extends DCLogic {
       if (this.state.simFail && this.state.payMethod !== 'wallet') { this.setState({ payState: 'error' }); return; }
       const price = this.totalNum();
       const isGroup = this.state.kind === 'group';
+      const isPkg = this.state.kind === 'pkg';
+      const pkgQ = isPkg ? this.state.pkgQty : 0;
       const gsnap = isGroup ? this.gSnapshot() : null;
       const w = this.state.payMethod === 'wallet' ? Math.max(0, this.state.wallet - price) : this.state.wallet;
       const when = this.whenLabel();
@@ -4657,10 +4692,10 @@ class Component extends DCLogic {
         svcP: this.basePrice(), optP: this.optsPrice(), fee: this.deliveryFee(), total: price,
         coupon: this.couponAmt() ? { code: this.state.coupon.code, amt: this.couponAmt() } : null,
         placed: 'الآن', pay: { wallet: 'محفظة جوشن', mada: 'مدى ٤٤٢١', apple: 'Apple Pay', tabby: 'تابي' }[this.state.payMethod],
-        group: gsnap, people: isGroup ? this.state.gPeople.length : 0, gDur: isGroup ? this.gDurLabel() : ''
+        group: gsnap, people: isGroup ? this.state.gPeople.length : pkgQ, gDur: isGroup ? this.gDurLabel() : '', isPkg: isPkg
       };
       const isNow = this.state.bookMode === 'now';
-      const bk = { id: order.id, svc: this.svc().name, who: 'لمار العتيبي', where: this.addr().district, when: when, time: isNow ? 'الآن' : (this.state.bookTime || '—'), price: price, status: isNow ? 'مؤكد' : 'مجدول', kind: isNow ? 'today' : 'next', ic: this.svc().icon, group: gsnap, people: isGroup ? this.state.gPeople.length : 0, gDur: isGroup ? this.gDurLabel() : '', addrFull: this.addr().label + ' — ' + this.addr().district + '، ' + this.addr().street };
+      const bk = { id: order.id, svc: this.svc().name + (pkgQ > 1 ? ' · ' + this.peopleWord(pkgQ) : ''), svcBase: this.svc().name, who: 'لمار العتيبي', where: this.addr().district, when: when, time: isNow ? 'الآن' : (this.state.bookTime || '—'), price: price, status: isNow ? 'مؤكد' : 'مجدول', kind: isNow ? 'today' : 'next', ic: this.svc().icon, group: gsnap, people: isGroup ? this.state.gPeople.length : pkgQ, gDur: isGroup ? this.gDurLabel() : '', isPkg: isPkg, addrFull: this.addr().label + ' — ' + this.addr().district + '، ' + this.addr().street };
       const toProv = this.prov().id === 2;
       this.setState(st => ({ payState: 'idle', cScreen: 'success', cStack: [], draft: null, coupon: null, couponInput: '', couponErr: '', orders: [order, ...st.orders.map(o => (o.kind === 'active' ? { ...o, kind: 'done', status: 'مكتمل' } : o))], orderSel: order.id, wallet: w, trackStage: 1, chatUnlocked: true, schedState: 'idle', pBookings: toProv ? [bk, ...st.pBookings] : st.pBookings, messages: [{ me: false, text: 'أهلاً بك، تم استلام طلبك وسأتواصل معك قبل الموعد.', time: 'الآن' }] }));
     }, 1600);
@@ -4774,6 +4809,10 @@ class Component extends DCLogic {
 
   pill(active) {
     return 'padding:10px 15px;border-radius:999px;font-size:12.5px;font-weight:700;min-height:44px;background:' + (active ? '#2C1745' : '#fff') + ';color:' + (active ? '#fff' : '#6E6178') + ';border:1px solid ' + (active ? '#2C1745' : '#EDE3EF') + ';';
+  }
+  qtyBtn(on) {
+    return 'width:44px;height:44px;border-radius:15px;display:grid;place-items:center;flex:none;font-weight:700;font-size:20px;border:1.5px solid '
+      + (on ? '#D9C6E8' : '#EFE9F3') + ';background:' + (on ? '#fff' : '#F7F4F9') + ';color:' + (on ? '#6B3F9E' : '#C9BFD2') + ';';
   }
   card(active) {
     return 'display:flex;align-items:center;justify-content:space-between;width:100%;background:#fff;border:1.5px solid ' + (active ? '#6B3F9E' : '#EDE3EF') + ';border-radius:20px;padding:14px 15px;text-align:right;min-height:60px;box-shadow:' + (active ? '0 10px 22px rgba(107,63,158,.14)' : '0 1px 2px rgba(44,23,69,.04)') + ';transition-property:border-color,box-shadow;transition-duration:180ms;';
@@ -4889,14 +4928,19 @@ class Component extends DCLogic {
       { k: 'المدة التقديرية', v: this.gDurLabel() },
       { k: 'مقدّمة الخدمة', v: prov.name }
     ] : [
-      { k: svc.kind === 'pkg' ? 'الباقة' : 'الخدمة الفرعية', v: svc.name },
+      { k: svc.kind === 'pkg' ? 'الباقة' : 'الخدمة الفرعية', v: svc.name }
+    ].concat(svc.kind === 'pkg' ? [{ k: 'عدد الأفراد', v: this.peopleWord(st.pkgQty) }] : [], [
       { k: 'مقدّمة الخدمة', v: prov.name }
-    ].concat(optsTxt ? [{ k: 'الاختيارات', v: optsTxt }] : [])).concat([
+    ], optsTxt ? [{ k: 'الاختيارات', v: optsTxt }] : [])).concat([
       { k: 'نوع الحجز', v: isNow ? 'فوري' : 'مجدول' },
       isNow ? { k: 'وقت الوصول المتوقع', v: 'خلال ٤٥ دقيقة' } : { k: 'التاريخ والوقت', v: this.DAYS[st.bookDay].dow + ' · ' + (st.bookTime || '—') },
       { k: 'عنوان تنفيذ الخدمة', v: addr.label + ' — ' + addr.district + '، ' + addr.street }
     ]);
-    const priceRows = [{ k: svc.kind === 'group' ? 'أسعار الخدمات الأساسية' : svc.kind === 'pkg' ? 'سعر الباقة' : 'سعر الخدمة لدى مقدّمة الخدمة', v: this.sar(base) }]
+    const pkgQ = st.pkgQty;
+    const priceRows = [{
+      k: svc.kind === 'group' ? 'أسعار الخدمات الأساسية'
+        : svc.kind === 'pkg' ? (pkgQ > 1 ? 'سعر الباقة × ' + this.ar(pkgQ) + ' أفراد' : 'سعر الباقة')
+        : 'سعر الخدمة لدى مقدّمة الخدمة', v: this.sar(base) }]
       .concat(optsP ? [{ k: 'سعر الاختيارات', v: this.sar(optsP) }] : [],
         [{ k: 'رسوم التوصيل', v: this.sar(fee) }],
         disc ? [{ k: 'خصم الباقة المطبّق', v: '− ' + this.sar(disc) }] : [],
@@ -5085,6 +5129,15 @@ class Component extends DCLogic {
 
       pkgName: this.pkg().name, pkgDesc: this.pkg().desc, pkgPrice: this.pkg().price, pkgWas: this.pkg().was, pkgSave: this.pkg().save,
       pkgArtBg: 'url(' + this.pkg().art + ')', pkgValid: this.pkg().valid || 'صلاحية ٣٠ يوم',
+      pkgQty: this.ar(st.pkgQty),
+      pkgQtyWord: this.peopleWord(st.pkgQty),
+      pkgQtyInc: () => this.pkgQtyStep(1),
+      pkgQtyDec: () => this.pkgQtyStep(-1),
+      pkgQtyIncStyle: this.qtyBtn(st.pkgQty < 6),
+      pkgQtyDecStyle: this.qtyBtn(st.pkgQty > 1),
+      pkgMulti: st.pkgQty > 1,
+      pkgUnitLabel: this.sar(this.pkg().num) + ' للفرد',
+      pkgQtyTotal: this.sar(this.pkg().num * st.pkgQty),
       pkgIncludes: this.pkg().includes,
       pkgProvName: (this.PROVIDERS.find(x => x.id === this.pkg().provId) || {}).name || '',
       pkgProvMeta: (() => { const p = this.PROVIDERS.find(x => x.id === this.pkg().provId) || {}; return p.rating + ' · ' + p.area; })(),
@@ -5352,7 +5405,8 @@ class Component extends DCLogic {
       summaryEdits: [
         ...(svc.kind === 'group'
           ? [{ ic: 'users', label: 'تعديل الأشخاص وخدماتهم', open: () => this.setState({ cScreen: 'gpeople' }) }]
-          : svc.kind === 'pkg' ? [] : [{ ic: 'edit', label: 'تعديل الخدمة والاختيارات', open: () => this.setState({ cScreen: 'sub' }) }]),
+          : svc.kind === 'pkg' ? [{ ic: 'users', label: 'تعديل عدد الأفراد', open: () => this.setState({ cScreen: 'pkg' }) }]
+          : [{ ic: 'edit', label: 'تعديل الخدمة والاختيارات', open: () => this.setState({ cScreen: 'sub' }) }]),
         { ic: 'calendar', label: 'تعديل نوع الحجز والموعد', open: () => this.setState({ cScreen: 'book' }) },
         { ic: 'pin', label: 'تعديل عنوان تنفيذ الخدمة', open: () => this.go('addresses') }
       ].map(r => ({ ...r, icon: this.icon(r.ic, 16) })),
@@ -5997,6 +6051,9 @@ class Component extends DCLogic {
         { k: 'عدد الأشخاص', v: this.peopleWord(ordSel.people || ordSel.group.length) },
         { k: 'إجمالي الخدمات', v: this.ar(ordSel.group.reduce((a, x) => a + (x.svcs || []).length, 0)) + ' خدمة' },
         { k: 'المدة التقديرية', v: ordSel.gDur || '—' }
+      ] : ordSel.isPkg ? [
+        { k: 'الباقة', v: ordSel.name },
+        { k: 'عدد الأفراد', v: this.peopleWord(ordSel.people || 1) }
       ] : [
         { k: 'الخدمة', v: ordSel.name },
         { k: 'الاختيارات', v: ordSel.opts || '—' }
@@ -6009,10 +6066,12 @@ class Component extends DCLogic {
         { k: 'تاريخ الطلب', v: ordSel.placed || '—' }
       ]),
       ordPriceRows: [
-        { k: (ordSel.group && ordSel.group.length) ? 'أسعار الخدمات الأساسية' : 'سعر الخدمة', v: this.sar(ordSel.svcP || 0) },
-        { k: 'سعر الاختيارات', v: this.sar(ordSel.optP || 0) },
+        { k: (ordSel.group && ordSel.group.length) ? 'أسعار الخدمات الأساسية'
+            : ordSel.isPkg ? ('سعر الباقة' + ((ordSel.people || 1) > 1 ? ' × ' + this.ar(ordSel.people) + ' أفراد' : ''))
+            : 'سعر الخدمة', v: this.sar(ordSel.svcP || 0) }
+      ].concat(ordSel.isPkg ? [] : [{ k: 'سعر الاختيارات', v: this.sar(ordSel.optP || 0) }], [
         { k: 'رسوم التوصيل', v: this.sar(ordSel.fee || 0) }
-      ].concat(ordSel.coupon ? [{ k: 'خصم الكوبون (' + ordSel.coupon.code + ')', v: '− ' + this.sar(ordSel.coupon.amt) }] : []),
+      ]).concat(ordSel.coupon ? [{ k: 'خصم الكوبون (' + ordSel.coupon.code + ')', v: '− ' + this.sar(ordSel.coupon.amt) }] : []),
       ordTotal: this.sar(ordSel.total || 0),
       ordStages: stages.map((s2, i) => ({ title: s2, time: i <= st.trackStage ? stageTimes[i] : '—', ...this.timeline(i, st.trackStage, stages.length) })),
       ordCancelRules: this.cancelRules().map(r => ({
@@ -6159,14 +6218,14 @@ class Component extends DCLogic {
         const isG = !!(b.group && b.group.length);
         return [
           { k: 'رقم الطلب', v: b.id || '—' },
-          { k: 'نوع الطلب', v: isG ? 'حجز مجمّع' : 'حجز فردي' }
+          { k: 'نوع الطلب', v: isG ? 'حجز مجمّع' : (b.people || 0) > 1 ? 'باقة لعدة أفراد' : 'حجز فردي' }
         ].concat(isG ? [
           { k: 'عدد الأشخاص', v: this.peopleWord(b.people || b.group.length) },
           { k: 'إجمالي الخدمات', v: this.ar(b.group.reduce((a, x) => a + (x.svcs || []).length, 0)) + ' خدمة' },
           { k: 'المدة التقديرية', v: b.gDur || '—' }
         ] : [
-          { k: 'الخدمة', v: b.svc || '—' }
-        ], [
+          { k: 'الخدمة', v: b.svcBase || b.svc || '—' }
+        ].concat((b.people || 0) > 1 ? [{ k: 'عدد الأفراد', v: this.peopleWord(b.people) }] : []), [
           { k: 'العميلة', v: b.who || '—' },
           { k: 'الموعد', v: b.when || '—' },
           { k: 'العنوان', v: b.addrFull || b.where || '—' },
