@@ -44,7 +44,17 @@
   button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:none;}
   input,textarea{font-family:inherit;}
   .jsh-scroll::-webkit-scrollbar{width:0;height:0;}
-  @keyframes jshUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  @keyframes jshBlob{0%{transform:translate(0,0) rotate(0deg) scale(1)}100%{transform:translate(-12px,10px) rotate(9deg) scale(1.06)}}
+@keyframes jshBlob2{0%{transform:translate(0,0) rotate(0deg) scale(1)}100%{transform:translate(10px,-9px) rotate(-7deg) scale(1.05)}}
+@keyframes jshDrift{0%{transform:translateY(0)}100%{transform:translateY(-13px)}}
+@keyframes jshTwinkle{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:.95;transform:scale(1.15)}}
+@keyframes jshFloaty{from{transform:translateY(0)}to{transform:translateY(-7px)}}
+@keyframes jshKen{from{transform:scale(1)}to{transform:scale(1.06)}}
+@keyframes jshChip{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes jshBob{from{transform:translateY(0)}to{transform:translateY(-3px)}}
+@keyframes jshGrow{from{width:0}to{width:46%}}
+@keyframes jshPulse{0%{transform:scale(.6);opacity:.65}100%{transform:scale(1.9);opacity:0}}
+@keyframes jshUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
   @keyframes jshIn{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:none}}
   @keyframes jshPop{0%{transform:scale(.94);opacity:0}100%{transform:scale(1);opacity:1}}
   @keyframes jshShim{0%{background-position:200% 0}100%{background-position:-200% 0}}
@@ -142,9 +152,28 @@
               <button onClick="{{ skipOnboard }}" style="min-height:44px;padding:0 12px;font-size:13px;font-weight:600;color:#9A90A3;">تخطي</button>
             </div>
             <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:26px;">
-              <div style="position:relative;height:290px;margin:0 -18px;animation:jshPop .5s cubic-bezier(.45,0,.55,1) both;">
-                <div role="img" aria-label="{{ obPlaceholder }}" style="position:absolute;inset:0;background-image:{{ obArtBg }};background-size:contain;background-repeat:no-repeat;background-position:center;"></div>
-                
+              <div style="position:relative;height:292px;margin:0 -14px;animation:jshPop .5s cubic-bezier(.45,0,.55,1) both;">
+                <span aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;">
+                  <span style="position:absolute;top:6px;left:-12px;width:206px;height:188px;background:linear-gradient(150deg,#E6D6F4,#DCC8EE);opacity:.75;filter:blur(16px);border-radius:58% 42% 37% 63% / 54% 48% 52% 46%;animation:jshBlob 11s ease-in-out infinite alternate;"></span>
+                  <span style="position:absolute;bottom:4px;right:-10px;width:190px;height:170px;background:linear-gradient(140deg,#FBEFE2,#F7E4EE);opacity:.8;filter:blur(16px);border-radius:42% 58% 63% 37% / 46% 52% 48% 54%;animation:jshBlob2 13s ease-in-out infinite alternate;"></span>
+                  <span style="position:absolute;top:36px;right:18px;width:104px;height:104px;border-radius:50%;border:1.5px solid rgba(107,63,158,.18);animation:jshDrift 7s ease-in-out infinite alternate;"></span>
+                  <span style="position:absolute;bottom:52px;left:26px;width:58px;height:58px;border-radius:50%;background:rgba(217,170,198,.3);animation:jshDrift 9s ease-in-out .8s infinite alternate;"></span>
+                  <span style="position:absolute;top:24px;left:44px;width:18px;height:18px;background:#C9A45C;opacity:.75;clip-path:polygon(50% 0%,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0% 50%,39% 39%);animation:jshTwinkle 2.9s ease-in-out infinite;"></span>
+                  <span style="position:absolute;bottom:84px;right:40px;width:13px;height:13px;background:#B07FD0;opacity:.7;clip-path:polygon(50% 0%,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0% 50%,39% 39%);animation:jshTwinkle 3.6s ease-in-out 1.1s infinite;"></span>
+                  <span style="position:absolute;top:104px;left:12px;width:8px;height:8px;border-radius:50%;background:rgba(107,63,158,.22);animation:jshTwinkle 4.2s ease-in-out .5s infinite;"></span>
+                </span>
+                <div role="img" aria-label="{{ obPlaceholder }}" style="position:absolute;inset:0;background-image:{{ obArtBg }};background-size:contain;background-repeat:no-repeat;background-position:center;animation:jshKen 15s ease-out .5s both, jshFloaty 4.4s cubic-bezier(.45,0,.55,1) 1s infinite alternate;"></div>
+              </div>
+
+              <div style="margin:-12px 2px 0;background:#fff;border:1px solid #F1E7F2;border-radius:18px;box-shadow:0 12px 26px -18px rgba(75,40,110,.55);display:flex;align-items:center;gap:11px;padding:11px 14px;animation:jshChip .6s cubic-bezier(.2,0,0,1) .5s both, jshBob 3.2s cubic-bezier(.45,0,.55,1) 1.2s infinite alternate;">
+                <span style="position:relative;width:30px;height:30px;border-radius:11px;background:{{ obChipTint }};color:{{ obChipInk }};display:grid;place-items:center;flex:none;">
+                  <span style="{{ obChipPulse }}"></span>
+                  {{ obChipIcon }}
+                </span>
+                <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;">
+                  <span style="{{ obChipBar }}"></span>
+                  <span style="{{ obChipBar2 }}"></span>
+                </span>
               </div>
               <div style="display:flex;flex-direction:column;gap:12px;animation:jshUp .45s .08s cubic-bezier(.2,0,0,1) both;">
                 <div style="width:52px;height:52px;border-radius:18px;background:#6B3F9E;color:#fff;display:grid;place-items:center;">{{ obIcon }}</div>
@@ -1943,7 +1972,7 @@
           <div style="min-height:100%;display:flex;flex-direction:column;padding:76px 26px 34px;background:linear-gradient(168deg,#1E0F2E 0%,#2C1745 48%,#57316F 100%);color:#fff;position:relative;overflow:hidden;">
             <div style="position:absolute;top:-80px;left:-60px;width:250px;height:250px;border-radius:50%;background:rgba(255,255,255,.06);"></div>
             <div style="position:relative;flex:1;display:flex;flex-direction:column;justify-content:center;gap:22px;">
-              <span style="width:62px;height:62px;border-radius:22px;background:rgba(255,255,255,.14);display:grid;place-items:center;">{{ icMotoD }}</span>
+              <span style="width:62px;height:62px;border-radius:22px;background:rgba(255,255,255,.14);display:grid;place-items:center;"><img src="brand/mark-w.svg" alt="جوشن" style="height:38px;width:auto;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.25));"></img></span>
               <div style="display:flex;flex-direction:column;gap:12px;">
                 <div style="font-weight:700;font-size:29px;line-height:1.32;letter-spacing:-.6px;">تطبيق مندوب جوشن</div>
                 <div style="font-size:14px;line-height:1.95;color:rgba(255,255,255,.82);max-width:31ch;">وصّل مقدّمات الخدمة وأدواتهن، وتابع رحلاتك وأرباحك لحظة بلحظة.</div>
@@ -2480,7 +2509,7 @@
           <div style="min-height:100%;display:flex;flex-direction:column;padding:76px 26px 34px;background:linear-gradient(168deg,#3E1F4F 0%,#6B3F9E 46%,#A9628A 100%);color:#fff;position:relative;overflow:hidden;">
             <div style="position:absolute;top:-80px;left:-60px;width:250px;height:250px;border-radius:50%;background:rgba(255,255,255,.08);"></div>
             <div style="position:relative;flex:1;display:flex;flex-direction:column;justify-content:center;gap:22px;">
-              <span style="width:62px;height:62px;border-radius:22px;background:rgba(255,255,255,.16);display:grid;place-items:center;">{{ icSparkle }}</span>
+              <span style="width:62px;height:62px;border-radius:22px;background:rgba(255,255,255,.16);display:grid;place-items:center;"><img src="brand/mark-w.svg" alt="جوشن" style="height:38px;width:auto;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.25));"></img></span>
               <div style="display:flex;flex-direction:column;gap:12px;">
                 <div style="font-weight:700;font-size:29px;line-height:1.32;letter-spacing:-.6px;">تطبيق مقدّمة الخدمة</div>
                 <div style="font-size:14px;line-height:1.95;color:rgba(255,255,255,.86);max-width:31ch;">استقبلي الحجوزات، سعّري خدماتك وإضافاتك، وتابعي مواعيدك وأرباحك من مكان واحد.</div>
@@ -3925,6 +3954,7 @@ class Component extends DCLogic {
     query: '', kind: 'sub', catId: 'makeup', subId: 'm1', opts: {}, optError: false,
     gPeople: [], gPersonSel: null, gSvcOpen: null, gCat: 'makeup', gNextPid: 1, gErr: false,
     bnIndex: 0, bnTimer: null,
+    obAt: 0, obTimer: null,
     pkgQty: 1,
     serviceId: null, providerId: null, loadingProviders: false,
     instantAlertOpen: false, schedState: 'idle', chatUnlocked: false,
@@ -4158,9 +4188,9 @@ class Component extends DCLogic {
   TAGS = ['الالتزام بالوقت', 'نظافة الأدوات', 'نتيجة ممتازة', 'تعامل راقٍ', 'أسعار عادلة'];
 
   ONBOARD = [
-    { icon: 'bolt', slot: 'jsh-ob-1', ph: 'صورة: أخصائية تصل إلى المنزل', title: 'جمالك يوصلك للبيت', body: 'احجزي خدمة فورية تصلك خلال ٤٥ دقيقة، أو جدّولي موعدك في الوقت الذي يناسبك.' },
-    { icon: 'shield', slot: 'jsh-ob-2', ph: 'صورة: أخصائية موثّقة أثناء العمل', title: 'أخصائيات موثّقات', body: 'كل أخصائية في جوشن مُتحقّق من هويتها وشهاداتها، وتقييمات العميلات ظاهرة أمامك قبل الحجز.' },
-    { icon: 'nav', slot: 'jsh-ob-3', ph: 'صورة: تتبع الطلب على الخريطة', title: 'تتبّع ودفع آمن', body: 'تابعي طلبك لحظة بلحظة، وادفعي من المحفظة أو مدى أو Apple Pay بأمان كامل.' }
+    { chipIc: 'clock', tint: '#F1E8F8', tint2: '#E3D6EE', ink: '#6B3F9E', icon: 'bolt', slot: 'jsh-ob-1', ph: 'صورة: أخصائية تصل إلى المنزل', title: 'جمالك يوصلك للبيت', body: 'احجزي خدمة فورية تصلك خلال ٤٥ دقيقة، أو جدّولي موعدك في الوقت الذي يناسبك.' },
+    { chipIc: 'check', tint: '#E6F5EE', tint2: '#CDE8DB', ink: '#2F7A5A', icon: 'shield', slot: 'jsh-ob-2', ph: 'صورة: أخصائية موثّقة أثناء العمل', title: 'أخصائيات موثّقات', body: 'كل أخصائية في جوشن مُتحقّق من هويتها وشهاداتها، وتقييمات العميلات ظاهرة أمامك قبل الحجز.' },
+    { chipIc: 'pin', tint: '#F1E8F8', tint2: '#E3D6EE', ink: '#6B3F9E', icon: 'nav', slot: 'jsh-ob-3', ph: 'صورة: تتبع الطلب على الخريطة', title: 'تتبّع ودفع آمن', body: 'تابعي طلبك لحظة بلحظة، وادفعي من المحفظة أو مدى أو Apple Pay بأمان كامل.' }
   ];
 
   componentDidMount() {
@@ -4170,10 +4200,17 @@ class Component extends DCLogic {
       const n = this.BANNERS.length; if (n < 2) return;
       this.goBanner((st.bnIndex + 1) % n);
     }, 4200);
-    this.setState({ bnTimer: t });
+    const ot = setInterval(() => {
+      const st = this.state;
+      if (st.role !== 'customer' || st.onboarded) return;
+      if (st.obIndex >= this.ONBOARD.length - 1) return;
+      if (Date.now() - (st.obAt || 0) < 3000) return;
+      this.setState({ obIndex: st.obIndex + 1, obAt: Date.now() });
+    }, 250);
+    this.setState({ bnTimer: t, obTimer: ot, obAt: Date.now() });
   }
   componentWillUnmount() {
-    clearInterval(this.state.trackTimer); clearInterval(this.state.cdTimer); clearInterval(this.state.pCdTimer); clearInterval(this.state.bnTimer); clearTimeout(this.state.toastTimer);
+    clearInterval(this.state.trackTimer); clearInterval(this.state.cdTimer); clearInterval(this.state.pCdTimer); clearInterval(this.state.bnTimer); clearInterval(this.state.obTimer); clearTimeout(this.state.toastTimer);
   }
   bannerBox() {
     if (typeof document === 'undefined') return null;
@@ -5009,10 +5046,14 @@ class Component extends DCLogic {
       icGift: this.icon('gift', 17),
       sOnboard: onboarding,
       obIndex: st.obIndex, obCount: this.ONBOARD.length, obTitle: ob.title, obBody: ob.body,
-      obSlot: ob.slot, obPlaceholder: ob.ph, obArtBg: 'url(art/onb-' + (st.obIndex + 1) + '.svg)', obIcon: this.icon(ob.icon, 24, 1.9),
+      obSlot: ob.slot, obPlaceholder: ob.ph, obArtBg: 'url(art/onb-' + (st.obIndex + 1) + '.webp)', obIcon: this.icon(ob.icon, 24, 1.9),
+      obChipTint: ob.tint, obChipInk: ob.ink, obChipIcon: this.icon(ob.chipIc, 18, 2),
+      obChipBar: 'height:6px;border-radius:3px;background:' + ob.ink + ';animation:jshGrow .9s cubic-bezier(.2,0,0,1) .8s both;',
+      obChipBar2: 'height:5px;border-radius:3px;width:30%;background:' + ob.tint2 + ';',
+      obChipPulse: 'position:absolute;inset:0;border-radius:11px;border:1.5px solid ' + ob.ink + ';animation:jshPulse 2.4s ease-out infinite;',
       obCta: st.obIndex === this.ONBOARD.length - 1 ? 'ابدئي الآن' : 'التالي',
-      obNext: () => (st.obIndex === this.ONBOARD.length - 1 ? this.setState({ onboarded: true, cScreen: 'gate', cStack: [] }) : this.setState({ obIndex: st.obIndex + 1 })),
-      obGoTo: i => this.setState({ obIndex: i }),
+      obNext: () => (st.obIndex === this.ONBOARD.length - 1 ? this.setState({ onboarded: true, cScreen: 'gate', cStack: [] }) : this.setState({ obIndex: st.obIndex + 1, obAt: Date.now() })),
+      obGoTo: i => this.setState({ obIndex: i, obAt: Date.now() }),
       skipOnboard: () => this.setState({ onboarded: true, cScreen: 'gate', cStack: [] }),
 
       sHome: isC && st.onboarded && cs === 'home', sSearch: isC && cs === 'search', sService: isC && cs === 'service',
@@ -5593,7 +5634,7 @@ class Component extends DCLogic {
         { ic: 'wallet', label: 'المحفظة والمدفوعات', value: this.sar(st.wallet), open: () => this.goTab('wallet') },
         { ic: 'receipt', label: 'سجل الطلبات', value: this.ar(st.orders.length), open: () => this.goTab('orders') },
         { ic: 'bell', label: 'تفضيلات الإشعارات', value: 'مفعّلة', open: () => this.flash('إعدادات الإشعارات — نموذج تجريبي') },
-        { ic: 'sparkle', label: 'إعادة عرض التعريف', value: '', open: () => this.setState({ onboarded: false, obIndex: 0 }) },
+        { ic: 'sparkle', label: 'إعادة عرض التعريف', value: '', open: () => this.setState({ onboarded: false, obIndex: 0, obAt: Date.now() }) },
         { ic: 'headset', label: 'الدعم والمساعدة', value: '٢٤/٧', open: () => this.flash('فريق الدعم متاح على مدار الساعة') }
       ].map(r => ({ ...r, icon: this.icon(r.ic, 17) })),
 
