@@ -88,7 +88,7 @@
     <div style="display:flex;gap:5px;background:#fff;padding:5px;border-radius:999px;border:1px solid #EDE3EF;box-shadow:0 10px 28px rgba(75,40,110,.10);">
       <button onClick="{{ setCustomer }}" style="{{ swCustomer }}">العميلة</button>
       <button onClick="{{ setProvider }}" style="{{ swProvider }}">مقدّمة الخدمة</button>
-      <button onClick="{{ setDriver }}" style="{{ swDriver }}">المندوب</button>
+      <button onClick="{{ setDriver }}" style="{{ swDriver }}">المندوبة</button>
     </div>
   </div>
 
@@ -1145,6 +1145,33 @@
                 </div>
               </div>
 
+              <sc-if value="{{ provHasPkgs }}" hint-placeholder-val="{{ true }}">
+                <div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                    <div style="font-weight:700;font-size:15px;">باقاتها</div>
+                    <div style="font-size:11px;color:#9A90A3;">{{ provPkgCount }}</div>
+                  </div>
+                  <div class="jsh-scroll" style="display:flex;gap:12px;overflow-x:auto;padding-bottom:4px;margin:0 -20px;padding-right:20px;padding-left:20px;scroll-snap-type:x mandatory;">
+                    <sc-for list="{{ provPkgs }}" as="pk" hint-placeholder-count="3">
+                      <button onClick="{{ pk.open }}" style="flex:none;width:214px;scroll-snap-align:start;display:flex;flex-direction:column;background:#fff;border:1.5px solid #E7DAEA;border-radius:22px;padding:11px;text-align:right;transition-property:translate,box-shadow;transition-duration:.18s;" style-hover="translate:0 -2px;box-shadow:0 14px 24px rgba(75,40,110,.13)" style-active="scale:0.99">
+                        <span style="position:relative;width:100%;height:104px;border-radius:16px;overflow:hidden;flex:none;background:linear-gradient(140deg,#F7E9F1,#EBE1F5);">
+                          <span role="img" aria-label="{{ pk.name }}" style="display:block;width:100%;height:100%;background-image:{{ pk.artBg }};background-size:cover;background-position:center;"></span>
+                          <img src="brand/mark-w.svg" alt="" aria-hidden="true" style="position:absolute;left:8px;bottom:8px;height:18px;width:auto;opacity:.9;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35));"></img>
+                          <span style="position:absolute;top:8px;right:8px;font-size:10px;font-weight:700;color:#2F7A5A;background:rgba(255,255,255,.94);padding:4px 9px;border-radius:999px;">{{ pk.save }}</span>
+                        </span>
+                        <span style="display:block;font-weight:700;font-size:13.5px;margin-top:10px;line-height:1.5;">{{ pk.name }}</span>
+                        <span style="display:block;font-size:11px;color:#9A90A3;margin-top:5px;line-height:1.65;min-height:30px;">{{ pk.desc }}</span>
+                        <span style="display:block;font-size:10px;color:#A9628A;font-weight:700;margin-top:4px;">{{ pk.incCount }} · {{ pk.validLabel }}</span>
+                        <span style="display:flex;align-items:baseline;gap:7px;margin-top:9px;padding-top:9px;border-top:1px solid #F6F1FB;">
+                          <span style="font-weight:700;color:#6B3F9E;font-size:15px;">{{ pk.price }}</span>
+                          <span style="font-size:11px;color:#B4A9BC;text-decoration:line-through;">{{ pk.was }}</span>
+                        </span>
+                      </button>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+
               <div>
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
                   <div style="font-weight:700;font-size:15px;">الخدمات التي تقدّمها</div>
@@ -1974,13 +2001,13 @@
             <div style="position:relative;flex:1;display:flex;flex-direction:column;justify-content:center;gap:22px;">
               <span style="width:62px;height:62px;border-radius:22px;background:rgba(255,255,255,.14);display:grid;place-items:center;"><img src="brand/mark-w.svg" alt="جوشن" style="height:38px;width:auto;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.25));"></img></span>
               <div style="display:flex;flex-direction:column;gap:12px;">
-                <div style="font-weight:700;font-size:29px;line-height:1.32;letter-spacing:-.6px;">تطبيق مندوب جوشن</div>
-                <div style="font-size:14px;line-height:1.95;color:rgba(255,255,255,.82);max-width:31ch;">وصّل مقدّمات الخدمة وأدواتهن، وتابع رحلاتك وأرباحك لحظة بلحظة.</div>
+                <div style="font-weight:700;font-size:29px;line-height:1.32;letter-spacing:-.6px;">تطبيق مندوبة جوشن</div>
+                <div style="font-size:14px;line-height:1.95;color:rgba(255,255,255,.82);max-width:31ch;">وصّلي مقدّمات الخدمة وأدواتهن، وتابعي رحلاتك وأرباحك لحظة بلحظة.</div>
               </div>
             </div>
             <div style="position:relative;display:flex;flex-direction:column;gap:12px;padding-top:26px;">
               <button onClick="{{ dDoLogin }}" style="width:100%;min-height:54px;border-radius:18px;background:#fff;color:#2C1745;font-weight:700;font-size:15px;box-shadow:0 16px 34px -18px rgba(0,0,0,.5);" style-active="scale:0.99">تسجيل الدخول</button>
-              <button onClick="{{ dStartReg }}" style="width:100%;min-height:54px;border-radius:18px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.34);color:#fff;font-weight:700;font-size:15px;" style-active="scale:0.99">إنشاء حساب مندوب جديد</button>
+              <button onClick="{{ dStartReg }}" style="width:100%;min-height:54px;border-radius:18px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.34);color:#fff;font-weight:700;font-size:15px;" style-active="scale:0.99">إنشاء حساب مندوبة جديد</button>
               <div style="font-size:11px;color:rgba(255,255,255,.62);text-align:center;line-height:1.85;margin-top:4px;">التسجيل على خطوتين: التحقق من رقم الجوال، ثم البيانات والمستندات.</div>
             </div>
           </div>
@@ -2049,7 +2076,7 @@
               <div style="display:flex;flex-direction:column;gap:20px;">
                 <div style="display:flex;flex-direction:column;gap:9px;">
                   <div style="font-weight:700;font-size:21px;line-height:1.4;letter-spacing:-.4px;">تحقّق من رقم جوالك</div>
-                  <div style="font-size:13px;line-height:1.9;color:#6E6178;text-wrap:pretty;">نرسل لك رمزاً في رسالة نصية. هذا الرقم سيكون معرّف حسابك كمندوب.</div>
+                  <div style="font-size:13px;line-height:1.9;color:#6E6178;text-wrap:pretty;">نرسل لك رمزاً في رسالة نصية. هذا الرقم سيكون معرّف حسابك كمندوبة.</div>
                 </div>
                 <button onClick="{{ demoDOtpFill }}" style="width:100%;min-height:48px;padding:0 15px;border-radius:16px;border:1.5px dashed #D6C4EA;background:#FBF8FD;color:#6B3F9E;font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center;gap:8px;" style-hover="background:#F8F3FB">{{ icBolt }}<span>محاكاة تعبئة البيانات للتجربة</span></button>
             <div style="background:#fff;border:1px solid #F2E9F4;border-radius:26px;padding:20px 18px;box-shadow:0 20px 44px -30px rgba(44,23,69,.35);display:flex;flex-direction:column;gap:18px;">
@@ -2156,11 +2183,11 @@
               <img src="brand/mark-w.svg" alt="" aria-hidden="true" class="jsh-wm" style="position:absolute;z-index:-1;left:-30px;bottom:-46px;height:240px;width:auto;opacity:.1;pointer-events:none;"></img>
               <div style="display:flex;align-items:center;gap:12px;">
                 <span style="width:48px;height:48px;border-radius:17px;overflow:hidden;background:rgba(255,255,255,.16);flex:none;">
-                  <img src="art/driver.png" alt="فهد العمري" style="width:100%;height:100%;object-fit:cover;display:block;"></img>
+                  <img src="art/driver.png" alt="مها الزهراني" style="width:100%;height:100%;object-fit:cover;display:block;"></img>
                 </span>
                 <div style="flex:1;min-width:0;">
                   <div style="font-size:11.5px;color:rgba(255,255,255,.7);">مرحباً</div>
-                  <div style="font-weight:700;font-size:17px;margin-top:2px;">فهد العمري</div>
+                  <div style="font-weight:700;font-size:17px;margin-top:2px;">مها الزهراني</div>
                 </div>
                 <button onClick="{{ goDNotifs }}" aria-label="الإشعارات" style="position:relative;width:44px;height:44px;border-radius:16px;background:rgba(255,255,255,.16);color:#fff;display:grid;place-items:center;flex:none;transition-property:background,scale;transition-duration:150ms;" style-active="scale:0.96">
                   {{ icBell }}
@@ -2188,7 +2215,7 @@
               <sc-if value="{{ dOffline }}" hint-placeholder-val="{{ true }}">
                 <div style="text-align:center;padding:40px 10px;display:flex;flex-direction:column;align-items:center;gap:11px;">
                   <span style="width:76px;height:76px;border-radius:26px;background:#F3EEF9;color:#6B3F9E;display:grid;place-items:center;">{{ icMoon }}</span>
-                  <div style="font-weight:700;font-size:15.5px;">أنت غير متصل</div>
+                  <div style="font-weight:700;font-size:15.5px;">أنتِ غير متصلة</div>
                   <div style="font-size:12.5px;color:#9A90A3;max-width:235px;line-height:1.85;">فعّل حالة الاتصال لبدء استقبال طلبات التوصيل القريبة منك.</div>
                 </div>
               </sc-if>
@@ -2199,7 +2226,7 @@
                     <span style="position:relative;width:72px;height:72px;border-radius:26px;background:#fff;border:1px solid #F1E7F2;color:#6B3F9E;display:grid;place-items:center;">{{ icRadar }}</span>
                   </span>
                   <div style="font-weight:700;font-size:15.5px;">نبحث عن طلبات قريبة…</div>
-                  <div style="font-size:12.5px;color:#9A90A3;">متصل في نطاق شمال الرياض</div>
+                  <div style="font-size:12.5px;color:#9A90A3;">متصلة في نطاق شمال الرياض</div>
                   <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="medium" variant="tinted" on-click="{{ simulateRequest }}" hint-size="auto,40px">محاكاة وصول طلب</x-import>
                 </div>
               </sc-if>
@@ -2358,11 +2385,11 @@
           <div style="padding:18px 20px 120px;animation:jshUp .3s cubic-bezier(.2,0,0,1) both;">
             <div style="background:#fff;border:1px solid #F1E7F2;border-radius:24px;padding:18px;display:flex;align-items:center;gap:13px;">
               <span style="width:62px;height:62px;border-radius:21px;overflow:hidden;background:linear-gradient(140deg,#EBE1F5,#F7E9F1);flex:none;">
-                <img src="art/driver.png" alt="فهد العمري" style="width:100%;height:100%;object-fit:cover;display:block;"></img>
+                <img src="art/driver.png" alt="مها الزهراني" style="width:100%;height:100%;object-fit:cover;display:block;"></img>
               </span>
               <div style="flex:1;min-width:0;">
                 <div style="font-weight:700;font-size:16px;">{{ dProfName }}</div>
-                <div style="font-size:12px;color:#9A90A3;margin-top:5px;">{{ dProfPhone }} · مندوب · ٤.٩</div>
+                <div style="font-size:12px;color:#9A90A3;margin-top:5px;">{{ dProfPhone }} · مندوبة · ٤.٩</div>
               </div>
               <button onClick="{{ openDEdit }}" aria-label="تعديل بياناتي" style="width:44px;height:44px;border-radius:15px;background:#F3EEF9;color:#5A3486;display:grid;place-items:center;flex:none;" style-hover="background:#EBE1F5" style-active="scale:0.94">{{ icEdit }}</button>
             </div>
@@ -2488,7 +2515,7 @@
         <sc-if value="{{ dSupportS }}" hint-placeholder-val="{{ false }}">
           <div style="padding:16px 20px 130px;animation:jshUp .3s cubic-bezier(.2,0,0,1) both;display:flex;flex-direction:column;gap:14px;">
             <div style="background:linear-gradient(140deg,#2C1745,#5A3486);border-radius:24px;padding:20px;color:#fff;">
-              <div style="font-weight:700;font-size:17px;">دعم المندوبين</div>
+              <div style="font-weight:700;font-size:17px;">دعم المندوبات</div>
               <div style="font-size:12px;color:rgba(255,255,255,.78);margin-top:7px;line-height:1.85;">فريق مخصّص على مدار الساعة للرحلات والمستندات والتحويلات المالية.</div>
             </div>
             <div style="display:flex;flex-direction:column;gap:9px;">
@@ -2542,8 +2569,20 @@
                 <button onClick="{{ demoPOtpFill }}" style="width:100%;min-height:48px;padding:0 15px;border-radius:16px;border:1.5px dashed #E9C6DC;background:#FDF8FB;color:#A9628A;font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center;gap:8px;" style-hover="background:#F8F3FB">{{ icBolt }}<span>محاكاة تعبئة البيانات للتجربة</span></button>
             <div style="background:#fff;border:1px solid #F2E9F4;border-radius:26px;padding:20px 18px;box-shadow:0 20px 44px -30px rgba(44,23,69,.35);display:flex;flex-direction:column;gap:18px;">
                   <div style="display:flex;flex-direction:column;gap:9px;">
-                    <label style="font-size:12.5px;font-weight:700;color:#6B3F9E;">الاسم الكامل</label>
-                    <input value="{{ pRegName }}" onChange="{{ onPRegName }}" placeholder="مثال: نورة الشمري" aria-label="الاسم الكامل" style="{{ pRegFieldStyle }}"></input>
+                    <label style="font-size:12.5px;font-weight:700;color:#6B3F9E;">نوع مقدّم الخدمة</label>
+                    <div style="display:flex;gap:9px;">
+                      <sc-for list="{{ pRegKinds }}" as="kd" hint-placeholder-count="2">
+                        <button onClick="{{ kd.pick }}" style="{{ kd.style }}">
+                          <span style="display:grid;place-items:center;">{{ kd.icon }}</span>
+                          <span>{{ kd.label }}</span>
+                        </button>
+                      </sc-for>
+                    </div>
+                    <div style="font-size:11px;color:#9A90A3;line-height:1.8;">{{ pRegKindNote }}</div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:9px;">
+                    <label style="font-size:12.5px;font-weight:700;color:#6B3F9E;">{{ pRegNameLabel }}</label>
+                    <input value="{{ pRegName }}" onChange="{{ onPRegName }}" placeholder="{{ pRegNamePh }}" aria-label="{{ pRegNameLabel }}" style="{{ pRegFieldStyle }}"></input>
                   </div>
                   <div style="display:flex;flex-direction:column;gap:9px;">
                     <label style="font-size:12.5px;font-weight:700;color:#6B3F9E;">رقم الجوال</label>
@@ -2827,7 +2866,7 @@
                     <span style="{{ pRideBadge }}">{{ pRideState }}</span>
                   </div>
                   <sc-if value="{{ pRideSim }}" hint-placeholder-val="{{ false }}">
-                    <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="medium" variant="tinted" full-width="{{ true }}" on-click="{{ simDriverArrived }}" hint-size="100%,40px">محاكاة وصول المندوب</x-import>
+                    <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="medium" variant="tinted" full-width="{{ true }}" on-click="{{ simDriverArrived }}" hint-size="100%,40px">محاكاة وصول المندوبة</x-import>
                   </sc-if>
                 </div>
               </sc-if>
@@ -3278,6 +3317,89 @@
             <sc-if value="{{ boostActive }}" hint-placeholder-val="{{ false }}">
               <button onClick="{{ cancelBoost }}" style="width:100%;padding:15px;border-radius:18px;background:#FDECEF;color:#C0364F;font-weight:700;font-size:13px;min-height:50px;">إيقاف التجديد التلقائي</button>
             </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ pBoostPayS }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:16px 20px 130px;animation:jshUp .3s cubic-bezier(.2,0,0,1) both;display:flex;flex-direction:column;gap:16px;">
+
+            <sc-if value="{{ boostPayIdle }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column;gap:16px;">
+                <div style="border-radius:24px;padding:18px;background:linear-gradient(140deg,#47286B,#A9628A);color:#fff;display:flex;gap:13px;align-items:center;">
+                  <span style="width:48px;height:48px;border-radius:17px;background:rgba(255,255,255,.16);display:grid;place-items:center;flex:none;">{{ icBoost }}</span>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font-weight:700;font-size:16px;">{{ boostPayName }}</div>
+                    <div style="font-size:11.5px;color:rgba(255,255,255,.82);margin-top:5px;">تُدفع {{ boostPayPer }}</div>
+                  </div>
+                </div>
+
+                <div>
+                  <div style="font-weight:700;font-size:15px;margin-bottom:10px;">وسيلة الدفع</div>
+                  <div style="display:flex;flex-direction:column;gap:10px;">
+                    <sc-for list="{{ boostPayMethods }}" as="m" hint-placeholder-count="4">
+                      <button onClick="{{ m.pick }}" style="{{ m.style }}">
+                        <span style="display:flex;align-items:center;gap:11px;">
+                          <span style="width:40px;height:40px;border-radius:14px;background:#F6F1FB;color:#6B3F9E;display:grid;place-items:center;flex:none;">{{ m.icon }}</span>
+                          <span style="text-align:right;">
+                            <span style="display:block;font-weight:700;font-size:13.5px;">{{ m.label }}</span>
+                            <span style="display:block;font-size:11.5px;color:#9A90A3;margin-top:4px;">{{ m.hint }}</span>
+                          </span>
+                        </span>
+                        <span style="{{ m.dot }}"></span>
+                      </button>
+                    </sc-for>
+                  </div>
+                </div>
+
+                <div style="background:#fff;border:1px solid #F1E7F2;border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:10px;">
+                  <sc-for list="{{ boostPayRows }}" as="row" hint-placeholder-count="5">
+                    <div style="display:flex;justify-content:space-between;gap:12px;font-size:12.5px;color:#6E6178;">
+                      <span>{{ row.k }}</span><span style="font-weight:700;color:#3B2B4A;text-align:left;max-width:62%;line-height:1.7;">{{ row.v }}</span>
+                    </div>
+                  </sc-for>
+                  <div style="height:1px;background:#F1E7F2;margin:4px 0;"></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <span style="font-weight:700;font-size:14.5px;">المطلوب دفعه</span>
+                    <span style="font-weight:700;font-size:19px;color:#6B3F9E;">{{ boostPayTotal }}</span>
+                  </div>
+                </div>
+
+                <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="large" variant="prominent" full-width="{{ true }}" on-click="{{ doBoostPay }}" hint-size="100%,50px">ادفعي وفعّلي الباقة</x-import>
+                <div style="font-size:11px;color:#9A90A3;text-align:center;line-height:1.9;">الدفع آمن ومشفّر. التجديد تلقائي ويمكنك إيقافه من صفحة باقة التمييز في أي وقت.</div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ boostPaying }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:80px 0;display:flex;flex-direction:column;align-items:center;gap:16px;" aria-busy="true">
+                <x-import component-from-global-scope="DesignSystem_9729b4.ActivityIndicator" size="{{ 44 }}" color="#6B3F9E" hint-size="44px,44px"></x-import>
+                <div style="font-weight:700;font-size:15px;">نتمّم الدفع الآن</div>
+                <div style="font-size:12.5px;color:#9A90A3;">لا تغلقي الشاشة</div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ boostPayDone }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:30px 6px 10px;display:flex;flex-direction:column;align-items:center;gap:15px;text-align:center;animation:jshPop .45s cubic-bezier(.45,0,.55,1) both;">
+                <span style="width:76px;height:76px;border-radius:50%;background:#E6F5EE;color:#2F7A5A;display:grid;place-items:center;">{{ icCheckBig }}</span>
+                <div style="font-weight:700;font-size:20px;">تم تفعيل باقة التمييز</div>
+                <div style="font-size:13px;color:#6E6178;line-height:1.95;max-width:30ch;">ملفك الآن موثّق ومميّز ويظهر في المقدّمة لدى العميلات.</div>
+                <div style="width:100%;background:#fff;border:1px solid #F1E7F2;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:10px;margin-top:2px;">
+                  <sc-for list="{{ boostPayRows }}" as="row" hint-placeholder-count="5">
+                    <div style="display:flex;justify-content:space-between;gap:12px;font-size:12.5px;color:#6E6178;">
+                      <span>{{ row.k }}</span><span style="font-weight:700;color:#3B2B4A;text-align:left;max-width:62%;line-height:1.7;">{{ row.v }}</span>
+                    </div>
+                  </sc-for>
+                  <div style="height:1px;background:#F1E7F2;margin:4px 0;"></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <span style="font-weight:700;font-size:14px;">المبلغ المدفوع</span>
+                    <span style="font-weight:700;font-size:18px;color:#2F7A5A;">{{ boostPayTotal }}</span>
+                  </div>
+                </div>
+                <div style="width:100%;margin-top:4px;">
+                  <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="large" variant="prominent" full-width="{{ true }}" on-click="{{ boostGoProfile }}" hint-size="100%,50px">العودة لحسابي</x-import>
+                </div>
+              </div>
+            </sc-if>
+
           </div>
         </sc-if>
 
@@ -3746,13 +3868,13 @@
           <div style="width:100%;background:#fff;border-radius:30px 30px 0 0;padding:20px 20px 28px;animation:jshSheet .32s cubic-bezier(.22,1,.36,1) both;">
             <div style="width:44px;height:5px;border-radius:6px;background:#EDE3EF;margin:0 auto 16px;"></div>
             <div style="font-weight:700;font-size:17px;">كيف ستتوجّهين للعميلة؟</div>
-            <div style="font-size:12.5px;color:#9A90A3;margin-top:5px;line-height:1.8;">اختاري طلب مندوب جوشن لتوصيلك مع أدواتك، أو التوجّه بمركبتك.</div>
+            <div style="font-size:12.5px;color:#9A90A3;margin-top:5px;line-height:1.8;">اختاري طلب مندوبة جوشن لتوصيلك مع أدواتك، أو التوجّه بمركبتك.</div>
             <div style="margin-top:12px;background:#FBF8FD;border-radius:16px;padding:12px 13px;font-size:11.5px;color:#6E6178;line-height:1.85;">{{ pRideFeeNote }}</div>
             <div style="display:flex;flex-direction:column;gap:10px;margin:16px 0 4px;">
               <button onClick="{{ chooseRideDriver }}" style="display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid #D6C4EA;border-radius:20px;padding:15px;text-align:right;min-height:64px;" style-hover="background:#FBF8FD">
                 <span style="width:44px;height:44px;border-radius:15px;background:#F3EEF9;color:#5A3486;display:grid;place-items:center;flex:none;">{{ icMoto }}</span>
                 <span style="flex:1;">
-                  <span style="display:block;font-weight:700;font-size:13.5px;">اطلبي مندوب جوشن</span>
+                  <span style="display:block;font-weight:700;font-size:13.5px;">اطلبي مندوبة جوشن</span>
                   <span style="display:block;font-size:11.5px;color:#9A90A3;margin-top:4px;">يوصّلك من موقعك إلى عنوان العميلة</span>
                 </span>
                 <span style="color:#CFC4D6;display:grid;place-items:center;">{{ icChevron }}</span>
@@ -3761,13 +3883,49 @@
                 <span style="width:44px;height:44px;border-radius:15px;background:#F6F1FB;color:#6B3F9E;display:grid;place-items:center;flex:none;">{{ icNav }}</span>
                 <span style="flex:1;">
                   <span style="display:block;font-weight:700;font-size:13.5px;">سأتوجّه بنفسي</span>
-                  <span style="display:block;font-size:11.5px;color:#9A90A3;margin-top:4px;">بدون مندوب — أبدأ التوجّه الآن</span>
+                  <span style="display:block;font-size:11.5px;color:#9A90A3;margin-top:4px;">بدون مندوبة — أبدأ التوجّه الآن</span>
                 </span>
                 <span style="color:#CFC4D6;display:grid;place-items:center;">{{ icChevron }}</span>
               </button>
             </div>
             <div style="display:flex;justify-content:center;">
               <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="medium" variant="plain" on-click="{{ closeRideSheet }}" hint-size="auto,40px">إلغاء</x-import>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ femDeclOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;z-index:70;background:rgba(30,14,44,.46);display:flex;align-items:flex-end;">
+          <div style="width:100%;background:#fff;border-radius:30px 30px 0 0;padding:20px 20px 26px;animation:jshSheet .32s cubic-bezier(.22,1,.36,1) both;">
+            <div style="width:44px;height:5px;border-radius:6px;background:#EDE3EF;margin:0 auto 16px;"></div>
+            <div style="display:flex;align-items:center;gap:11px;">
+              <span style="width:44px;height:44px;border-radius:16px;background:#F6F1FB;color:#6B3F9E;display:grid;place-items:center;flex:none;">{{ icShieldDecl }}</span>
+              <div style="flex:1;min-width:0;">
+                <div style="font-weight:700;font-size:17px;">{{ femDeclTitle }}</div>
+                <div style="font-size:11.5px;color:#9A90A3;margin-top:4px;">{{ femDeclSub }}</div>
+              </div>
+            </div>
+
+            <div style="margin-top:16px;background:#FBF8FD;border:1px dashed #E0CFEB;border-radius:18px;padding:15px;font-size:12.5px;color:#4A3B55;line-height:2;">{{ femDeclBody }}</div>
+
+            <button onClick="{{ toggleFemDecl }}" style="{{ femDeclRowStyle }}" style-active="scale:0.995">
+              <span style="{{ femDeclBoxStyle }}">{{ femDeclMark }}</span>
+              <span style="flex:1;min-width:0;">
+                <span style="display:block;font-weight:700;font-size:13px;line-height:1.7;">أقرّ بأنني أنثى</span>
+                <span style="display:block;font-size:11.5px;color:#6E6178;margin-top:5px;line-height:1.8;">وأتحمّل مسؤولية صحة هذا الإقرار، وأعلم أن مخالفته تعني إيقاف الحساب.</span>
+              </span>
+            </button>
+
+            <sc-if value="{{ femDeclErr }}" hint-placeholder-val="{{ false }}">
+              <div role="alert" style="margin-top:10px;font-size:11.5px;color:#C0364F;font-weight:700;line-height:1.8;">يجب تأكيد الإقرار قبل المتابعة.</div>
+            </sc-if>
+
+            <div style="margin-top:18px;">
+              <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="large" variant="prominent" full-width="{{ true }}" on-click="{{ confirmFemDecl }}" hint-size="100%,50px">{{ femDeclCta }}</x-import>
+            </div>
+            <div style="display:flex;justify-content:center;margin-top:8px;">
+              <button onClick="{{ cancelFemDecl }}" style="min-height:44px;padding:0 14px;font-size:13px;font-weight:700;color:#6E6178;">رجوع</button>
             </div>
           </div>
         </div>
@@ -3872,7 +4030,7 @@
   </div>
 
   <div class="jsh-foot" style="font-size:11.5px;color:#9A90A3;text-align:center;max-width:380px;line-height:1.8;">
-    نموذج تفاعلي · هوية جوشن الجديدة · مكوّنات iOS 26 · ثلاثة تطبيقات: العميلة · مقدّمة الخدمة · المندوب
+    نموذج تفاعلي · هوية جوشن الجديدة · مكوّنات iOS 26 · ثلاثة تطبيقات: العميلة · مقدّمة الخدمة · المندوبة
   </div>
 </div>
 
@@ -3886,6 +4044,8 @@ class Component extends DCLogic {
     pScreen: 'auth', pStack: [],
 
     cAuth: 'guest',
+    femDeclOpen: false, femDeclAgreed: false, femDeclErr: false, femDeclFor: 'customer',
+    femOk: { customer: false, provider: false, driver: false },
     authPhone: '', authOtp: '', authName: '', authErr: '', authSent: false,
     gateOpen: false, gateReason: '',
     cProf: { name: 'لمار العتيبي', phone: '٠٥٥١٢٣٤٥٦٧', email: 'lamar@joshen.sa', city: 'الرياض', birth: '١٩٩٦' },
@@ -3894,6 +4054,7 @@ class Component extends DCLogic {
 
     pAuthMode: 'login', pRegStep: 0, pOtp: '', pOtpSent: false, pOtpErr: '',
     pInstant: true, pVerified: false, pBoostSel: 'gold', pBoostActive: false,
+    pPayMethod: 'mada', pPayState: 'idle', pBoostCycle: '',
     pProf: { name: 'نورة الشمري', title: 'أخصائية عناية بالبشرة', bio: 'أخصائية عناية معتمدة، أستخدم منتجات خالية من العطور ومناسبة للبشرة الحساسة، وألتزم بمعايير التعقيم الكامل وأحضر جميع الأدوات معي.', phone: '٠٥٥٤٤٧٨٨١٢' },
     pEdit: null,
     pPortfolio: ['art/a1.png', 'art/a3.png', 'art/pkg-2.png'],
@@ -3903,10 +4064,11 @@ class Component extends DCLogic {
     pRideDefault: 'ask',
 
     dAuthMode: 'login', dRegStep: 0, dOtp: '', dOtpSent: false, dOtpErr: '',
-    dProf: { name: 'فهد العمري', phone: '٠٥٥١٢٣٤٥٦٧', city: 'الرياض', vehicle: 'هوندا PCX ١٢٥ — ر ن ب ٤٨٢١' },
+    dProf: { name: 'مها الزهراني', phone: '٠٥٥١٢٣٤٥٦٧', city: 'الرياض', vehicle: 'هوندا PCX ١٢٥ — ر ن ب ٤٨٢١' },
     dEdit: null, tripSel: null,
 
-    pReg: { name: '', nid: '', phone: '', exp: '' },
+    pRegKind: 'individual',
+    pReg: { name: '', nid: '', phone: '', exp: '', cr: '', vat: '', rep: '' },
     pCraftSel: [],
     pDocState: { id: 'idle', cert: 'idle', health: 'idle' },
     pOnline: false, pRequest: null, pCd: 20, pCdTimer: null, pStage: 0,
@@ -4165,7 +4327,26 @@ class Component extends DCLogic {
     { id: 101, name: 'باكج العروس الكامل', desc: 'مكياج + شعر + حناء + عناية بالبشرة', price: '١٫٩٥٠ ر.س', was: '٢٫٦٠٠ ر.س', save: 'وفري ٦٥٠', slot: 'jsh-pkg-1', art: 'art/pkg-1.png', status: 'live', valid: 'صلاحية ٣٠ يوم', num: 1950, wasNum: 2600, provId: 1, occ: ['عروس'], cat: 'makeup',
       includes: [{ name: 'مكياج عروس', dur: '١٨٠ د' }, { name: 'تسريحة مناسبات', dur: '١٢٠ د' }, { name: 'حناء يدين', dur: '٦٠ د' }, { name: 'جلسة عناية بالبشرة', dur: '٧٥ د' }] },
     { id: 102, name: 'باكج نهاية الأسبوع', desc: 'تصفيف شعر + مانيكير + ماسك مرطب', price: '٣٩٠ ر.س', was: '٥٢٠ ر.س', save: 'وفري ١٣٠', slot: 'jsh-pkg-2', art: 'art/pkg-2.png', status: 'live', valid: 'صلاحية ٣٠ يوم', num: 390, wasNum: 520, provId: 4, occ: ['سهرة', 'عناية شخصية'], cat: 'hair',
-      includes: [{ name: 'تصفيف وسيشوار', dur: '٩٠ د' }, { name: 'مانيكير', dur: '٤٥ د' }, { name: 'ماسك مرطب', dur: '٣٠ د' }] }
+      includes: [{ name: 'تصفيف وسيشوار', dur: '٩٠ د' }, { name: 'مانيكير', dur: '٤٥ د' }, { name: 'ماسك مرطب', dur: '٣٠ د' }] },
+
+    { id: 104, name: 'باكج سهرة متكامل', desc: 'مكياج سواريه + تسريحة مناسبات', price: '٥٩٠ ر.س', was: '٧٢٠ ر.س', save: 'وفري ١٣٠', slot: 'jsh-pkg-4', art: 'art/pkg-2.png', status: 'live', valid: 'صلاحية ٣٠ يوم', num: 590, wasNum: 720, provId: 1, occ: ['سهرة'], cat: 'makeup',
+      includes: [{ name: 'مكياج سواريه', dur: '١٢٠ د' }, { name: 'تسريحة مناسبات', dur: '١٢٠ د' }] },
+    { id: 105, name: 'باكج العناية بالشعر', desc: 'علاج بروتين + تصفيف وسيشوار', price: '٥٨٠ ر.س', was: '٧٢٥ ر.س', save: 'وفري ١٤٥', slot: 'jsh-pkg-5', art: 'art/pkg-3.png', status: 'live', valid: 'صلاحية ٤٥ يوم', num: 580, wasNum: 725, provId: 1, occ: ['عناية شخصية'], cat: 'hair',
+      includes: [{ name: 'علاج بروتين', dur: '١٥٠ د' }, { name: 'تصفيف وسيشوار', dur: '٩٠ د' }] },
+
+    { id: 106, name: 'باكج تجديد البشرة', desc: 'جلستا عناية بالبشرة + تقشير الجسم', price: '٦٩٠ ر.س', was: '٨١٠ ر.س', save: 'وفري ١٢٠', slot: 'jsh-pkg-6', art: 'art/pkg-1.png', status: 'live', valid: 'صلاحية ٤٥ يوم', num: 690, wasNum: 810, provId: 2, occ: ['عناية شخصية'], cat: 'body',
+      includes: [{ name: 'جلستا عناية بالبشرة', dur: '٧٥ د × ٢' }, { name: 'تقشير الجسم', dur: '٩٠ د' }] },
+    { id: 107, name: 'باكج الحواجب والرموش', desc: 'تنظيف وتشقير + رفع الرموش', price: '٢٤٠ ر.س', was: '٢٨٠ ر.س', save: 'وفري ٤٠', slot: 'jsh-pkg-7', art: 'art/pkg-2.png', status: 'live', valid: 'صلاحية ٣٠ يوم', num: 240, wasNum: 280, provId: 2, occ: ['عناية شخصية', 'سهرة'], cat: 'brows',
+      includes: [{ name: 'تنظيف وتشقير الحواجب', dur: '٤٥ د' }, { name: 'رفع الرموش', dur: '٦٠ د' }] },
+
+    { id: 108, name: 'باكج الأظافر الكامل', desc: 'مانيكير وباديكير + تركيب أظافر', price: '٣٩٠ ر.س', was: '٤٤٠ ر.س', save: 'وفري ٥٠', slot: 'jsh-pkg-8', art: 'art/pkg-3.png', status: 'live', valid: 'صلاحية ٣٠ يوم', num: 390, wasNum: 440, provId: 3, occ: ['سهرة', 'عروس'], cat: 'nails',
+      includes: [{ name: 'مانيكير وباديكير', dur: '٦٠ د' }, { name: 'تركيب أظافر', dur: '١٢٠ د' }] },
+    { id: 109, name: 'باكج دلال واسترخاء', desc: 'مساج استرخائي + مانيكير وباديكير', price: '٣٨٠ ر.س', was: '٤٢٠ ر.س', save: 'وفري ٤٠', slot: 'jsh-pkg-9', art: 'art/pkg-1.png', status: 'live', valid: 'صلاحية ٤٥ يوم', num: 380, wasNum: 420, provId: 3, occ: ['عناية شخصية'], cat: 'body',
+      includes: [{ name: 'مساج استرخائي', dur: '٦٠ د' }, { name: 'مانيكير وباديكير', dur: '٦٠ د' }] },
+    { id: 110, name: 'باكج العروس الملكي', desc: 'مكياج عروس + تسريحة + أظافر + حواجب', price: '٢٫٣٥٠ ر.س', was: '٢٫٩٨٠ ر.س', save: 'وفري ٦٣٠', slot: 'jsh-pkg-10', art: 'art/pkg-2.png', status: 'live', valid: 'صلاحية ٦٠ يوم', num: 2350, wasNum: 2980, provId: 4, occ: ['عروس'], cat: 'makeup',
+      includes: [{ name: 'مكياج عروس', dur: '١٨٠ د' }, { name: 'تسريحة مناسبات', dur: '١٢٠ د' }, { name: 'تركيب أظافر', dur: '١٢٠ د' }, { name: 'تنظيف وتشقير الحواجب', dur: '٤٥ د' }] },
+    { id: 111, name: 'باكج إطلالة كاملة', desc: 'مكياج ناعم + تصفيف + مانيكير', price: '٦٤٠ ر.س', was: '٧٦٠ ر.س', save: 'وفري ١٢٠', slot: 'jsh-pkg-11', art: 'art/pkg-3.png', status: 'live', valid: 'صلاحية ٣٠ يوم', num: 640, wasNum: 760, provId: 4, occ: ['سهرة'], cat: 'makeup',
+      includes: [{ name: 'مكياج ناعم', dur: '٦٠ د' }, { name: 'تصفيف وسيشوار', dur: '٩٠ د' }, { name: 'مانيكير وباديكير', dur: '٦٠ د' }] }
   ];
 
   FROM_TIMES = ['٨:٠٠ ص', '٩:٠٠ ص', '١٠:٠٠ ص', '١٢:٠٠ م', '٤:٠٠ م'];
@@ -4294,6 +4475,22 @@ class Component extends DCLogic {
   dTab(s) { this.setState({ dScreen: s, dStack: [] }); }
   pTab(s) { this.setState({ pScreen: s, pStack: [] }); }
   pgo(s) { this.setState(st => ({ pScreen: s, pStack: [...st.pStack, st.pScreen] })); }
+  BOOST_PLANS = [
+    { k: 'silver', name: 'تمييز فضي', price: 149, per: 'شهرياً' },
+    { k: 'gold', name: 'تمييز ذهبي', price: 299, per: 'شهرياً' },
+    { k: 'year', name: 'تمييز ذهبي سنوي', price: 2690, per: 'سنوياً' }
+  ];
+  boostPlan() { return this.BOOST_PLANS.find(x => x.k === this.state.pBoostSel) || this.BOOST_PLANS[1]; }
+  doBoostPay() {
+    this.setState({ pPayState: 'processing' });
+    setTimeout(() => {
+      const pl = this.boostPlan();
+      this.setState({
+        pPayState: 'done', pBoostActive: true,
+        pBoostCycle: pl.per === 'سنوياً' ? 'يتجدد بعد سنة' : 'يتجدد بعد شهر'
+      });
+    }, 1700);
+  }
   chip(on) {
     return 'font-size:12px;font-weight:700;padding:11px 14px;border-radius:999px;min-height:44px;border:1.5px solid ' + (on ? '#A9628A' : '#EDE3EF') + ';background:' + (on ? '#FCF5F9' : '#fff') + ';color:' + (on ? '#A9628A' : '#6E6178') + ';transition-property:border-color,background,color;transition-duration:150ms;';
   }
@@ -4486,13 +4683,42 @@ class Component extends DCLogic {
   verifyAuth(mode) {
     if (this.state.authOtp.replace(/\D/g, '').length < 4) { this.setState({ authErr: 'أدخلي رمز التحقق المكوّن من ٤ أرقام' }); return; }
     if (mode === 'signup' && this.state.authName.trim().length < 3) { this.setState({ authErr: 'أدخلي اسمك الكامل' }); return; }
+    if (mode === 'signup' && !this.state.femOk.customer) {
+      this.setState({ authErr: '' }, () => this.openFemDecl('customer'));
+      return;
+    }
     const name = mode === 'signup' ? this.state.authName.trim() : this.state.cProf.name;
     this.setState(st => ({
       cAuth: 'user', gateOpen: false, authErr: '', authSent: false, authOtp: '', authPhone: '', authName: '',
+      femDeclOpen: false, femDeclErr: false,
       cProf: { ...st.cProf, name: name }, cScreen: 'home', cStack: []
     }));
     this.flash(mode === 'signup' ? 'أهلاً بك في جوشن، ' + name : 'أهلاً بعودتك، ' + name);
   }
+  FEM_DECL = {
+    customer: { title: 'إقرار قبل إنشاء الحساب', sub: 'خدمات جوشن مخصّصة للنساء فقط',
+      body: 'جميع الخدمات في جوشن تُقدَّم داخل المنازل من أخصائيات لعميلات، وحفاظاً على خصوصية وسلامة الطرفين فإن الحسابات مخصّصة للإناث فقط.',
+      cta: 'تأكيد وإنشاء الحساب' },
+    provider: { title: 'إقرار قبل تقديم الطلب', sub: 'العمل في جوشن مخصّص للنساء فقط',
+      body: 'الخدمات تُنفَّذ داخل منازل العميلات، ولذلك يُشترط أن تكون مقدّمة الخدمة أنثى. وفي حساب المؤسسة ينطبق الشرط على جميع الأخصائيات العاملات تحتها.',
+      cta: 'تأكيد وإرسال الطلب' },
+    driver: { title: 'إقرار قبل تقديم الطلب', sub: 'التوصيل في جوشن مخصّص للنساء فقط',
+      body: 'يشمل العمل التعامل المباشر مع مقدّمات الخدمة وعميلات جوشن، ولذلك يُشترط أن تكون المندوبة أنثى.',
+      cta: 'تأكيد وإرسال الطلب' }
+  };
+  femDecl() { return this.FEM_DECL[this.state.femDeclFor] || this.FEM_DECL.customer; }
+  openFemDecl(role) { this.setState({ femDeclFor: role, femDeclOpen: true, femDeclAgreed: false, femDeclErr: false }); }
+  toggleFemDecl() { this.setState(st => ({ femDeclAgreed: !st.femDeclAgreed, femDeclErr: false })); }
+  confirmFemDecl() {
+    const role = this.state.femDeclFor;
+    if (!this.state.femDeclAgreed) { this.setState({ femDeclErr: true }); this.flash('يجب تأكيد الإقرار للمتابعة'); return; }
+    this.setState(st => ({ femDeclOpen: false, femOk: { ...st.femOk, [role]: true } }), () => {
+      if (role === 'provider') this.submitPReg();
+      else if (role === 'driver') this.submitReg();
+      else this.verifyAuth('signup');
+    });
+  }
+  cancelFemDecl() { this.setState({ femDeclOpen: false, femDeclErr: false }); }
   enterVisitor() { this.setState({ cAuth: 'guest', cScreen: 'home', cStack: [] }); this.flash('تتصفّحين جوشن كزائرة — التصفّح فقط'); }
 
   order() { return this.state.orders.find(o => o.id === this.state.orderSel) || this.state.orders[0]; }
@@ -4536,7 +4762,7 @@ class Component extends DCLogic {
   pSendOtp() {
     const p = (this.state.pReg.phone || '').replace(/\D/g, '');
     if (p.length < 9) { this.setState({ pOtpErr: 'أدخلي رقم جوال صحيح يبدأ بـ 05' }); return; }
-    if (this.state.pReg.name.trim().length < 3) { this.setState({ pOtpErr: 'أدخلي الاسم الكامل' }); return; }
+    if (this.state.pReg.name.trim().length < 3) { this.setState({ pOtpErr: this.state.pRegKind === 'org' ? 'أدخلي اسم المؤسسة كما في السجل التجاري' : 'أدخلي اسم الفرد كاملاً' }); return; }
     this.setState({ pOtpSent: true, pOtpErr: '', pOtp: '' });
     this.flash('أرسلنا رمز التحقق لرقمك — استخدمي 1234 للتجربة');
   }
@@ -4580,7 +4806,7 @@ class Component extends DCLogic {
   dVerifyOtp() {
     if (this.state.dOtp.replace(/\D/g, '').length < 4) { this.setState({ dOtpErr: 'أدخل الرمز المكوّن من ٤ أرقام' }); return; }
     this.setState({ dRegStep: 1, dOtpErr: '', dOtpSent: false });
-    this.flash('تم التحقق من رقم الجوال — أكمل بياناتك ومستنداتك');
+    this.flash('تم التحقق من رقم الجوال — أكملي بياناتك ومستنداتك');
   }
 
   back() {
@@ -4766,12 +4992,17 @@ class Component extends DCLogic {
     this.setState(st => ({ docState: { ...st.docState, [k]: 'uploading' } }));
     setTimeout(() => this.setState(st => ({ docState: { ...st.docState, [k]: 'done' } })), 1300);
   }
+  submitPReg() {
+    if (!this.state.femOk.provider) { this.openFemDecl('provider'); return; }
+    this.setState({ pScreen: 'pending', pStack: [] });
+  }
   submitReg() {
+    if (!this.state.femOk.driver) { this.openFemDecl('driver'); return; }
     this.setState({ regErrors: {}, docsError: false, dScreen: 'pending', dStack: [] });
   }
   autofillReg() {
     this.setState({
-      reg: { name: 'فهد العمري', nid: '1098234571', phone: '0551234567', vehicle: 'تويوتا يارس — ح ب د ٤٥٢١' },
+      reg: { name: 'مها الزهراني', nid: '1098234571', phone: '0551234567', vehicle: 'تويوتا يارس — ح ب د ٤٥٢١' },
       regErrors: {}, docsError: false, docState: { id: 'uploading', license: 'uploading', vehicle: 'uploading' }
     });
     this.flash('تم تعبئة البيانات ورفع المستندات تلقائياً');
@@ -4897,14 +5128,14 @@ class Component extends DCLogic {
       pedit: ['تعديل بياناتي', 'الاسم وبيانات التواصل']
     };
     const dTitles = {
-      reg: ['تسجيل مندوب', 'أكمل بياناتك والمستندات'], pending: ['حالة الحساب', 'مراجعة المستندات'],
-      trip: ['الرحلة الحالية', 'تابع مراحل التوصيل'], history: ['سجل الرحلات', this.ar(st.trips.length) + ' رحلة'],
-      earnings: ['الأرباح', 'التحصيل والتحويلات'], profile: ['حسابي', 'إعدادات المندوب'],
+      reg: ['تسجيل مندوبة', 'أكملي بياناتك والمستندات'], pending: ['حالة الحساب', 'مراجعة المستندات'],
+      trip: ['الرحلة الحالية', 'تابعي مراحل التوصيل'], history: ['سجل الرحلات', this.ar(st.trips.length) + ' رحلة'],
+      earnings: ['الأرباح', 'التحصيل والتحويلات'], profile: ['حسابي', 'إعدادات المندوبة'],
       docs: ['المستندات', 'للعرض فقط'],
       vehicle: ['المركبة', 'بيانات الاستمارة'],
       bank: ['الحساب البنكي', 'للعرض فقط'],
       reviews: ['تقييمات العميلات', 'للعرض فقط'],
-      support: ['الدعم', 'المندوبون'],
+      support: ['الدعم', 'المندوبات'],
       tripd: ['تفاصيل الرحلة', (st.trips.find(t2 => t2.id === st.tripSel) || {}).id || ''],
       dedit: ['تعديل بياناتي', 'الاسم وبيانات التواصل'],
       notifs: ['الإشعارات', 'آخر التحديثات']
@@ -4924,6 +5155,7 @@ class Component extends DCLogic {
       support: ['الدعم', 'مقدّمات الخدمة'],
       psvc: ['خدماتي وأسعاري', 'الخدمات الفرعية والإضافات'],
       boost: ['باقة التمييز', 'التوثيق والظهور الأول'],
+      boostpay: ['الدفع', 'الاشتراك في باقة التمييز'],
       pedit: ['تعديل الملف الشخصي', 'البيانات وصور الأعمال'],
       bookingd: ['تفاصيل الموعد', (st.pBookings.find(b => b.id === st.pBookSel) || {}).id || ''],
       pchat: [(st.pBookings.find(b => b.id === st.pBookSel) || {}).who || 'العميلة', 'محادثة الطلب'],
@@ -4998,7 +5230,7 @@ class Component extends DCLogic {
     const stageTimes = ['٣:٣٠ م', '٣:٤٢ م', '٤:٠٢ م', '٤:٠٥ م', '٥:٢٠ م'];
     const tripStages = ['قبول الطلب', 'التوجه لمقدّمة الخدمة', 'اصطحاب مقدّمة الخدمة', 'الوصول لعنوان العميلة'];
     const tripCtas = ['بدء التوجه لمقدّمة الخدمة', 'تأكيد اصطحاب مقدّمة الخدمة', 'تأكيد الوصول للعميلة', 'إتمام الرحلة'];
-    const pStage1Title = st.pRide === 'driver' ? 'وصول المندوب والتوجه للعميلة' : 'التوجه لموقع العميلة';
+    const pStage1Title = st.pRide === 'driver' ? 'وصول المندوبة والتوجه للعميلة' : 'التوجه لموقع العميلة';
 
     const docsMeta = [
       { k: 'id', label: 'الهوية الوطنية', hint: 'صورة واضحة للوجهين', ic: 'idcard' },
@@ -5068,7 +5300,7 @@ class Component extends DCLogic {
       sGate: isC && cs === 'gate', sLogin: isC && cs === 'login', sSignup: isC && cs === 'signup',
       sOrderD: isC && cs === 'orderd', sPEdit: isC && cs === 'pedit',
       dAuthS: isD && ds === 'auth', dTripD: isD && ds === 'tripd', dEditS: isD && ds === 'dedit',
-      pAuthS: isP && pss === 'auth', pSvcS: isP && pss === 'psvc', pBoostS: isP && pss === 'boost',
+      pAuthS: isP && pss === 'auth', pSvcS: isP && pss === 'psvc', pBoostS: isP && pss === 'boost', pBoostPayS: isP && pss === 'boostpay',
       pEditS: isP && pss === 'pedit', pBookingDS: isP && pss === 'bookingd', pChatS: isP && pss === 'pchat', pRateS: isP && pss === 'prate',
       dReg: isD && ds === 'reg', dPending: isD && ds === 'pending', dHome: isD && ds === 'home',
       dTrip: isD && ds === 'trip', dHistory: isD && ds === 'history', dEarnings: isD && ds === 'earnings',
@@ -5235,6 +5467,8 @@ class Component extends DCLogic {
       resultsCount: this.ar(results.length) + ' نتيجة',
       results: results.map(r => ({ ...r, icon: this.icon(r.icon, 20), open: () => (r.isPkg ? this.openPkg(r.id) : this.openSub(r.catId, r.id)) })),
       icChevron: this.icon('back', 18, 2),
+      icShieldDecl: this.icon('shield', 22, 1.9),
+      icCheckBig: this.icon('check', 34, 2.6),
       icUsers: this.icon('users', 20), icUsersLg: this.icon('users', 24, 1.9), icUserPlus: this.icon('userPlus', 19),
       icTrashSm: this.icon('trash', 16), icUsersSm: this.icon('users', 15), icUsersMd: this.icon('users', 18),
       icPinSm: this.icon('pin', 15),
@@ -5378,6 +5612,14 @@ class Component extends DCLogic {
         id: c.id, name: c.name, icon: this.icon(c.icon, 18), tint: c.tint, ink: c.ink,
         items: c.subs.map(x => ({ name: x.name, dur: x.dur, price: this.sar(Math.round(x.base * prov.factor)) }))
       })),
+      provPkgs: this.livePkgs().filter(x => x.provId === prov.id).map(x => ({
+        ...x, artBg: 'url(' + x.art + ')',
+        incCount: this.ar((x.includes || []).length) + ' خدمات مشمولة',
+        validLabel: x.valid || 'صلاحية ٣٠ يوم',
+        open: () => this.openPkg(x.id)
+      })),
+      provPkgCount: this.ar(this.livePkgs().filter(x => x.provId === prov.id).length) + ' باقة',
+      provHasPkgs: this.livePkgs().some(x => x.provId === prov.id),
       provSvcCount: this.ar(this.CATS.filter(c => (prov.cats || []).includes(c.id)).reduce((a, c) => a + c.subs.length, 0)) + ' خدمة',
       provBadges: [
         { t: 'أدوات معقّمة لكل عميلة', ic: 'shield' },
@@ -5617,7 +5859,7 @@ class Component extends DCLogic {
       logoutOpen: st.logoutOpen,
       askLogout: () => this.setState({ logoutOpen: true }),
       cancelLogout: () => this.setState({ logoutOpen: false }),
-      logoutTitle: isC ? 'تسجيل الخروج من جوشن؟' : isP ? 'تسجيل الخروج من حساب مقدّمة الخدمة؟' : 'تسجيل الخروج من حساب المندوب؟',
+      logoutTitle: isC ? 'تسجيل الخروج من جوشن؟' : isP ? 'تسجيل الخروج من حساب مقدّمة الخدمة؟' : 'تسجيل الخروج من حساب المندوبة؟',
       logoutBody: isC ? 'ستحتاجين لتسجيل الدخول مجدداً لمتابعة طلباتك ومحفظتك. لن يتم إلغاء أي حجز قائم.'
         : isP ? 'لن تستقبلي طلبات جديدة بعد الخروج، وتبقى مواعيدك المؤكدة كما هي.'
         : 'لن تستقبل طلبات توصيل بعد الخروج، وتبقى رحلاتك المكتملة في السجل.',
@@ -5639,7 +5881,7 @@ class Component extends DCLogic {
       ].map(r => ({ ...r, icon: this.icon(r.ic, 17) })),
 
       regFields: [
-        { key: 'name', label: 'الاسم الكامل', placeholder: 'مثال: فهد العمري' },
+        { key: 'name', label: 'الاسم الكامل', placeholder: 'مثال: مها الزهراني' },
         { key: 'nid', label: 'رقم الهوية الوطنية', placeholder: '١٠ أرقام' },
         { key: 'phone', label: 'رقم الجوال', placeholder: '05XXXXXXXX' },
         { key: 'vehicle', label: 'المركبة', placeholder: 'مثال: تويوتا يارس — ح ب د ٤٥٢١' }
@@ -5709,7 +5951,7 @@ class Component extends DCLogic {
         { ic: 'star', label: 'تقييمات العميلات', value: '٤.٩', open: () => this.dgo('reviews') },
         { ic: 'chart', label: 'الأرباح', value: this.sar(340), open: () => this.dTab('earnings') },
         { ic: 'moto', label: 'سجل الرحلات', value: this.ar(st.trips.length), open: () => this.dTab('history') },
-        { ic: 'headset', label: 'دعم المندوبين', value: '٢٤/٧', open: () => this.dgo('support') }
+        { ic: 'headset', label: 'دعم المندوبات', value: '٢٤/٧', open: () => this.dgo('support') }
       ].map(r => ({ ...r, icon: this.icon(r.ic, 17) })),
 
       icShieldD: this.icon('shield', 17), icMotoD: this.icon('moto', 24), icUserD: this.icon('user', 20),
@@ -5732,7 +5974,7 @@ class Component extends DCLogic {
       dVehAsk: () => this.flash('أُرسل طلب تغيير المركبة للدعم'),
 
       dBankRows: [
-        { k: 'اسم صاحب الحساب', v: 'فهد سعد العمري' },
+        { k: 'اسم صاحبة الحساب', v: 'مها سعد الزهراني' },
         { k: 'البنك', v: 'البنك الأهلي' },
         { k: 'الآيبان', v: 'SA•• •••• •••• •••• ٢٣٤١' },
         { k: 'دورة التحويل', v: 'أسبوعية — الأحد' },
@@ -5750,7 +5992,7 @@ class Component extends DCLogic {
       ],
       dSupportRows: [
         { ic: 'chat', label: 'محادثة الدعم', value: 'رد خلال دقيقتين', open: () => this.flash('فتحنا محادثة مع فريق الدعم') },
-        { ic: 'phone', label: 'اتصال هاتفي', value: '٨٠٠ ٢٠٠ ٢٠٠', open: () => this.flash('جاري الاتصال بدعم المندوبين…') },
+        { ic: 'phone', label: 'اتصال هاتفي', value: '٨٠٠ ٢٠٠ ٢٠٠', open: () => this.flash('جاري الاتصال بدعم المندوبات…') },
         { ic: 'shield', label: 'بلاغ سلامة', value: 'عاجل', open: () => this.flash('تم فتح بلاغ سلامة — سنتواصل معك فوراً') },
         { ic: 'doc', label: 'الشروط والأحكام', value: '', open: () => this.flash('الشروط والأحكام — نموذج تجريبي') }
       ].map(r => ({ ...r, icon: this.icon(r.ic, 17) })),
@@ -5769,19 +6011,23 @@ class Component extends DCLogic {
         style: 'font-size:12px;font-weight:700;padding:11px 14px;border-radius:999px;min-height:44px;border:1.5px solid ' + (st.pCraftSel.includes(c) ? '#A9628A' : '#EDE3EF') + ';background:' + (st.pCraftSel.includes(c) ? '#FCF5F9' : '#fff') + ';color:' + (st.pCraftSel.includes(c) ? '#A9628A' : '#6E6178') + ';transition-property:border-color,background,color;transition-duration:150ms;',
         toggle: () => this.setState(s2 => ({ pCraftSel: s2.pCraftSel.includes(c) ? s2.pCraftSel.filter(x => x !== c) : [...s2.pCraftSel, c] }))
       })),
-      pDocs: [
+      pDocs: (st.pRegKind === 'org' ? [
+        { k: 'id', label: 'السجل التجاري', hint: 'ساري وصادر من وزارة التجارة', ic: 'doc' },
+        { k: 'cert', label: 'رخصة مزاولة النشاط', hint: 'من الجهة المختصة', ic: 'idcard' },
+        { k: 'health', label: 'الشهادات الصحية للأخصائيات', hint: 'سارية المفعول', ic: 'shield' }
+      ] : [
         { k: 'id', label: 'الهوية الوطنية / الإقامة', hint: 'صورة واضحة للوجهين', ic: 'idcard' },
         { k: 'cert', label: 'شهادة مهنية أو رخصة', hint: 'من مركز أو معهد معتمد', ic: 'doc' },
         { k: 'health', label: 'الشهادة الصحية', hint: 'سارية المفعول', ic: 'shield' }
-      ].map(d => {
+      ]).map(d => {
         const s2 = st.pDocState[d.k];
         return { ...d, icon: this.icon(d.ic, 18), style: this.card(s2 === 'done'), badge: docBadge(s2), status: s2 === 'done' ? 'تم الرفع' : s2 === 'uploading' ? 'جاري الرفع…' : 'رفع الملف', upload: () => this.uploadPDoc(d.k) };
       }),
-      submitPReg: () => { this.setState({ pScreen: 'pending', pStack: [] }); },
+      submitPReg: () => this.submitPReg(),
       autofillPReg: () => this.autofillPReg(),
       demoPOtpFill: () => {
         if (st.pOtpSent) { this.setState({ pOtp: '1234', pOtpErr: '' }); this.flash('تم تعبئة رمز التحقق — اضغطي تأكيد'); return; }
-        this.setState(s => ({ pReg: { ...s.pReg, name: 'نورة الشمري', phone: '0554478812' }, pOtpErr: '' }));
+        this.setState(s => ({ pReg: { ...s.pReg, name: s.pRegKind === 'org' ? 'مركز لمسة الجمال' : 'نورة الشمري', phone: '0554478812' }, pOtpErr: '' }));
         this.flash('تم تعبئة بيانات التجربة');
       },
       pApprovalSteps: [
@@ -5828,28 +6074,28 @@ class Component extends DCLogic {
       pRideSheet: st.pRideSheet,
       pRideCard: st.pStage >= 1 && st.pRide === 'driver',
       pRideSim: st.pRideSt === 'assigned',
-      pRideTitle: st.pRideSt === 'searching' ? 'نبحث عن مندوب قريب منك…' : st.pRideSt === 'assigned' ? 'فهد العمري في الطريق إليك' : 'وصل المندوب إلى موقعك',
-      pRideHint: st.pRideSt === 'searching' ? 'سيوصّلك مندوب جوشن مع أدواتك إلى عنوان العميلة' : st.pRideSt === 'assigned' ? 'تويوتا يارس · ح ب د ٤٥٢١ · يصل خلال ٤ دقائق' : 'يمكنك الانطلاق لعنوان العميلة الآن',
+      pRideTitle: st.pRideSt === 'searching' ? 'نبحث عن مندوبة قريبة منك…' : st.pRideSt === 'assigned' ? 'مها الزهراني في الطريق إليك' : 'وصلت المندوبة إلى موقعك',
+      pRideHint: st.pRideSt === 'searching' ? 'ستوصّلك مندوبة جوشن مع أدواتك إلى عنوان العميلة' : st.pRideSt === 'assigned' ? 'تويوتا يارس · ح ب د ٤٥٢١ · يصل خلال ٤ دقائق' : 'يمكنك الانطلاق لعنوان العميلة الآن',
       pRideState: st.pRideSt === 'searching' ? 'جاري البحث' : st.pRideSt === 'assigned' ? 'في الطريق' : 'وصل',
       pRideBadge: 'font-size:11px;font-weight:700;padding:6px 11px;border-radius:999px;flex:none;background:' + (st.pRideSt === 'arrived' ? '#E6F5EE' : '#FFF6E6') + ';color:' + (st.pRideSt === 'arrived' ? '#2F7A5A' : '#9A6B12') + ';',
       closeRideSheet: () => this.setState({ pRideSheet: false }),
       chooseRideDriver: () => {
         this.setState({ pRideSheet: false, pRide: 'driver', pRideSt: 'searching', pStage: 1 });
-        this.flash('جاري البحث عن مندوب قريب…');
+        this.flash('جاري البحث عن مندوبة قريبة…');
         setTimeout(() => this.setState({ pRideSt: 'assigned' }), 2200);
       },
       chooseRideSelf: () => { this.setState({ pRideSheet: false, pRide: 'self', pStage: 1 }); this.flash('تم بدء التوجه للعميلة'); },
-      simDriverArrived: () => { this.setState({ pRideSt: 'arrived' }); this.flash('وصل المندوب — يمكنك التوجّه للعميلة'); },
+      simDriverArrived: () => { this.setState({ pRideSt: 'arrived' }); this.flash('وصلت المندوبة — يمكنك التوجّه للعميلة'); },
       icMoto: this.icon('moto', 21), icNav: this.icon('nav', 20),
       pSessionAction: () => {
         if (st.pStage === 0) { this.setState({ pRideSheet: true }); return; }
-        if (st.pStage === 1 && st.pRide === 'driver' && st.pRideSt !== 'arrived') { this.flash('بانتظار وصول المندوب…'); return; }
+        if (st.pStage === 1 && st.pRide === 'driver' && st.pRideSt !== 'arrived') { this.flash('بانتظار وصول المندوبة…'); return; }
         this.advanceSession();
       },
-      pSessionTitle: st.pStage === 0 ? 'قبول الحجز' : st.pStage === 1 ? (st.pRide === 'driver' ? (st.pRideSt === 'arrived' ? 'المندوب وصل — في الطريق' : 'بانتظار وصول المندوب') : 'في الطريق للعميلة') : ['', '', 'الجلسة جارية', 'إتمام الجلسة'][Math.min(st.pStage, 3)],
+      pSessionTitle: st.pStage === 0 ? 'قبول الحجز' : st.pStage === 1 ? (st.pRide === 'driver' ? (st.pRideSt === 'arrived' ? 'المندوبة وصلت — في الطريق' : 'بانتظار وصول المندوبة') : 'في الطريق للعميلة') : ['', '', 'الجلسة جارية', 'إتمام الجلسة'][Math.min(st.pStage, 3)],
       pSessionStep: 'المرحلة ' + this.ar(st.pStage + 1) + ' من ٤',
       pSessionCta: st.pStage === 0 ? 'بدء التوجه للعميلة'
-        : st.pStage === 1 ? (st.pRide === 'driver' && st.pRideSt !== 'arrived' ? 'بانتظار وصول المندوب…' : 'تأكيد الوصول للعميلة')
+        : st.pStage === 1 ? (st.pRide === 'driver' && st.pRideSt !== 'arrived' ? 'بانتظار وصول المندوبة…' : 'تأكيد الوصول للعميلة')
         : ['', '', 'بدء الجلسة', 'إتمام الجلسة وتحصيل المبلغ'][Math.min(st.pStage, 3)],
       advanceSession: () => this.advanceSession(),
       pCallCustomer: () => this.flash('جاري الاتصال بالعميلة…'),
@@ -5984,7 +6230,7 @@ class Component extends DCLogic {
         pick: () => this.setState(s2 => ({ pArea: { ...s2.pArea, districts: s2.pArea.districts.includes(d) ? s2.pArea.districts.filter(x => x !== d) : [...s2.pArea.districts, d] } }))
       })),
       pAreaCircle: (() => { const sz = 76 + st.pArea.radius * 22; return 'position:absolute;top:50%;right:50%;width:' + sz + 'px;height:' + sz + 'px;margin:-' + sz / 2 + 'px -' + sz / 2 + 'px 0 0;border-radius:50%;background:rgba(169,98,138,.16);border:2px solid rgba(169,98,138,.45);'; })(),
-      pAreaNote: 'تستقبلين الحجوزات الفورية داخل ' + this.RADII[st.pArea.radius] + ' من موقعك وفي ' + (st.pArea.districts.length ? this.ar(st.pArea.districts.length) + ' أحياء محددة' : 'لا أحياء — اختاري حيّاً واحداً على الأقل') + '. رسوم توصيل المندوب تحتسب على العميلة حسب المسافة.',
+      pAreaNote: 'تستقبلين الحجوزات الفورية داخل ' + this.RADII[st.pArea.radius] + ' من موقعك وفي ' + (st.pArea.districts.length ? this.ar(st.pArea.districts.length) + ' أحياء محددة' : 'لا أحياء — اختاري حيّاً واحداً على الأقل') + '. رسوم توصيل المندوبة تحتسب على العميلة حسب المسافة.',
       savePArea: () => this.flash('تم حفظ نطاق الخدمة'),
 
       pBankRows: [
@@ -6019,7 +6265,7 @@ class Component extends DCLogic {
         if (isC && cs === 'chat') out.push({ label: 'اتصال', icon: this.icon('phone', 18), act: () => this.flash('جاري الاتصال بـ ' + prov.name + '…'), style: btn });
         if (isC && (cs === 'orders' || cs === 'wallet' || cs === 'profile')) out.push({ label: 'الإشعارات', icon: this.icon('bell', 19), act: () => this.goTab('notifs'), style: btn, dot: st.notifs.some(n => n.unread) });
         if (isC && (cs === 'search' || cs === 'service' || cs === 'provider')) out.push({ label: 'الدعم', icon: this.icon('headset', 19), act: () => this.flash('فريق الدعم متاح على مدار الساعة'), style: btn });
-        if (!isC && (ds === 'history' || ds === 'earnings' || ds === 'profile')) out.push({ label: 'دعم المندوبين', icon: this.icon('headset', 19), act: () => this.flash('دعم المندوبين متاح دائماً'), style: btn });
+        if (!isC && (ds === 'history' || ds === 'earnings' || ds === 'profile')) out.push({ label: 'دعم المندوبات', icon: this.icon('headset', 19), act: () => this.flash('دعم المندوبات متاح دائماً'), style: btn });
         if (!isC && ds === 'trip') out.push({ label: 'اتصال بالعميلة', icon: this.icon('phone', 18), act: () => this.flash('جاري الاتصال بالعميلة…'), style: btn });
         if (isP && (pss === 'schedule' || pss === 'earnings' || pss === 'profile')) out.push({ label: 'دعم مقدّمات الخدمة', icon: this.icon('headset', 19), act: () => this.flash('فريق دعم مقدّمات الخدمة متاح ٢٤/٧'), style: btn });
         if (isP && pss === 'session') out.push({ label: 'اتصال بالعميلة', icon: this.icon('phone', 18), act: () => this.flash('جاري الاتصال بالعميلة…'), style: btn });
@@ -6044,6 +6290,21 @@ class Component extends DCLogic {
       sendAuthOtp: () => this.sendAuthOtp(),
       verifyLogin: () => this.verifyAuth('login'),
       verifySignup: () => this.verifyAuth('signup'),
+      femDeclOpen: st.femDeclOpen,
+      femDeclTitle: this.femDecl().title,
+      femDeclSub: this.femDecl().sub,
+      femDeclBody: this.femDecl().body,
+      femDeclCta: this.femDecl().cta,
+      femDeclAgreed: st.femDeclAgreed,
+      femDeclErr: st.femDeclErr,
+      toggleFemDecl: () => this.toggleFemDecl(),
+      confirmFemDecl: () => this.confirmFemDecl(),
+      cancelFemDecl: () => this.cancelFemDecl(),
+      femDeclBoxStyle: 'width:26px;height:26px;border-radius:9px;flex:none;display:grid;place-items:center;color:#fff;border:1.5px solid '
+        + (st.femDeclAgreed ? '#6B3F9E' : st.femDeclErr ? '#E2A0AE' : '#D9CFE0') + ';background:' + (st.femDeclAgreed ? '#6B3F9E' : '#fff') + ';',
+      femDeclRowStyle: 'width:100%;text-align:right;display:flex;align-items:flex-start;gap:11px;background:' + (st.femDeclErr ? '#FDF4F6' : '#FBF8FD')
+        + ';border:1.5px solid ' + (st.femDeclAgreed ? '#C9B3DA' : st.femDeclErr ? '#E2A0AE' : '#EEE4F3') + ';border-radius:18px;padding:14px;',
+      femDeclMark: st.femDeclAgreed ? this.icon('check', 15, 2.8) : null,
       goLogin: () => this.setState({ cScreen: 'login', cStack: ['gate'], authSent: false, authErr: '', authOtp: '' }),
       goSignup: () => this.setState({ cScreen: 'signup', cStack: ['gate'], authSent: false, authErr: '', authOtp: '' }),
       goGate: () => this.setState({ cScreen: 'gate', cStack: [], authSent: false, authErr: '' }),
@@ -6169,7 +6430,37 @@ class Component extends DCLogic {
         pick: () => this.setState({ pBoostSel: p.k })
       })),
       boostActive: st.pBoostActive,
-      subscribeBoost: () => { this.setState({ pBoostActive: true }); this.flash('تم الاشتراك في باقة التمييز — ملفك الآن موثّق ومميّز'); },
+      subscribeBoost: () => this.setState({ pPayState: 'idle' }, () => this.pgo('boostpay')),
+      boostPayMethods: [
+        { k: 'mada', label: 'مدى · ٤٤٢١ ****', hint: 'بطاقة محفوظة', ic: 'card' },
+        { k: 'visa', label: 'بطاقة ائتمانية', hint: 'فيزا أو ماستركارد', ic: 'card' },
+        { k: 'apple', label: 'Apple Pay', hint: 'دفع سريع بالبصمة', ic: 'apple' },
+        { k: 'earn', label: 'الخصم من الأرباح', hint: 'يُخصم من أول تحويل قادم', ic: 'wallet' }
+      ].map(m => ({
+        ...m, icon: this.icon(m.ic, 18), style: this.card(st.pPayMethod === m.k),
+        dot: 'width:22px;height:22px;border-radius:50%;flex:none;border:2px solid ' + (st.pPayMethod === m.k ? '#6B3F9E' : '#DED2E2') + ';background:' + (st.pPayMethod === m.k ? 'radial-gradient(circle,#6B3F9E 42%,#fff 46%)' : '#fff') + ';',
+        pick: () => this.setState({ pPayMethod: m.k })
+      })),
+      boostPayRows: (() => {
+        const pl = this.boostPlan();
+        const vat = Math.round(pl.price * 0.15);
+        return [
+          { k: 'الباقة', v: pl.name },
+          { k: 'مدة الاشتراك', v: pl.per === 'سنوياً' ? 'سنة كاملة' : 'شهر واحد' },
+          { k: 'التجديد', v: 'تلقائي — يمكن إيقافه في أي وقت' },
+          { k: 'قيمة الاشتراك', v: this.sar(pl.price) },
+          { k: 'ضريبة القيمة المضافة ١٥٪', v: this.sar(vat) }
+        ];
+      })(),
+      boostPayTotal: (() => { const pl = this.boostPlan(); return this.sar(pl.price + Math.round(pl.price * 0.15)); })(),
+      boostPayName: this.boostPlan().name,
+      boostPayPer: this.boostPlan().per,
+      boostPayIdle: st.pPayState === 'idle',
+      boostPaying: st.pPayState === 'processing',
+      boostPayDone: st.pPayState === 'done',
+      doBoostPay: () => this.doBoostPay(),
+      boostPayBack: () => this.back(),
+      boostGoProfile: () => this.setState({ pScreen: 'profile', pStack: [] }),
       cancelBoost: () => { this.setState({ pBoostActive: false }); this.flash('تم إيقاف التجديد — ينتهي التمييز بنهاية الدورة'); },
 
       pProfName: st.pProf.name, pProfTitle: st.pProf.title, pProfBio: st.pProf.bio, pProfPhone: st.pProf.phone,
@@ -6323,14 +6614,14 @@ class Component extends DCLogic {
       },
       pRideDefaultOpts: [
         { k: 'ask', label: 'أختار عند كل حجز' },
-        { k: 'driver', label: 'مندوب جوشن دائماً' },
+        { k: 'driver', label: 'مندوبة جوشن دائماً' },
         { k: 'self', label: 'أتوجّه بنفسي دائماً' }
       ].map(o => ({ label: o.label, style: this.chip(st.pRideDefault === o.k), pick: () => { this.setState({ pRideDefault: o.k }); this.flash('تم حفظ طريقة التنقل الافتراضية'); } })),
-      pRideFeeNote: 'رسوم مندوب جوشن تُحتسب على العميلة ضمن رسوم التوصيل (' + this.sar(this.deliveryFee()) + ' تقريباً حسب المسافة). عند اختيارك التوجّه بنفسك تُحتسب الرسوم نفسها وتُضاف لعائدك.',
+      pRideFeeNote: 'رسوم مندوبة جوشن تُحتسب على العميلة ضمن رسوم التوصيل (' + this.sar(this.deliveryFee()) + ' تقريباً حسب المسافة). عند اختيارك التوجّه بنفسك تُحتسب الرسوم نفسها وتُضاف لعائدك.',
 
       dAuthLogin: st.dAuthMode === 'login', dAuthSignup: st.dAuthMode === 'signup',
       dSetAuthLogin: () => this.setState({ dAuthMode: 'login' }),
-      dDoLogin: () => { this.setState({ dScreen: 'home', dStack: [] }); this.flash('أهلاً بعودتك، فهد'); },
+      dDoLogin: () => { this.setState({ dScreen: 'home', dStack: [] }); this.flash('أهلاً بعودتك، مها'); },
       dStartReg: () => this.setState({ dScreen: 'reg', dStack: ['auth'], dRegStep: 0, dOtpSent: false, dOtp: '', dOtpErr: '' }),
       dRegStep1: st.dRegStep === 0, dRegStep2: st.dRegStep === 1,
       dRegStepLabel: 'الخطوة ' + this.ar(st.dRegStep + 1) + ' من ٢',
@@ -6343,21 +6634,43 @@ class Component extends DCLogic {
       dRegPhoneStyle: this.field(!!st.dOtpErr),
       dBackStep1: () => this.setState({ dRegStep: 0, dOtpSent: false }),
       dRegFields2: [
-        { key: 'name', label: 'الاسم الكامل', placeholder: 'مثال: فهد العمري' },
+        { key: 'name', label: 'الاسم الكامل', placeholder: 'مثال: مها الزهراني' },
         { key: 'nid', label: 'رقم الهوية الوطنية', placeholder: '١٠ أرقام' },
         { key: 'vehicle', label: 'المركبة', placeholder: 'مثال: تويوتا يارس — ح ب د ٤٥٢١' }
       ].map(f => ({
         ...f, value: st.reg[f.key], style: this.field(false),
         onChange: e => { const v = e.target.value; this.setState(s2 => ({ reg: { ...s2.reg, [f.key]: v } })); }
       })),
-      pRegFields2: [
+      pRegFields2: (st.pRegKind === 'org' ? [
+        { key: 'cr', label: 'رقم السجل التجاري', placeholder: '١٠ أرقام' },
+        { key: 'vat', label: 'الرقم الضريبي (اختياري)', placeholder: '١٥ رقم' },
+        { key: 'rep', label: 'اسم المفوّضة بالتوقيع', placeholder: 'مثال: نورة الشمري' },
+        { key: 'exp', label: 'سنوات النشاط وعدد الأخصائيات', placeholder: 'مثال: ٦ سنوات — ٨ أخصائيات' }
+      ] : [
         { key: 'nid', label: 'رقم الهوية / الإقامة', placeholder: '١٠ أرقام' },
         { key: 'exp', label: 'سنوات الخبرة وجهة العمل', placeholder: 'مثال: ٤ سنوات — مركز لمسة الجمال' }
-      ].map(f => ({
+      ]).map(f => ({
         ...f, value: st.pReg[f.key], style: this.field(false),
         onChange: e => { const v = e.target.value; this.setState(s2 => ({ pReg: { ...s2.pReg, [f.key]: v } })); }
       })),
       pRegName: st.pReg.name, pRegPhone: st.pReg.phone,
+      pRegIsOrg: st.pRegKind === 'org',
+      pRegIsIndiv: st.pRegKind !== 'org',
+      pRegNameLabel: st.pRegKind === 'org' ? 'اسم المؤسسة' : 'اسم الفرد',
+      pRegNamePh: st.pRegKind === 'org' ? 'مثال: مركز لمسة الجمال' : 'مثال: نورة الشمري',
+      pRegKindNote: st.pRegKind === 'org'
+        ? 'سجّلي باسم المنشأة، وستُضاف الأخصائيات تحت حسابها بعد الاعتماد.'
+        : 'سجّلي باسمك كما في الهوية، والخدمات تُنفَّذ بواسطتك شخصياً.',
+      pRegKinds: [
+        { k: 'individual', label: 'فرد', ic: 'user' },
+        { k: 'org', label: 'مؤسسة', ic: 'bank' }
+      ].map(x => ({
+        label: x.label, icon: this.icon(x.ic, 17),
+        style: 'flex:1;display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;border-radius:16px;font-size:13.5px;font-weight:700;border:1.5px solid '
+          + (st.pRegKind === x.k ? '#6B3F9E' : '#EDE3EF') + ';background:' + (st.pRegKind === x.k ? '#F6F1FB' : '#fff')
+          + ';color:' + (st.pRegKind === x.k ? '#4A2A66' : '#6E6178') + ';transition-property:background,border-color;transition-duration:.18s;',
+        pick: () => this.setState(s2 => ({ pRegKind: x.k, pOtpErr: '', pReg: { ...s2.pReg, name: '' } }))
+      })),
       onPRegName: e => { const v = e.target.value; this.setState(s2 => ({ pReg: { ...s2.pReg, name: v }, pOtpErr: '' })); },
       onPRegPhone: e => { const v = e.target.value; this.setState(s2 => ({ pReg: { ...s2.pReg, phone: v }, pOtpErr: '' })); },
       pRegFieldStyle: this.field(false),
@@ -6390,7 +6703,7 @@ class Component extends DCLogic {
       openDEdit: () => { this.setState({ dEdit: { ...st.dProf } }); this.dgo('dedit'); },
       dProfName: st.dProf.name, dProfPhone: st.dProf.phone,
       dEditFields: [
-        { key: 'name', label: 'الاسم الكامل', ph: 'فهد العمري' },
+        { key: 'name', label: 'الاسم الكامل', ph: 'مها الزهراني' },
         { key: 'phone', label: 'رقم الجوال', ph: '05XXXXXXXX' },
         { key: 'city', label: 'مدينة العمل', ph: 'الرياض' }
       ].map(f => ({
