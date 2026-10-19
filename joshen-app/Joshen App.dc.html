@@ -465,23 +465,24 @@
               </div>
 
               <div>
-                <div style="font-weight:700;font-size:16.5px;margin-bottom:12px;">باكجات مميزة</div>
-                <div style="display:flex;flex-direction:column;gap:12px;">
-                  <sc-for list="{{ packages }}" as="p" hint-placeholder-count="3">
-                    <button onClick="{{ p.open }}" style="display:flex;gap:13px;background:#fff;border:1px solid #F1E7F2;border-radius:22px;padding:12px;text-align:right;align-items:center;transition-property:box-shadow,scale;transition-duration:180ms;" style-hover="box-shadow:0 14px 26px rgba(75,40,110,.13)" style-active="scale:0.99">
-                      <span style="position:relative;width:80px;height:80px;border-radius:18px;overflow:hidden;flex:none;background:linear-gradient(140deg,#F7E9F1,#EBE1F5);">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                  <div style="font-weight:700;font-size:16.5px;">باكجات مميزة</div>
+                  <button onClick="{{ goPkgsAll }}" style="font-size:12.5px;color:#6B3F9E;font-weight:700;min-height:44px;padding:0 4px;">عرض الكل</button>
+                </div>
+                <div class="jsh-scroll" style="display:flex;gap:12px;overflow-x:auto;padding-bottom:4px;margin:0 -20px;padding-right:20px;padding-left:20px;scroll-snap-type:x mandatory;">
+                  <sc-for list="{{ packages }}" as="p" hint-placeholder-count="5">
+                    <button onClick="{{ p.open }}" style="flex:none;width:222px;scroll-snap-align:start;display:flex;flex-direction:column;background:#fff;border:1px solid #F1E7F2;border-radius:22px;padding:11px;text-align:right;transition-property:translate,box-shadow;transition-duration:.18s;" style-hover="translate:0 -2px;box-shadow:0 14px 24px rgba(75,40,110,.13)" style-active="scale:0.99">
+                      <span style="position:relative;width:100%;height:112px;border-radius:17px;overflow:hidden;flex:none;background:linear-gradient(140deg,#F7E9F1,#EBE1F5);">
                         <span role="img" aria-label="{{ p.name }}" style="display:block;width:100%;height:100%;background-image:{{ p.artBg }};background-size:cover;background-position:center;"></span>
-                        <img src="brand/mark-w.svg" alt="" aria-hidden="true" style="position:absolute;left:8px;bottom:8px;height:20px;width:auto;opacity:.9;filter:drop-shadow(0 1px 3px rgba(44,23,69,.4));"></img>
+                        <img src="brand/mark-w.svg" alt="" aria-hidden="true" style="position:absolute;left:8px;bottom:8px;height:19px;width:auto;opacity:.9;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35));"></img>
+                        <span style="position:absolute;top:8px;right:8px;font-size:10px;font-weight:700;color:#2F7A5A;background:rgba(255,255,255,.94);padding:4px 9px;border-radius:999px;">{{ p.save }}</span>
                       </span>
-                      <span style="flex:1;min-width:0;">
-                        <span style="display:block;font-weight:700;font-size:14.5px;">{{ p.name }}</span>
-                        <span style="display:block;font-size:11.5px;color:#9A90A3;margin-top:5px;line-height:1.7;">{{ p.desc }}</span>
-                        <span style="display:block;font-size:11px;color:#A9628A;font-weight:700;margin-top:5px;">مقدّمة الخدمة: {{ p.provName }}</span>
-                        <span style="display:flex;align-items:center;gap:8px;margin-top:9px;">
-                          <span style="font-weight:700;color:#6B3F9E;font-size:15px;">{{ p.price }}</span>
-                          <span style="font-size:11px;color:#B4A9BC;text-decoration:line-through;">{{ p.was }}</span>
-                          <span style="font-size:10.5px;font-weight:700;color:#2F7A5A;background:#E6F5EE;padding:3px 8px;border-radius:999px;">{{ p.save }}</span>
-                        </span>
+                      <span style="display:block;font-weight:700;font-size:13.5px;margin-top:10px;line-height:1.5;">{{ p.name }}</span>
+                      <span style="display:block;font-size:11px;color:#9A90A3;margin-top:5px;line-height:1.65;min-height:30px;">{{ p.desc }}</span>
+                      <span style="display:block;font-size:10.5px;color:#A9628A;font-weight:700;margin-top:5px;">{{ p.provName }}</span>
+                      <span style="display:flex;align-items:baseline;gap:7px;margin-top:9px;padding-top:9px;border-top:1px solid #F6F1FB;">
+                        <span style="font-weight:700;color:#6B3F9E;font-size:15px;">{{ p.price }}</span>
+                        <span style="font-size:11px;color:#B4A9BC;text-decoration:line-through;">{{ p.was }}</span>
                       </span>
                     </button>
                   </sc-for>
@@ -909,6 +910,73 @@
                 </sc-if>
               </div>
             </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ sPkgsAll }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:0 0 28px;animation:jshIn .3s cubic-bezier(.2,0,0,1) both;">
+
+            <div style="position:relative;overflow:hidden;padding:22px 20px 26px;background:linear-gradient(150deg,#47286B 0%,#6B3F9E 52%,#A9628A 100%);color:#fff;">
+              <img src="brand/mark-w.svg" alt="" aria-hidden="true" style="position:absolute;left:-26px;bottom:-34px;height:168px;width:auto;opacity:.12;pointer-events:none;"></img>
+              <span style="position:absolute;top:-52px;left:-30px;width:168px;height:168px;border-radius:50%;background:rgba(255,255,255,.09);"></span>
+              <span style="position:absolute;bottom:-40px;right:-24px;width:124px;height:124px;border-radius:50%;background:rgba(217,170,198,.22);"></span>
+              <div style="position:relative;">
+                <span style="display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;color:#47286B;background:#E9C6DC;padding:6px 12px;border-radius:999px;">{{ icSparkle }}<span>باقات جوشن</span></span>
+                <div style="font-weight:700;font-size:25px;line-height:1.35;letter-spacing:-.5px;margin-top:13px;">خدمات مجمّعة بسعر أوفر</div>
+                <div style="font-size:12.5px;line-height:1.9;color:rgba(255,255,255,.84);margin-top:8px;max-width:30ch;">باقات جاهزة من مقدّمات الخدمة، محتواها وسعرها ثابتان — تحجزينها كما هي.</div>
+                <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+                  <span style="font-size:11.5px;font-weight:700;color:#fff;background:rgba(255,255,255,.18);padding:7px 12px;border-radius:999px;">{{ pkgsAllCount }}</span>
+                  <span style="font-size:11.5px;font-weight:700;color:#fff;background:rgba(255,255,255,.18);padding:7px 12px;border-radius:999px;">{{ pkgsHeroSave }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="padding:16px 0 0;">
+              <div class="jsh-scroll" style="display:flex;gap:8px;overflow-x:auto;padding:0 20px 4px;">
+                <sc-for list="{{ pkgFilters }}" as="f" hint-placeholder-count="6">
+                  <button onClick="{{ f.pick }}" style="{{ f.style }}">{{ f.name }}</button>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="padding:16px 20px 0;display:flex;flex-direction:column;gap:14px;">
+              <sc-for list="{{ pkgsAllList }}" as="p" hint-placeholder-count="4">
+                <button onClick="{{ p.open }}" style="display:flex;flex-direction:column;background:#fff;border:1px solid #F1E7F2;border-radius:26px;padding:0;overflow:hidden;text-align:right;width:100%;box-shadow:0 14px 34px -26px rgba(75,40,110,.5);transition-property:translate,box-shadow;transition-duration:.18s;" style-hover="translate:0 -2px;box-shadow:0 18px 34px -22px rgba(75,40,110,.55)" style-active="scale:0.995">
+                  <span style="position:relative;width:100%;height:150px;flex:none;background:linear-gradient(140deg,#F7E9F1,#EBE1F5);">
+                    <span role="img" aria-label="{{ p.name }}" style="display:block;width:100%;height:100%;background-image:{{ p.artBg }};background-size:cover;background-position:center;"></span>
+                    <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(44,23,69,0) 45%,rgba(44,23,69,.62) 100%);"></span>
+                    <span style="position:absolute;top:11px;right:11px;font-size:10.5px;font-weight:700;color:{{ p.catInk }};background:{{ p.catTint }};padding:5px 11px;border-radius:999px;">{{ p.catName }}</span>
+                    <span style="position:absolute;top:11px;left:11px;font-size:10.5px;font-weight:700;color:#2F7A5A;background:rgba(255,255,255,.95);padding:5px 11px;border-radius:999px;">{{ p.save }}</span>
+                    <span style="position:absolute;bottom:11px;right:13px;left:13px;display:flex;align-items:flex-end;justify-content:space-between;gap:10px;">
+                      <span style="font-weight:700;font-size:16px;color:#fff;line-height:1.45;text-shadow:0 1px 6px rgba(0,0,0,.35);">{{ p.name }}</span>
+                      <img src="brand/mark-w.svg" alt="" aria-hidden="true" style="height:22px;width:auto;opacity:.92;flex:none;filter:drop-shadow(0 1px 4px rgba(0,0,0,.4));"></img>
+                    </span>
+                  </span>
+
+                  <span style="display:block;padding:14px 15px 15px;">
+                    <span style="display:block;font-size:12px;color:#6E6178;line-height:1.8;">{{ p.desc }}</span>
+                    <span style="display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap;">
+                      <span style="font-size:10.5px;font-weight:700;color:#6B3F9E;background:#F6F1FB;padding:5px 10px;border-radius:999px;">{{ p.incCount }}</span>
+                      <span style="font-size:10.5px;font-weight:700;color:#A9628A;background:#FCF5F9;padding:5px 10px;border-radius:999px;">{{ p.validLabel }}</span>
+                    </span>
+                    <span style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:13px;padding-top:13px;border-top:1px solid #F6F1FB;">
+                      <span style="display:flex;align-items:center;gap:7px;min-width:0;">
+                        <span style="width:26px;height:26px;border-radius:9px;background:#F6F1FB;color:#6B3F9E;display:grid;place-items:center;flex:none;">{{ icUserSm }}</span>
+                        <span style="font-size:11.5px;color:#6E6178;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ p.provName }}</span>
+                      </span>
+                      <span style="display:flex;align-items:baseline;gap:7px;flex:none;">
+                        <span style="font-size:11px;color:#B4A9BC;text-decoration:line-through;">{{ p.was }}</span>
+                        <span style="font-weight:700;color:#6B3F9E;font-size:17px;">{{ p.price }}</span>
+                      </span>
+                    </span>
+                  </span>
+                </button>
+              </sc-for>
+
+              <sc-if value="{{ pkgsAllEmpty }}" hint-placeholder-val="{{ false }}">
+                <div style="background:#FBF8FD;border:1px dashed #E0CFEB;border-radius:22px;padding:28px 20px;text-align:center;font-size:12.5px;color:#6E6178;line-height:1.9;">لا توجد باقات في هذا التصنيف حالياً — جرّبي تصنيفاً آخر.</div>
+              </sc-if>
+            </div>
           </div>
         </sc-if>
 
@@ -4115,6 +4183,7 @@ class Component extends DCLogic {
     ],
     query: '', kind: 'sub', catId: 'makeup', subId: 'm1', opts: {}, optError: false,
     gPeople: [], gPersonSel: null, gSvcOpen: null, gCat: 'makeup', gNextPid: 1, gErr: false,
+    pkgFilter: 'all',
     bnIndex: 0, bnTimer: null,
     obAt: 0, obTimer: null,
     pkgQty: 1,
@@ -4601,6 +4670,26 @@ class Component extends DCLogic {
 
   pkgList() { return this.PACKAGES.concat(this.state.myPkgs || []); }
   livePkgs() { return this.pkgList().filter(p => (p.status || 'live') === 'live'); }
+  pkgsFiltered() {
+    const f = this.state.pkgFilter || 'all';
+    const l = this.livePkgs().slice().sort((a, b) => b.id - a.id);
+    return f === 'all' ? l : l.filter(p => p.cat === f);
+  }
+  pkgCards(list) {
+    return list.map(p => {
+      const prov = this.PROVIDERS.find(x => x.id === p.provId) || {};
+      const cat = this.CATS.find(c => c.id === p.cat) || {};
+      return {
+        ...p, artBg: 'url(' + p.art + ')',
+        provName: prov.name || '',
+        catName: cat.name || 'باقة',
+        catTint: cat.tint || '#F6F1FB', catInk: cat.ink || '#6B3F9E',
+        incCount: this.ar((p.includes || []).length) + ' خدمات',
+        validLabel: p.valid || 'صلاحية ٣٠ يوم',
+        open: () => this.openPkg(p.id)
+      };
+    });
+  }
   myPkgList() { return this.pkgList().filter(p => p.provId === 2); }
   setPkgStatus(id, status) {
     this.setState(st => ({ myPkgs: st.myPkgs.map(p => (p.id === id ? { ...p, status } : p)) }));
@@ -5118,6 +5207,7 @@ class Component extends DCLogic {
       service: [svc.name, 'مقدّمات الخدمة المتاحات'],
       provider: ['ملف مقدّمة الخدمة', 'الخبرة والتقييمات والسعر'], book: ['تفاصيل الحجز', svc.name + ' · ' + prov.name],
       gcats: ['حجز خدمة مجمّعة', 'اختاري التصنيف ثم مقدّمة الخدمة'],
+      pkgsall: ['الباقات', 'وفّري أكثر مع الباقات الجاهزة'],
       gpeople: ['الأشخاص والخدمات', this.peopleWord(st.gPeople.length) + ' · ' + prov.name],
       gperson: [this.gPerson().name || 'الشخص', 'اختاري خدماته من ' + prov.name],
       pay: ['الدفع', 'اختاري وسيلة الدفع'], addresses: ['عناويني', this.ar(st.addresses.length) + ' عنوان محفوظ'],
@@ -5291,6 +5381,7 @@ class Component extends DCLogic {
       sHome: isC && st.onboarded && cs === 'home', sSearch: isC && cs === 'search', sService: isC && cs === 'service',
       sProvider: isC && cs === 'provider', sBook: isC && cs === 'book', sPay: isC && cs === 'pay',
       sGCats: isC && cs === 'gcats', sGPeople: isC && cs === 'gpeople', sGPerson: isC && cs === 'gperson',
+      sPkgsAll: isC && cs === 'pkgsall',
       isGroup: st.kind === 'group', notGroup: st.kind !== 'group',
       sSuccess: isC && cs === 'success', sTrack: isC && cs === 'track', sChat: isC && cs === 'chat',
       sWallet: isC && cs === 'wallet', sNotifs: isC && cs === 'notifs', sRate: isC && cs === 'rate',
@@ -5374,11 +5465,24 @@ class Component extends DCLogic {
       })(),
       resumeDraft: () => { const d = st.draft; if (d) this.setState({ cScreen: d, cStack: ['home'] }); },
       dropDraft: () => { this.setState({ draft: null }); this.flash('تم تجاهل الحجز غير المكتمل'); },
-      packages: this.livePkgs().map(p => ({
-        ...p, artBg: 'url(' + p.art + ')',
-        provName: (this.PROVIDERS.find(x => x.id === p.provId) || {}).name || '',
-        open: () => this.openPkg(p.id)
+      packages: this.pkgCards(this.livePkgs().slice().sort((a, b) => b.id - a.id).slice(0, 5)),
+      pkgsAllList: this.pkgCards(this.pkgsFiltered()),
+      pkgsAllCount: this.ar(this.pkgsFiltered().length) + ' باقة',
+      pkgsAllEmpty: this.pkgsFiltered().length === 0,
+      goPkgsAll: () => this.setState({ pkgFilter: 'all' }, () => this.go('pkgsall')),
+      pkgFilters: [{ k: 'all', name: 'الكل' }].concat(this.CATS.map(c => ({ k: c.id, name: c.name }))).map(f => ({
+        name: f.name,
+        style: 'flex:none;padding:10px 15px;border-radius:999px;min-height:42px;font-size:12.5px;font-weight:700;border:1.5px solid '
+          + (st.pkgFilter === f.k ? '#6B3F9E' : '#EDE3EF') + ';background:' + (st.pkgFilter === f.k ? '#6B3F9E' : '#fff')
+          + ';color:' + (st.pkgFilter === f.k ? '#fff' : '#6E6178') + ';transition-property:background,border-color,color;transition-duration:.18s;',
+        pick: () => this.setState({ pkgFilter: f.k })
       })),
+      pkgsHeroSave: (() => {
+        const l = this.livePkgs();
+        if (!l.length) return '';
+        const best = l.reduce((a, b) => ((b.wasNum - b.num) > (a.wasNum - a.num) ? b : a));
+        return 'وفّري حتى ' + this.sar(best.wasNum - best.num);
+      })(),
       catIcon: this.icon(this.cat().icon, 22), catName: this.cat().name, catDesc: this.cat().desc,
       addrShort: addr.label + ' — ' + addr.district,
       subs: this.cat().subs.map(s => ({ ...s, fromLabel: 'يبدأ من ' + this.sar(s.base), open: () => this.openSub(this.cat().id, s.id) })),
@@ -5470,6 +5574,7 @@ class Component extends DCLogic {
       icShieldDecl: this.icon('shield', 22, 1.9),
       icCheckBig: this.icon('check', 34, 2.6),
       icUsers: this.icon('users', 20), icUsersLg: this.icon('users', 24, 1.9), icUserPlus: this.icon('userPlus', 19),
+      icUserSm: this.icon('user', 14),
       icTrashSm: this.icon('trash', 16), icUsersSm: this.icon('users', 15), icUsersMd: this.icon('users', 18),
       icPinSm: this.icon('pin', 15),
 
