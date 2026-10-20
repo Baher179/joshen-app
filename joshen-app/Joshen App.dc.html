@@ -1023,10 +1023,6 @@
                       <span style="display:block;font-size:11px;font-weight:700;margin-top:6px;color:#6B3F9E;">{{ p.svcCountLabel }}</span>
                     </span>
                   </span>
-                  <span style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid #F6F1FB;">
-                    <span style="font-size:11px;color:#9A90A3;">{{ p.priceNote }}</span>
-                    <span style="font-weight:700;font-size:15px;color:#6B3F9E;">{{ p.svcPrice }}</span>
-                  </span>
                 </button>
               </sc-for>
               <sc-if value="{{ gNoProviders }}" hint-placeholder-val="{{ false }}">
@@ -1499,6 +1495,11 @@
                   <div style="font-size:12.5px;color:#6E6178;display:flex;justify-content:space-between;"><span>الموعد</span><span style="font-weight:700;color:#3B2B4A;">{{ whenLabel }}</span></div>
                   <div style="font-size:12.5px;color:#6E6178;display:flex;justify-content:space-between;"><span>الإجمالي</span><span style="font-weight:700;color:#6B3F9E;">{{ total }}</span></div>
                 </div>
+                <div style="width:100%;background:#F1E9F7;border-radius:16px;padding:13px 14px;display:flex;align-items:flex-start;gap:10px;text-align:right;">
+                  <span style="width:26px;height:26px;border-radius:9px;background:#fff;color:#6B3F9E;display:grid;place-items:center;flex:none;">{{ icCheckSm2 }}</span>
+                  <span style="flex:1;font-size:11.5px;color:#4A3B55;line-height:1.85;">طلبك محفوظ في «طلباتي». يمكنك إغلاق التطبيق — سيصلك إشعار فور رد {{ provName }}، ومنه تكملين الدفع.</span>
+                </div>
+                <button onClick="{{ awaitLater }}" style="width:100%;min-height:48px;border-radius:16px;background:#fff;border:1.5px solid #E0CFEB;color:#6B3F9E;font-weight:700;font-size:13.5px;">متابعة التصفّح — أتابع لاحقاً</button>
                 <div style="width:100%;display:flex;flex-direction:column;gap:8px;align-items:center;margin-top:6px;">
                   <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="large" variant="prominent" full-width="{{ true }}" on-click="{{ simAccept }}" hint-size="100%,50px">محاكاة قبول مقدّمة الخدمة</x-import>
                   <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="medium" variant="plain" on-click="{{ simReject }}" hint-size="auto,40px">محاكاة رفض الطلب</x-import>
@@ -1573,6 +1574,12 @@
                     <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
                       <span style="font-weight:700;color:#6B3F9E;font-size:15px;">{{ o.price }}</span>
                       <div style="display:flex;gap:8px;">
+                        <sc-if value="{{ o.isAwait }}" hint-placeholder-val="{{ false }}">
+                          <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="medium" variant="tinted" on-click="{{ o.resume }}" hint-size="auto,40px">متابعة حالة الطلب</x-import>
+                        </sc-if>
+                        <sc-if value="{{ o.isAccepted }}" hint-placeholder-val="{{ false }}">
+                          <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="medium" variant="prominent" on-click="{{ o.resume }}" hint-size="auto,40px">إكمال الدفع</x-import>
+                        </sc-if>
                         <sc-if value="{{ o.canTrack }}" hint-placeholder-val="{{ true }}">
                           <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="medium" variant="prominent" on-click="{{ o.track }}" hint-size="auto,40px">تتبع الطلب</x-import>
                         </sc-if>
@@ -1998,6 +2005,9 @@
                   <div style="font-weight:700;font-size:13.5px;">{{ n.title }}</div>
                   <div style="font-size:12px;color:#6E6178;margin-top:6px;line-height:1.8;">{{ n.body }}</div>
                   <div style="font-size:10.5px;color:#B4A9BC;margin-top:8px;">{{ n.time }}</div>
+                  <sc-if value="{{ n.hasAct }}" hint-placeholder-val="{{ false }}">
+                    <button onClick="{{ n.act }}" style="margin-top:10px;min-height:40px;padding:0 15px;border-radius:13px;background:#6B3F9E;color:#fff;font-weight:700;font-size:12.5px;">إكمال الدفع الآن</button>
+                  </sc-if>
                 </div>
                 <sc-if value="{{ n.unread }}" hint-placeholder-val="{{ true }}"><span style="width:9px;height:9px;border-radius:50%;background:#6B3F9E;flex:none;margin-top:6px;"></span></sc-if>
               </div>
@@ -2191,6 +2201,19 @@
                       <input value="{{ f.value }}" onChange="{{ f.onChange }}" placeholder="{{ f.placeholder }}" aria-label="{{ f.label }}" style="{{ f.style }}"></input>
                     </div>
                   </sc-for>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                    <sc-for list="{{ dVehFields }}" as="v" hint-placeholder-count="2">
+                      <div>
+                        <div style="font-size:12.5px;font-weight:700;color:#6B3F9E;margin-bottom:7px;">{{ v.label }}</div>
+                        <input value="{{ v.value }}" onChange="{{ v.onChange }}" placeholder="{{ v.placeholder }}" aria-label="{{ v.label }}" style="{{ v.style }}"></input>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <div style="background:#FBF8FD;border:1.5px solid #EDE3F5;border-radius:20px;padding:14px;">
+                    <div style="font-size:12.5px;font-weight:700;color:#6B3F9E;margin-bottom:7px;">رقم اللوحة</div>
+                    <input value="{{ dPlateValue }}" onChange="{{ onDPlate }}" placeholder="مثال: ح ب د ٤٥٢١" aria-label="رقم اللوحة" style="{{ dPlateStyle }}"></input>
+                    <div style="font-size:11px;color:#9A90A3;margin-top:8px;line-height:1.7;">أدخلي حروف وأرقام اللوحة كما تظهر في الاستمارة.</div>
+                  </div>
                 </div>
             <div>
               <div style="font-weight:700;font-size:15px;margin-bottom:10px;">المستندات</div>
@@ -2502,45 +2525,97 @@
         </sc-if>
 
         <sc-if value="{{ dVehicleS }}" hint-placeholder-val="{{ false }}">
-          <div style="padding:16px 20px 130px;animation:jshUp .3s cubic-bezier(.2,0,0,1) both;display:flex;flex-direction:column;gap:14px;">
-            <div style="border-radius:24px;padding:20px;background:linear-gradient(140deg,#2C1745,#5A3486);color:#fff;display:flex;align-items:center;gap:14px;">
-              <span style="width:52px;height:52px;border-radius:18px;background:rgba(255,255,255,.14);display:grid;place-items:center;flex:none;">{{ icMotoD }}</span>
-              <div style="flex:1;min-width:0;">
-                <div style="font-weight:700;font-size:16px;">{{ dVehName }}</div>
-                <div style="font-size:12px;color:rgba(255,255,255,.74);margin-top:5px;">{{ dVehPlate }}</div>
-              </div>
-            </div>
-            <div style="background:#fff;border:1px solid #F1E7F2;border-radius:22px;overflow:hidden;">
-              <sc-for list="{{ dVehRows }}" as="r" hint-placeholder-count="5">
-                <div style="padding:15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #F6F1FB;">
-                  <span style="flex:1;font-size:12.5px;color:#6E6178;">{{ r.k }}</span>
-                  <span style="font-weight:700;font-size:13px;">{{ r.v }}</span>
+          <div style="padding:16px 20px 40px;animation:jshUp .3s cubic-bezier(.2,0,0,1) both;display:flex;flex-direction:column;gap:14px;">
+            <sc-if value="{{ vehEmpty }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:16px;">
+                <div style="background:#fff;border:1.5px dashed #D6C4EA;border-radius:24px;padding:26px 18px;text-align:center;">
+                  <span style="width:62px;height:62px;border-radius:22px;background:#F6F1FB;color:#6B3F9E;display:grid;place-items:center;margin:0 auto 14px;">{{ icMotoBig }}</span>
+                  <div style="font-weight:800;font-size:15.5px;">لم تُسجَّل مركبة بعد</div>
+                  <div style="font-size:12px;color:#6E6178;margin-top:9px;line-height:1.95;">أضيفي بيانات مركبتك واستمارتها ليتم اعتمادها من الدعم قبل استقبال الرحلات.</div>
                 </div>
-              </sc-for>
-            </div>
-            <div style="background:#FBF8FD;border-radius:18px;padding:14px;font-size:11.5px;color:#6E6178;line-height:1.85;">بيانات المركبة مرتبطة باستمارتك الموثّقة — أي تغيير يتطلب رفع استمارة جديدة عبر الدعم.</div>
-            <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="large" variant="tinted" full-width="{{ true }}" on-click="{{ dVehAsk }}" hint-size="100%,50px">طلب تغيير المركبة</x-import>
+                <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="large" variant="prominent" full-width="{{ true }}" on-click="{{ vehAddNew }}" hint-size="100%,50px">إضافة مركبة</x-import>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ vehHas }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column;gap:14px;">
+                <div style="border-radius:24px;padding:20px;background:linear-gradient(140deg,#2C1745,#5A3486);color:#fff;display:flex;align-items:center;gap:14px;">
+                  <span style="width:52px;height:52px;border-radius:18px;background:rgba(255,255,255,.14);display:grid;place-items:center;flex:none;">{{ icMotoD }}</span>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font-weight:700;font-size:16px;">{{ dVehName }}</div>
+                    <div style="font-size:12px;color:rgba(255,255,255,.74);margin-top:5px;">{{ dVehPlate }}</div>
+                  </div>
+                </div>
+
+                <div style="{{ vehStatusStyle }}">
+                  <span style="{{ vehStatusIcoStyle }}">{{ vehStatusIcon }}</span>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font-weight:700;font-size:13.5px;">{{ vehStatusTitle }}</div>
+                    <div style="font-size:11.5px;margin-top:5px;line-height:1.8;opacity:.85;">{{ vehStatusNote }}</div>
+                  </div>
+                </div>
+
+                <div style="background:#fff;border:1px solid #F1E7F2;border-radius:22px;overflow:hidden;">
+                  <sc-for list="{{ dVehRows }}" as="r" hint-placeholder-count="5">
+                    <div style="padding:15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #F6F1FB;">
+                      <span style="flex:1;font-size:12.5px;color:#6E6178;">{{ r.k }}</span>
+                      <span style="font-weight:700;font-size:13px;">{{ r.v }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+
+                <sc-if value="{{ vehPending }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:#FFF6E6;border:1px solid #F3DFB4;border-radius:20px;padding:15px;">
+                    <div style="font-weight:700;font-size:13px;color:#9A6B12;margin-bottom:9px;">{{ vehPendingTitle }}</div>
+                    <div style="display:flex;flex-direction:column;gap:7px;">
+                      <sc-for list="{{ vehPendingRows }}" as="r" hint-placeholder-count="3">
+                        <div style="display:flex;gap:10px;font-size:12px;">
+                          <span style="flex:1;color:#6E6178;">{{ r.k }}</span>
+                          <span style="font-weight:700;color:#2C1745;">{{ r.v }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                    <button onClick="{{ vehApprove }}" style="width:100%;margin-top:13px;min-height:48px;border-radius:17px;background:#2F7A5A;color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;gap:8px;">{{ icBolt2 }}<span>{{ vehApproveLabel }}</span></button>
+                  </div>
+                </sc-if>
+
+                <div style="background:#FBF8FD;border-radius:18px;padding:14px;font-size:11.5px;color:#6E6178;line-height:1.85;">بيانات المركبة مرتبطة باستمارتك الموثّقة — أي تغيير يحتاج اعتماد الدعم قبل أن يسري.</div>
+                <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="large" variant="tinted" full-width="{{ true }}" on-click="{{ vehEdit }}" hint-size="100%,50px">طلب تعديل بيانات المركبة</x-import>
+                <button onClick="{{ vehReset }}" style="width:100%;min-height:46px;border-radius:17px;border:1.5px dashed #D6C4EA;background:#FBF8FD;color:#6B3F9E;font-weight:700;font-size:12.5px;">محاكاة حساب جديد بلا مركبة</button>
+              </div>
+            </sc-if>
           </div>
         </sc-if>
 
-        <sc-if value="{{ dBankS }}" hint-placeholder-val="{{ false }}">
-          <div style="padding:16px 20px 130px;animation:jshUp .3s cubic-bezier(.2,0,0,1) both;display:flex;flex-direction:column;gap:14px;">
-            <div style="background:#F4F0F6;border-radius:18px;padding:13px 14px;display:flex;align-items:flex-start;gap:11px;">
-              <span style="width:30px;height:30px;border-radius:11px;background:#fff;color:#6E6178;display:grid;place-items:center;flex:none;">{{ icShieldD }}</span>
-              <span style="flex:1;font-size:11.5px;color:#6E6178;line-height:1.85;">بيانات الحساب البنكي للعرض فقط — تعديلها يتم عبر الدعم بعد التحقق من الهوية.</span>
-            </div>
-            <div style="background:#fff;border:1px solid #F1E7F2;border-radius:22px;overflow:hidden;">
-              <sc-for list="{{ dBankRows }}" as="r" hint-placeholder-count="5">
-                <div style="padding:15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #F6F1FB;">
-                  <span style="flex:1;font-size:12.5px;color:#6E6178;">{{ r.k }}</span>
-                  <span style="font-weight:700;font-size:13px;">{{ r.v }}</span>
+        <sc-if value="{{ vehFormS }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:16px 20px 40px;animation:jshUp .3s cubic-bezier(.2,0,0,1) both;display:flex;flex-direction:column;gap:16px;">
+            <div style="background:linear-gradient(140deg,#F7E9F1,#EBE1F5);border-radius:22px;padding:15px;font-size:12px;color:#4A3B55;line-height:1.9;">{{ vehFormHint }}</div>
+            <button onClick="{{ vehAutofill }}" style="width:100%;min-height:52px;padding:15px;border-radius:20px;border:1.5px dashed #D6C4EA;background:#FBF8FD;color:#6B3F9E;font-weight:700;font-size:13.5px;display:flex;align-items:center;justify-content:center;gap:8px;" style-hover="background:#F6F1FB">{{ icBolt2 }}<span>محاكاة تعبئة بيانات المركبة</span></button>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <sc-for list="{{ vehFields }}" as="f" hint-placeholder-count="5">
+                <div>
+                  <div style="font-size:12.5px;font-weight:700;color:#6B3F9E;margin-bottom:7px;">{{ f.label }}</div>
+                  <sc-if value="{{ f.isSelect }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                      <sc-for list="{{ f.choices }}" as="c" hint-placeholder-count="3">
+                        <button onClick="{{ c.pick }}" aria-label="{{ c.label }}" style="{{ c.style }}">{{ c.label }}</button>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ f.isText }}" hint-placeholder-val="{{ true }}">
+                    <input value="{{ f.value }}" onChange="{{ f.onChange }}" placeholder="{{ f.placeholder }}" aria-label="{{ f.label }}" style="{{ f.style }}"></input>
+                  </sc-if>
+                  <sc-if value="{{ f.hasError }}" hint-placeholder-val="{{ false }}">
+                    <div style="margin-top:7px;font-size:11.5px;color:#C0364F;font-weight:700;">{{ f.error }}</div>
+                  </sc-if>
                 </div>
               </sc-for>
             </div>
-            <div style="background:#FBF8FD;border-radius:18px;padding:14px;font-size:11.5px;color:#6E6178;line-height:1.85;">تُحوّل أرباح التوصيل كل يوم أحد بعد خصم عمولة جوشن ١٥٪ من قيمة الرحلة، وتصل خلال يوم عمل واحد.</div>
-            <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="large" variant="tinted" full-width="{{ true }}" on-click="{{ dBankAsk }}" hint-size="100%,50px">طلب تعديل الحساب عبر الدعم</x-import>
+            <div style="background:#FBF8FD;border-radius:18px;padding:14px;font-size:11.5px;color:#6E6178;line-height:1.85;">تأكدي من مطابقة اللوحة والطراز للاستمارة — الاختلاف يؤخّر الاعتماد.</div>
+            <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="large" variant="prominent" full-width="{{ true }}" on-click="{{ vehSubmit }}" hint-size="100%,50px">{{ vehSubmitLabel }}</x-import>
           </div>
         </sc-if>
+
 
         <sc-if value="{{ dRevS }}" hint-placeholder-val="{{ false }}">
           <div style="padding:16px 20px 130px;animation:jshUp .3s cubic-bezier(.2,0,0,1) both;display:flex;flex-direction:column;gap:16px;">
@@ -3285,17 +3360,29 @@
                 <sc-for list="{{ pSvcCats }}" as="c" hint-placeholder-count="5"><button onClick="{{ c.pick }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
               </div>
             </div>
+            <button onClick="{{ svcNew }}" style="width:100%;min-height:54px;padding:15px;border-radius:20px;border:1.5px dashed #E9C6DC;background:#FDF8FB;color:#A9628A;font-weight:700;font-size:13.5px;display:flex;align-items:center;justify-content:center;gap:8px;" style-hover="background:#FCF5F9">{{ icPlusP }}<span>إنشاء خدمة جديدة</span></button>
             <div style="display:flex;flex-direction:column;gap:11px;">
               <sc-for list="{{ pSvcSubs }}" as="s" hint-placeholder-count="3">
                 <div style="{{ s.cardStyle }}">
                   <div style="display:flex;align-items:center;gap:12px;">
                     <div style="flex:1;min-width:0;">
-                      <div style="font-weight:700;font-size:13.5px;">{{ s.name }}</div>
+                      <div style="display:flex;align-items:center;gap:7px;">
+                        <span style="font-weight:700;font-size:13.5px;">{{ s.name }}</span>
+                        <sc-if value="{{ s.own }}" hint-placeholder-val="{{ false }}">
+                          <span style="font-size:10px;font-weight:700;color:#A9628A;background:#FCF5F9;padding:4px 8px;border-radius:999px;">خدمة أضفتِها</span>
+                        </sc-if>
+                      </div>
                       <div style="font-size:11.5px;color:#9A90A3;margin-top:5px;line-height:1.7;">{{ s.desc }}</div>
                       <div style="font-size:11px;color:#A9628A;font-weight:700;margin-top:6px;">{{ s.refLabel }} · {{ s.dur }}</div>
                     </div>
                     <x-import component-from-global-scope="DesignSystem_9729b4.Toggle" on="{{ s.on }}" on-change="{{ s.toggle }}" hint-size="51px,31px"></x-import>
                   </div>
+                  <sc-if value="{{ s.own }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;gap:8px;">
+                      <button onClick="{{ s.edit }}" style="flex:1;min-height:44px;border-radius:15px;background:#F6F1FB;color:#6B3F9E;font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center;gap:7px;">{{ icEditP }}<span>تعديل الخدمة</span></button>
+                      <button onClick="{{ s.del }}" style="flex:1;min-height:44px;border-radius:15px;background:#FDECEF;color:#C0364F;font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center;gap:7px;">{{ icTrashP }}<span>حذف</span></button>
+                    </div>
+                  </sc-if>
                   <sc-if value="{{ s.on }}" hint-placeholder-val="{{ false }}">
                     <div style="display:flex;flex-direction:column;gap:12px;">
                       <button onClick="{{ s.expand }}" style="align-self:flex-start;font-size:12px;font-weight:700;color:#A9628A;min-height:44px;padding:0 2px;">{{ s.expandLabel }}</button>
@@ -3314,13 +3401,42 @@
                                     <sc-for list="{{ g.choices }}" as="ch" hint-placeholder-count="3">
                                       <div style="display:flex;align-items:center;gap:9px;">
                                         <span style="flex:1;font-size:12px;color:#4A3B55;">{{ ch.label }}</span>
-                                        <span style="width:98px;flex:none;"><input value="{{ ch.value }}" onChange="{{ ch.onChange }}" aria-label="سعر {{ ch.label }}" inputMode="numeric" placeholder="0" style="{{ ch.style }}"></input></span>
+                                        <span style="width:88px;flex:none;"><input value="{{ ch.value }}" onChange="{{ ch.onChange }}" aria-label="سعر {{ ch.label }}" inputMode="numeric" placeholder="0" style="{{ ch.style }}"></input></span>
+                                        <button onClick="{{ ch.remove }}" aria-label="حذف {{ ch.label }}" style="width:34px;height:34px;border-radius:12px;background:#FDECEF;color:#C0364F;display:grid;place-items:center;flex:none;">{{ icTrashSm }}</button>
                                       </div>
                                     </sc-for>
                                   </div>
                                 </div>
                               </sc-for>
                             </div>
+                          </sc-if>
+                          <sc-if value="{{ s.hasExtra }}" hint-placeholder-val="{{ false }}">
+                            <div>
+                              <div style="font-size:12px;font-weight:700;color:#A9628A;margin-bottom:8px;">إضافات أضفتِها</div>
+                              <div style="display:flex;flex-direction:column;gap:8px;">
+                                <sc-for list="{{ s.extras }}" as="x" hint-placeholder-count="2">
+                                  <div style="display:flex;align-items:center;gap:9px;">
+                                    <span style="flex:1;font-size:12px;color:#4A3B55;">{{ x.label }}</span>
+                                    <span style="width:88px;flex:none;"><input value="{{ x.value }}" onChange="{{ x.onChange }}" aria-label="سعر {{ x.label }}" inputMode="numeric" placeholder="0" style="{{ x.style }}"></input></span>
+                                    <button onClick="{{ x.remove }}" aria-label="حذف {{ x.label }}" style="width:34px;height:34px;border-radius:12px;background:#FDECEF;color:#C0364F;display:grid;place-items:center;flex:none;">{{ icTrashSm }}</button>
+                                  </div>
+                                </sc-for>
+                              </div>
+                            </div>
+                          </sc-if>
+                          <div style="background:#fff;border:1.5px dashed #E9C6DC;border-radius:16px;padding:13px;">
+                            <div style="font-size:12px;font-weight:700;color:#A9628A;margin-bottom:9px;">إضافة جديدة لهذه الخدمة</div>
+                            <div style="display:flex;gap:8px;align-items:flex-start;">
+                              <span style="flex:1;"><input value="{{ optLabel }}" onChange="{{ onOptLabel }}" aria-label="اسم الإضافة" placeholder="مثال: ماسك مرطّب" style="{{ optLabelStyle }}"></input></span>
+                              <span style="width:84px;flex:none;"><input value="{{ optPrice }}" onChange="{{ onOptPrice }}" aria-label="سعر الإضافة" inputMode="numeric" placeholder="السعر" style="{{ optPriceStyle }}"></input></span>
+                              <button onClick="{{ s.addOpt }}" aria-label="إضافة" style="width:44px;height:44px;border-radius:14px;background:#A9628A;color:#fff;display:grid;place-items:center;flex:none;">{{ icPlusW }}</button>
+                            </div>
+                            <sc-if value="{{ optErrShow }}" hint-placeholder-val="{{ false }}">
+                              <div style="margin-top:8px;font-size:11.5px;color:#C0364F;font-weight:700;">{{ optErrText }}</div>
+                            </sc-if>
+                          </div>
+                          <sc-if value="{{ s.hasHidden }}" hint-placeholder-val="{{ false }}">
+                            <button onClick="{{ s.restore }}" style="align-self:flex-start;font-size:11.5px;font-weight:700;color:#6B3F9E;min-height:40px;">استعادة الإضافات المحذوفة ({{ s.hiddenCount }})</button>
                           </sc-if>
                           <div style="font-size:11px;color:#9A90A3;line-height:1.85;">السعر النهائي الذي تراه العميلة = سعر الخدمة + الإضافات التي تختارها، ثم تُضاف رسوم التوصيل.</div>
                         </div>
@@ -3750,24 +3866,6 @@
           </div>
         </sc-if>
 
-        <sc-if value="{{ pBankS }}" hint-placeholder-val="{{ false }}">
-          <div style="padding:16px 20px 130px;animation:jshUp .3s cubic-bezier(.2,0,0,1) both;display:flex;flex-direction:column;gap:14px;">
-            <div style="background:#F4F0F6;border-radius:18px;padding:13px 14px;display:flex;align-items:flex-start;gap:11px;">
-              <span style="width:30px;height:30px;border-radius:11px;background:#fff;color:#6E6178;display:grid;place-items:center;flex:none;">{{ icShieldP }}</span>
-              <span style="flex:1;font-size:11.5px;color:#6E6178;line-height:1.85;">بيانات الحساب البنكي للعرض فقط — تعديلها يتم عبر الدعم بعد التحقق من الهوية، حمايةً لأرباحك.</span>
-            </div>
-            <div style="background:#fff;border:1px solid #F1E7F2;border-radius:22px;overflow:hidden;">
-              <sc-for list="{{ pBankRows }}" as="r" hint-placeholder-count="5">
-                <div style="padding:15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #F6F1FB;">
-                  <span style="flex:1;font-size:12.5px;color:#6E6178;">{{ r.k }}</span>
-                  <span style="font-weight:700;font-size:13px;">{{ r.v }}</span>
-                </div>
-              </sc-for>
-            </div>
-            <div style="background:#FBF8FD;border-radius:18px;padding:14px;font-size:11.5px;color:#6E6178;line-height:1.85;">تُحوّل الأرباح كل يوم أحد بعد خصم عمولة جوشن ٢٠٪، وتصل خلال يوم عمل واحد.</div>
-            <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="large" variant="tinted" full-width="{{ true }}" on-click="{{ pBankAsk }}" hint-size="100%,50px">طلب تعديل الحساب عبر الدعم</x-import>
-          </div>
-        </sc-if>
 
         <sc-if value="{{ pReviewsS }}" hint-placeholder-val="{{ false }}">
           <div style="padding:16px 20px 130px;animation:jshUp .3s cubic-bezier(.2,0,0,1) both;display:flex;flex-direction:column;gap:16px;">
@@ -3828,6 +3926,327 @@
               </sc-for>
             </div>
             <div style="background:#FBF8FD;border-radius:18px;padding:14px;font-size:11.5px;color:#6E6178;line-height:1.9;">سياسة الإلغاء: إلغاء العميلة قبل ساعتين مجاني، وبعدها تُحصّل ٥٠٪ من قيمة الخدمة لك. إلغاؤك المتكرر للحجوزات يخفض ترتيب ملفك في نتائج العميلات.</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ notifPrefsS }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:16px 20px 40px;animation:jshUp .3s cubic-bezier(.2,0,0,1) both;display:flex;flex-direction:column;gap:14px;">
+            <div style="background:#FBF8FD;border-radius:20px;padding:14px;font-size:12px;color:#6E6178;line-height:1.9;">اختاري الإشعارات التي تصلك. إشعارات الطلبات الجارية تبقى مفعّلة دائماً لسلامة الخدمة.</div>
+            <div style="background:#fff;border:1px solid #F1E7F2;border-radius:22px;overflow:hidden;">
+              <sc-for list="{{ notifPrefRows }}" as="r" hint-placeholder-count="5">
+                <div style="padding:15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #F6F1FB;">
+                  <span style="width:38px;height:38px;border-radius:14px;background:#F6F1FB;color:#6B3F9E;display:grid;place-items:center;flex:none;">{{ r.icon }}</span>
+                  <span style="flex:1;min-width:0;">
+                    <span style="display:block;font-weight:700;font-size:13px;">{{ r.label }}</span>
+                    <span style="display:block;font-size:11.5px;color:#9A90A3;margin-top:4px;line-height:1.7;">{{ r.desc }}</span>
+                  </span>
+                  <x-import component-from-global-scope="DesignSystem_9729b4.Toggle" on="{{ r.on }}" on-change="{{ r.toggle }}" hint-size="51px,31px"></x-import>
+                </div>
+              </sc-for>
+            </div>
+            <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="large" variant="prominent" full-width="{{ true }}" on-click="{{ saveNotifPrefs }}" hint-size="100%,50px">حفظ التفضيلات</x-import>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ svcFormS }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:16px 20px 40px;animation:jshUp .3s cubic-bezier(.2,0,0,1) both;display:flex;flex-direction:column;gap:16px;">
+            <div style="background:linear-gradient(140deg,#F7E9F1,#EBE1F5);border-radius:22px;padding:15px;font-size:12px;color:#4A3B55;line-height:1.9;">{{ svcFormHint }}</div>
+            <div>
+              <div style="font-size:12.5px;font-weight:700;color:#6B3F9E;margin-bottom:9px;">التصنيف</div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                <sc-for list="{{ svcCatChoices }}" as="c" hint-placeholder-count="5">
+                  <button onClick="{{ c.pick }}" aria-label="{{ c.label }}" style="{{ c.style }}">{{ c.label }}</button>
+                </sc-for>
+              </div>
+              <sc-if value="{{ svcCatErr }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:8px;font-size:11.5px;color:#C0364F;font-weight:700;">{{ svcCatErrText }}</div>
+              </sc-if>
+            </div>
+            <sc-for list="{{ svcFields }}" as="f" hint-placeholder-count="4">
+              <div>
+                <div style="font-size:12.5px;font-weight:700;color:#6B3F9E;margin-bottom:7px;">{{ f.label }}</div>
+                <sc-if value="{{ f.isArea }}" hint-placeholder-val="{{ false }}">
+                  <textarea value="{{ f.value }}" onChange="{{ f.onChange }}" placeholder="{{ f.placeholder }}" aria-label="{{ f.label }}" style="{{ f.areaStyle }}"></textarea>
+                </sc-if>
+                <sc-if value="{{ f.isInput }}" hint-placeholder-val="{{ true }}">
+                  <input value="{{ f.value }}" onChange="{{ f.onChange }}" placeholder="{{ f.placeholder }}" aria-label="{{ f.label }}" style="{{ f.style }}"></input>
+                </sc-if>
+                <sc-if value="{{ f.hasError }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:7px;font-size:11.5px;color:#C0364F;font-weight:700;">{{ f.error }}</div>
+                </sc-if>
+              </div>
+            </sc-for>
+            <div style="background:#FBF8FD;border-radius:18px;padding:14px;font-size:11.5px;color:#6E6178;line-height:1.85;">بعد الحفظ تظهر الخدمة في ملفك للعميلات، ويمكنك إضافة إضافاتها وتسعيرها من صفحة «خدماتي وأسعاري».</div>
+            <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="large" variant="prominent" full-width="{{ true }}" on-click="{{ svcSubmit }}" hint-size="100%,50px">{{ svcSubmitLabel }}</x-import>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ bankS }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:16px 20px 40px;animation:jshUp .3s cubic-bezier(.2,0,0,1) both;display:flex;flex-direction:column;gap:14px;">
+            <sc-if value="{{ bankEmpty }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:16px;">
+                <div style="background:#fff;border:1.5px dashed #D6C4EA;border-radius:24px;padding:26px 18px;text-align:center;">
+                  <span style="width:62px;height:62px;border-radius:22px;background:#F6F1FB;color:#6B3F9E;display:grid;place-items:center;margin:0 auto 14px;">{{ icBankBig }}</span>
+                  <div style="font-weight:800;font-size:15.5px;">لا يوجد حساب بنكي بعد</div>
+                  <div style="font-size:12px;color:#6E6178;margin-top:9px;line-height:1.95;">أضيفي حسابك البنكي لتصلك أرباحك. يراجع الدعم البيانات ويوثّق الحساب خلال ٢٤ ساعة.</div>
+                </div>
+                <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="large" variant="prominent" full-width="{{ true }}" on-click="{{ bankAddNew }}" hint-size="100%,50px">إضافة حساب بنكي</x-import>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ bankHas }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column;gap:14px;">
+                <div style="{{ bankStatusStyle }}">
+                  <span style="{{ bankStatusIcoStyle }}">{{ bankStatusIcon }}</span>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font-weight:700;font-size:13.5px;">{{ bankStatusTitle }}</div>
+                    <div style="font-size:11.5px;margin-top:5px;line-height:1.8;opacity:.85;">{{ bankStatusNote }}</div>
+                  </div>
+                </div>
+
+                <div style="background:#fff;border:1px solid #F1E7F2;border-radius:22px;overflow:hidden;">
+                  <sc-for list="{{ bankRows }}" as="r" hint-placeholder-count="5">
+                    <div style="padding:15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #F6F1FB;">
+                      <span style="flex:1;font-size:12.5px;color:#6E6178;">{{ r.k }}</span>
+                      <span style="font-weight:700;font-size:13px;">{{ r.v }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+
+                <sc-if value="{{ bankPending }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:#FFF6E6;border:1px solid #F3DFB4;border-radius:20px;padding:15px;">
+                    <div style="font-weight:700;font-size:13px;color:#9A6B12;margin-bottom:9px;">{{ bankPendingTitle }}</div>
+                    <div style="display:flex;flex-direction:column;gap:7px;">
+                      <sc-for list="{{ bankPendingRows }}" as="r" hint-placeholder-count="3">
+                        <div style="display:flex;gap:10px;font-size:12px;">
+                          <span style="flex:1;color:#6E6178;">{{ r.k }}</span>
+                          <span style="font-weight:700;color:#2C1745;">{{ r.v }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                    <button onClick="{{ bankApprove }}" style="width:100%;margin-top:13px;min-height:48px;border-radius:17px;background:#2F7A5A;color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;gap:8px;">{{ icBolt2 }}<span>{{ bankApproveLabel }}</span></button>
+                  </div>
+                </sc-if>
+
+                <div style="background:#FBF8FD;border-radius:18px;padding:14px;font-size:11.5px;color:#6E6178;line-height:1.85;">{{ bankNote }}</div>
+                <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="large" variant="tinted" full-width="{{ true }}" on-click="{{ bankEdit }}" hint-size="100%,50px">طلب تعديل الحساب البنكي</x-import>
+                <button onClick="{{ bankReset }}" style="width:100%;min-height:46px;border-radius:17px;border:1.5px dashed #D6C4EA;background:#FBF8FD;color:#6B3F9E;font-weight:700;font-size:12.5px;">محاكاة حساب جديد بلا بيانات بنكية</button>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ bankFormS }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:16px 20px 40px;animation:jshUp .3s cubic-bezier(.2,0,0,1) both;display:flex;flex-direction:column;gap:16px;">
+            <div style="background:linear-gradient(140deg,#F7E9F1,#EBE1F5);border-radius:22px;padding:15px;font-size:12px;color:#4A3B55;line-height:1.9;">{{ bankFormHint }}</div>
+            <button onClick="{{ bankAutofill }}" style="width:100%;min-height:52px;padding:15px;border-radius:20px;border:1.5px dashed #D6C4EA;background:#FBF8FD;color:#6B3F9E;font-weight:700;font-size:13.5px;display:flex;align-items:center;justify-content:center;gap:8px;" style-hover="background:#F6F1FB">{{ icBolt2 }}<span>محاكاة تعبئة البيانات البنكية</span></button>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <sc-for list="{{ bankFields }}" as="f" hint-placeholder-count="3">
+                <div>
+                  <div style="font-size:12.5px;font-weight:700;color:#6B3F9E;margin-bottom:7px;">{{ f.label }}</div>
+                  <sc-if value="{{ f.isSelect }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                      <sc-for list="{{ f.choices }}" as="c" hint-placeholder-count="4">
+                        <button onClick="{{ c.pick }}" aria-label="{{ c.label }}" style="{{ c.style }}">{{ c.label }}</button>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ f.isText }}" hint-placeholder-val="{{ true }}">
+                    <input value="{{ f.value }}" onChange="{{ f.onChange }}" placeholder="{{ f.placeholder }}" aria-label="{{ f.label }}" style="{{ f.style }}"></input>
+                  </sc-if>
+                  <sc-if value="{{ f.hasError }}" hint-placeholder-val="{{ false }}">
+                    <div style="margin-top:7px;font-size:11.5px;color:#C0364F;font-weight:700;">{{ f.error }}</div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+            <div style="background:#FBF8FD;border-radius:18px;padding:14px;font-size:11.5px;color:#6E6178;line-height:1.85;">يجب أن يكون الحساب باسمك أنتِ ومطابقاً لاسم الهوية، وإلا يُرفض التوثيق.</div>
+            <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="large" variant="prominent" full-width="{{ true }}" on-click="{{ bankSubmit }}" hint-size="100%,50px">{{ bankSubmitLabel }}</x-import>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ legalS }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:16px 20px 40px;animation:jshUp .3s cubic-bezier(.2,0,0,1) both;display:flex;flex-direction:column;gap:16px;">
+            <div style="background:linear-gradient(140deg,#F7E9F1,#EBE1F5);border-radius:22px;padding:16px;">
+              <div style="font-weight:800;font-size:16px;">{{ legalTitle }}</div>
+              <div style="font-size:11px;color:#6E6178;margin-top:7px;">{{ legalUpdated }}</div>
+              <div style="font-size:12px;color:#4A3B55;line-height:1.9;margin-top:10px;">{{ legalIntro }}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <sc-for list="{{ legalSections }}" as="sec" hint-placeholder-count="6">
+                <div style="background:#fff;border:1px solid #F1E7F2;border-radius:20px;padding:15px;">
+                  <div style="font-weight:700;font-size:13.5px;color:#6B3F9E;margin-bottom:8px;">{{ sec.h }}</div>
+                  <div style="font-size:12.5px;color:#4A3B55;line-height:2;">{{ sec.b }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;gap:9px;">
+              <button onClick="{{ legalGoTerms }}" style="{{ legalTermsStyle }}">الشروط والأحكام</button>
+              <button onClick="{{ legalGoPrivacy }}" style="{{ legalPrivacyStyle }}">سياسة الخصوصية</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ faqS }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:16px 20px 40px;animation:jshUp .3s cubic-bezier(.2,0,0,1) both;display:flex;flex-direction:column;gap:12px;">
+            <div style="background:#FBF8FD;border-radius:20px;padding:14px;font-size:12px;color:#6E6178;line-height:1.9;">اضغطي على أي سؤال لعرض إجابته. لم تجدي ما تبحثين عنه؟ افتحي تذكرة دعم وسيصلك الرد خلال ٢٤ ساعة.</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <sc-for list="{{ faqRows }}" as="f" hint-placeholder-count="6">
+                <div style="background:#fff;border:1px solid #F1E7F2;border-radius:20px;overflow:hidden;">
+                  <button onClick="{{ f.toggle }}" style="width:100%;padding:15px;display:flex;align-items:center;gap:11px;text-align:right;min-height:56px;">
+                    <span style="flex:1;font-weight:700;font-size:13px;">{{ f.q }}</span>
+                    <span style="{{ f.caret }}">{{ icChevD }}</span>
+                  </button>
+                  <sc-if value="{{ f.open }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding:0 15px 15px;font-size:12.5px;color:#4A3B55;line-height:2;">{{ f.a }}</div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+            <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="large" variant="tinted" full-width="{{ true }}" on-click="{{ openSupForm }}" hint-size="100%,50px">لم أجد إجابتي — فتح تذكرة</x-import>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ safetyS }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:16px 20px 40px;animation:jshUp .3s cubic-bezier(.2,0,0,1) both;display:flex;flex-direction:column;gap:17px;">
+            <div style="background:linear-gradient(135deg,#C0364F,#8E2740);border-radius:22px;padding:17px;color:#fff;">
+              <div style="font-weight:800;font-size:16px;">بلاغ سلامة عاجل</div>
+              <div style="font-size:12px;opacity:.92;margin-top:8px;line-height:1.9;">إذا كنتِ في خطر مباشر اتصلي بالرقم ٩١١ أولاً. بلاغك هنا يصل لفريق الطوارئ في جوشن خلال دقائق.</div>
+            </div>
+            <button onClick="{{ safeCall }}" style="width:100%;min-height:54px;border-radius:20px;background:#FDECEF;color:#C0364F;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;gap:9px;">{{ icPhoneR }}<span>اتصال فوري بفريق الطوارئ</span></button>
+            <div>
+              <div style="font-size:12.5px;font-weight:700;color:#6B3F9E;margin-bottom:9px;">نوع البلاغ</div>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <sc-for list="{{ safeKinds }}" as="k" hint-placeholder-count="6">
+                  <button onClick="{{ k.pick }}" aria-label="{{ k.label }}" style="{{ k.style }}">
+                    <span style="{{ k.iconStyle }}">{{ k.icon }}</span>
+                    <span style="flex:1;text-align:right;font-weight:700;font-size:13px;">{{ k.label }}</span>
+                    <span style="{{ k.tickStyle }}">{{ k.tick }}</span>
+                  </button>
+                </sc-for>
+              </div>
+              <sc-if value="{{ safeKindErr }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:9px;font-size:11.5px;color:#C0364F;font-weight:700;">{{ safeKindErrText }}</div>
+              </sc-if>
+            </div>
+            <div>
+              <div style="font-size:12.5px;font-weight:700;color:#6B3F9E;margin-bottom:7px;">ماذا حدث؟</div>
+              <textarea value="{{ safeText }}" onChange="{{ onSafeText }}" placeholder="اذكري الوقت والمكان وما حدث بالتفصيل — كل معلومة تساعد فريق الطوارئ." aria-label="تفاصيل البلاغ" style="{{ safeTextStyle }}"></textarea>
+              <sc-if value="{{ safeTextErr }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:8px;font-size:11.5px;color:#C0364F;font-weight:700;">{{ safeTextErrText }}</div>
+              </sc-if>
+            </div>
+            <div style="background:#FBF8FD;border-radius:18px;padding:14px;font-size:11.5px;color:#6E6178;line-height:1.9;">بلاغك سرّي ولا يُطلع عليه الطرف الآخر. قد يترتب على البلاغ إيقاف فوري للحساب المبلَّغ عنه لحين انتهاء التحقيق.</div>
+            <button onClick="{{ submitSafety }}" style="width:100%;min-height:52px;border-radius:20px;background:#C0364F;color:#fff;font-weight:800;font-size:14.5px;">إرسال البلاغ العاجل</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ safetyDoneS }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:30px 20px 40px;animation:jshUp .3s cubic-bezier(.2,0,0,1) both;display:flex;flex-direction:column;gap:18px;align-items:center;text-align:center;">
+            <span style="width:78px;height:78px;border-radius:28px;background:#E6F5EE;color:#2F7A5A;display:grid;place-items:center;">{{ icCheckBig }}</span>
+            <div>
+              <div style="font-weight:800;font-size:18px;">وصلنا بلاغك</div>
+              <div style="font-size:12.5px;color:#6E6178;margin-top:9px;line-height:1.95;">رقم البلاغ <span style="font-weight:800;color:#6B3F9E;">{{ safeRef }}</span> — فريق الطوارئ يراجعه الآن وسيتصل بك على رقمك المسجّل خلال دقائق.</div>
+            </div>
+            <div style="width:100%;background:#fff;border:1px solid #F1E7F2;border-radius:20px;padding:15px;text-align:right;">
+              <div style="font-size:12px;color:#6E6178;line-height:1.95;">نوع البلاغ: <span style="font-weight:700;color:#2C1745;">{{ safeKindLabel }}</span></div>
+              <div style="font-size:12px;color:#6E6178;line-height:1.95;margin-top:7px;">الحالة: <span style="font-weight:700;color:#C0364F;">قيد المعالجة العاجلة</span></div>
+            </div>
+            <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="large" variant="prominent" full-width="{{ true }}" on-click="{{ safeDone }}" hint-size="100%,50px">العودة للحساب</x-import>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ supFormS }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:16px 20px 130px;animation:jshUp .3s cubic-bezier(.2,0,0,1) both;display:flex;flex-direction:column;gap:18px;">
+            <div style="background:linear-gradient(135deg,#6B3F9E,#8C5FC0);border-radius:24px;padding:18px;color:#fff;">
+              <div style="font-weight:800;font-size:16px;">كيف نقدر نساعدك؟</div>
+              <div style="font-size:12px;opacity:.9;margin-top:7px;line-height:1.85;">اكتبي تفاصيل المشكلة وأرفقي ما يوضّحها، وفريق الدعم يرد عليك خلال ٢٤ ساعة.</div>
+            </div>
+
+            <div>
+              <div style="font-size:12.5px;font-weight:700;color:#6B3F9E;margin-bottom:9px;">موضوع التذكرة</div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                <sc-for list="{{ supTopicChips }}" as="t" hint-placeholder-count="6">
+                  <button onClick="{{ t.pick }}" aria-label="{{ t.label }}" style="{{ t.style }}">{{ t.label }}</button>
+                </sc-for>
+              </div>
+              <sc-if value="{{ supTopicErr }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:9px;font-size:11.5px;color:#C0364F;font-weight:700;">{{ supTopicErrText }}</div>
+              </sc-if>
+            </div>
+
+            <div>
+              <div style="font-size:12.5px;font-weight:700;color:#6B3F9E;margin-bottom:7px;">تفاصيل المشكلة</div>
+              <textarea value="{{ supText }}" onChange="{{ onSupText }}" placeholder="اشرحي ما حدث بالتفصيل — رقم الطلب، الوقت، وما الذي توقعتِه." aria-label="تفاصيل المشكلة" style="{{ supTextStyle }}"></textarea>
+              <sc-if value="{{ supTextErr }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:8px;font-size:11.5px;color:#C0364F;font-weight:700;">{{ supTextErrText }}</div>
+              </sc-if>
+            </div>
+
+            <div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;">
+                <span style="font-size:12.5px;font-weight:700;color:#6B3F9E;">المرفقات</span>
+                <span style="font-size:11px;color:#9A90A3;">{{ supFilesCount }} من ٣</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:9px;">
+                <sc-for list="{{ supFileRows }}" as="f" hint-placeholder-count="2">
+                  <div style="display:flex;align-items:center;gap:11px;background:#FBF8FD;border:1.5px solid #EDE3F5;border-radius:18px;padding:11px 13px;">
+                    <span style="width:36px;height:36px;border-radius:13px;background:#F0E8F8;color:#6B3F9E;display:grid;place-items:center;flex:none;">{{ f.icon }}</span>
+                    <span style="flex:1;min-width:0;">
+                      <span style="display:block;font-weight:700;font-size:12.5px;">{{ f.name }}</span>
+                      <span style="display:block;font-size:11px;color:#9A90A3;margin-top:3px;">{{ f.kind }}</span>
+                    </span>
+                    <button onClick="{{ f.remove }}" aria-label="حذف المرفق" style="font-size:11.5px;font-weight:700;color:#C0364F;background:#FDECEF;border-radius:999px;padding:7px 12px;flex:none;">حذف</button>
+                  </div>
+                </sc-for>
+              </div>
+              <button onClick="{{ supAddFile }}" style="width:100%;min-height:52px;margin-top:9px;padding:15px;border-radius:20px;border:1.5px dashed #D6C4EA;background:#FBF8FD;color:#6B3F9E;font-weight:700;font-size:13.5px;display:flex;align-items:center;justify-content:center;gap:8px;" style-hover="background:#F6F1FB">{{ icPlus }}<span>إضافة مرفق</span></button>
+            </div>
+
+            <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="large" variant="prominent" full-width="{{ true }}" on-click="{{ submitSupTicket }}" hint-size="100%,50px">إرسال التذكرة</x-import>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ supThreadS }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:16px 20px 130px;animation:jshUp .3s cubic-bezier(.2,0,0,1) both;display:flex;flex-direction:column;gap:16px;">
+            <div style="background:#FBF8FD;border:1.5px solid #EDE3F5;border-radius:22px;padding:15px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+                <span style="font-weight:800;font-size:14px;">تذكرة {{ supTicketId }}</span>
+                <span style="{{ supStatusStyle }}">{{ supTicketStatus }}</span>
+              </div>
+              <div style="font-size:11.5px;color:#6E6178;margin-top:8px;line-height:1.8;">{{ supTicketTopic }} · {{ supTicketTime }}</div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <sc-for list="{{ supBubbles }}" as="b" hint-placeholder-count="2">
+                <div style="{{ b.rowStyle }}">
+                  <div style="{{ b.bubbleStyle }}">
+                    <div style="{{ b.whoStyle }}">{{ b.who }}</div>
+                    <div style="font-size:12.5px;line-height:1.95;">{{ b.text }}</div>
+                    <sc-if value="{{ b.hasFiles }}" hint-placeholder-val="{{ false }}">
+                      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;">
+                        <sc-for list="{{ b.files }}" as="bf" hint-placeholder-count="2">
+                          <span style="{{ bf.chipStyle }}">{{ bf.name }}</span>
+                        </sc-for>
+                      </div>
+                    </sc-if>
+                    <div style="{{ b.timeStyle }}">{{ b.time }}</div>
+                  </div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ supReplying }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;justify-content:flex-start;">
+                  <div style="background:#F4F0F6;border-radius:20px 20px 20px 6px;padding:13px 16px;font-size:12px;color:#6E6178;font-weight:700;">فريق الدعم يكتب…</div>
+                </div>
+              </sc-if>
+            </div>
+
+            <div style="background:#F4F0F6;border-radius:20px;padding:15px;display:flex;align-items:flex-start;gap:11px;">
+              <span style="width:32px;height:32px;border-radius:12px;background:#fff;color:#9A90A3;display:grid;place-items:center;flex:none;">{{ icLock }}</span>
+              <span style="flex:1;font-size:11.5px;color:#6E6178;line-height:1.9;">هذه المحادثة للعرض فقط ولا تقبل الرد. إذا احتجتِ متابعة إضافية افتحي تذكرة جديدة وسيصلك الرد عليها.</span>
+            </div>
+
+            <x-import component-from-global-scope="DesignSystem_9729b4.Button" size="large" variant="tinted" full-width="{{ true }}" on-click="{{ openSupForm }}" hint-size="100%,50px">فتح تذكرة جديدة</x-import>
           </div>
         </sc-if>
 
@@ -4188,7 +4607,17 @@ class Component extends DCLogic {
     obAt: 0, obTimer: null,
     pkgQty: 1,
     serviceId: null, providerId: null, loadingProviders: false,
-    instantAlertOpen: false, schedState: 'idle', chatUnlocked: false,
+    instantAlertOpen: false, schedState: 'idle', schedReqId: null, chatUnlocked: false,
+    supTopic: '', supText: '', supFiles: [], supErr: {}, supTicket: null, supThread: [], supReplying: false,
+    safeKind: '', safeText: '', safeErr: {}, safeRef: null, faqOpen: null, legalOpen: null,
+    pBank: { holder: 'نورة محمد الشمري', bank: 'مصرف الراجحي', iban: 'SA4580000000608010167519', status: 'verified', pend: null },
+    dBank: { holder: 'مها سعد الزهراني', bank: 'البنك الأهلي', iban: 'SA0310000000000000002341', status: 'verified', pend: null },
+    dVeh: { type: 'دراجة نارية', model: 'هوندا PCX ١٢٥', year: '٢٠٢٣', color: 'أبيض', plate: 'ر ن ب ٤٨٢١', status: 'verified', pend: null },
+    bankForm: { holder: '', bank: '', iban: '' }, bankErr: {}, bankMode: 'new',
+    vehForm: { type: '', model: '', year: '', color: '', plate: '' }, vehErr: {}, vehMode: 'new',
+    pOwnSubs: [], svcForm: { cat: '', name: '', desc: '', dur: '', base: '' }, svcErr: {}, svcMode: 'new', svcEditId: null,
+    optForm: { label: '', price: '' }, optErr: {},
+    notifPrefs: { orders: true, offers: true, chat: true, reminders: true, sms: false },
     locOpen: false, locTmp: null, locGps: false, logoutOpen: false,
     mapOpen: false, mapMode: 'loc', mapPin: { x: 50, y: 44 }, addrPin: null, addrMapErr: false,
     j: { type: '', occ: '', budget: '', time: '' }, jRan: false,
@@ -4247,7 +4676,7 @@ class Component extends DCLogic {
     ],
     couponInput: '', coupon: null, couponErr: '',
     rateStars: 0, rateSel: [], rateNote: '', rateError: false,
-    reg: { name: '', nid: '', phone: '', vehicle: '' }, regErrors: {},
+    reg: { name: '', nid: '', phone: '', vType: '', vModel: '', plate: '' }, regErrors: {},
     docState: { id: 'idle', license: 'idle', vehicle: 'idle' }, docsError: false,
     online: false, request: null, countdown: 15, cdTimer: null,
     tripStage: 0,
@@ -4808,6 +5237,344 @@ class Component extends DCLogic {
     });
   }
   cancelFemDecl() { this.setState({ femDeclOpen: false, femDeclErr: false }); }
+  schedReqId() { return this.state.schedReqId; }
+  sendSchedReq() {
+    const id = 'JSH-48' + Math.floor(200 + Math.random() * 700);
+    const a = this.addr(), when = this.whenLabel(), price = this.totalNum();
+    const req = {
+      id: id, name: this.svc().name,
+      meta: this.prov().name + ' · ' + when + ' · ' + a.district,
+      price: this.sar(price), status: 'بانتظار الموافقة', kind: 'active', await: true,
+      prov: this.prov().name, provId: this.prov().id, mode: 'later', when: when,
+      addr: a.label + ' — ' + a.district + '، ' + a.street,
+      opts: this.optsLabel() || 'بدون اختيارات إضافية',
+      svcP: this.basePrice(), optP: this.optsPrice(), fee: this.deliveryFee(), total: price,
+      placed: 'الآن', pay: '—', cat: this.state.catId, subId: this.state.subId
+    };
+    this.setState(st => ({ schedState: 'waiting', schedReqId: id, orders: [req, ...st.orders] }), () => this.go('awaitp'));
+  }
+  schedAccept() {
+    const id = this.state.schedReqId, name = this.prov().name;
+    this.setState(st => ({
+      schedState: 'accepted',
+      orders: st.orders.map(o => o.id === id ? { ...o, status: 'بانتظار الدفع', await: false, accepted: true } : o),
+      notifs: [{ icon: 'check', tint: '#E6F5EE', ink: '#2F7A5A', title: 'تم قبول طلب الحجز',
+        body: 'قبلت ' + name + ' موعدك — أكملي الدفع لتأكيد الحجز.', time: 'الآن', unread: true, goPay: id }, ...st.notifs]
+    }));
+    this.flash('قبلت ' + name + ' طلب الحجز — أكملي الدفع');
+  }
+  schedReject() {
+    const id = this.state.schedReqId, name = this.prov().name;
+    this.setState(st => ({
+      schedState: 'rejected',
+      orders: st.orders.map(o => o.id === id ? { ...o, status: 'لم يُقبل', kind: 'cancelled', await: false, cancelReason: 'اعتذرت ' + name + ' عن الموعد المطلوب — لم يُخصم أي مبلغ.' } : o),
+      notifs: [{ icon: 'close', tint: '#FDECEF', ink: '#C0364F', title: 'لم يُقبل طلب الحجز',
+        body: 'اعتذرت ' + name + ' عن الموعد المطلوب. جرّبي موعداً آخر أو مقدّمة خدمة أخرى.', time: 'الآن', unread: true }, ...st.notifs]
+    }));
+    this.flash('لم يُقبل طلب الحجز');
+  }
+  resumeReq(o) {
+    this.setState({
+      schedReqId: o.id, schedState: o.accepted ? 'accepted' : 'waiting',
+      cScreen: o.accepted ? 'pay' : 'awaitp', cStack: ['home', 'orders']
+    });
+  }
+  SAFE_KINDS = [
+    { id: 'harass', label: 'تحرّش أو سلوك غير لائق', ic: 'shield' },
+    { id: 'threat', label: 'تهديد أو عنف', ic: 'shield' },
+    { id: 'unsafe', label: 'مكان غير آمن', ic: 'pin' },
+    { id: 'identity', label: 'شخص غير مطابق للحساب', ic: 'user' },
+    { id: 'accident', label: 'حادث أثناء الخدمة', ic: 'bolt' },
+    { id: 'other', label: 'بلاغ آخر', ic: 'doc' }
+  ];
+  FAQS = [
+    { q: 'متى تصلني أرباحي؟', a: 'تُحوّل الأرباح كل يوم أحد على حسابك البنكي الموثّق بعد خصم عمولة جوشن، وتصل خلال يوم عمل واحد.' },
+    { q: 'كيف أغيّر أوقات عملي؟', a: 'من «حسابي» ثم «أوقات العمل»، فعّلي الأيام وحدّدي ساعات البداية والنهاية. التغيير يسري فوراً على المواعيد الجديدة.' },
+    { q: 'ماذا يحدث عند إلغاء العميلة للموعد؟', a: 'إذا ألغت العميلة قبل ساعتين من الموعد لا يُحتسب أي خصم. الإلغاء المتأخر يُحتسب لكِ رسوم انتظار تظهر في أرباحك.' },
+    { q: 'كيف أرفع تقييمي؟', a: 'الالتزام بالموعد، التأكيد قبل التوجّه، ووضوح الأسعار قبل البدء — هذه أكثر ثلاثة عوامل تأثيراً في تقييم العميلات.' },
+    { q: 'هل أستطيع رفض طلب؟', a: 'نعم، لكن تكرار الرفض يقلّل ظهورك في نتائج البحث. الأفضل ضبط نطاق الخدمة وأوقات العمل بما يناسبك.' },
+    { q: 'كيف أعدّل حسابي البنكي؟', a: 'من «حسابي» ثم «الحساب البنكي» اطلبي التعديل؛ يراجع الدعم الطلب ويصلك إشعار بالموافقة خلال ٢٤ ساعة.' }
+  ];
+  LEGAL = {
+    terms: {
+      title: 'الشروط والأحكام', updated: 'آخر تحديث: ١ أكتوبر ٢٠٢٦',
+      intro: 'باستخدامك تطبيق جوشن فإنك توافقين على الشروط التالية. نرجو قراءتها بعناية قبل تقديم أو طلب أي خدمة.',
+      sections: [
+        { h: '١. طبيعة المنصّة', b: 'جوشن منصّة وسيطة تربط العميلات بمقدّمات خدمات التجميل والعناية المنزلية والمندوبات. جوشن لا تقدّم الخدمة بنفسها، ومسؤوليتها تقتصر على تيسير الحجز والدفع والدعم.' },
+        { h: '٢. الحسابات مخصّصة للإناث', b: 'جميع الخدمات تُقدَّم داخل المنازل من أخصائيات لعميلات. الحسابات في التطبيقات الثلاثة مخصّصة للإناث فقط، ويُعدّ الإقرار بذلك شرطاً للتسجيل. مخالفة هذا الشرط تعني إيقاف الحساب نهائياً.' },
+        { h: '٣. الأسعار والعمولة', b: 'تحدّد مقدّمة الخدمة أسعارها داخل التطبيق. تخصم جوشن عمولة معلنة من قيمة كل طلب مكتمل، وتُضاف ضريبة القيمة المضافة ١٥٪ حسب الأنظمة السعودية.' },
+        { h: '٤. الإلغاء والاسترداد', b: 'للعميلة إلغاء الطلب مجاناً قبل ساعتين من الموعد. الإلغاء بعد ذلك أو بعد توجّه مقدّمة الخدمة يترتب عليه رسوم انتظار. الاسترداد يتم على وسيلة الدفع الأصلية خلال ٣ أيام عمل.' },
+        { h: '٥. المستندات والتوثيق', b: 'تلتزم مقدّمة الخدمة والمندوبة برفع مستندات سارية وصحيحة. تقديم مستند غير صحيح يعرّض الحساب للإيقاف ويُحمّل صاحبته المسؤولية النظامية.' },
+        { h: '٦. السلوك داخل المنزل', b: 'يُمنع تصوير المنزل أو العميلة، أو مشاركة أي بيانات خاصة. أي بلاغ سلامة يُراجع خلال ساعة وقد يترتب عليه إيقاف فوري للحساب لحين انتهاء التحقيق.' },
+        { h: '٧. تعديل الشروط', b: 'قد تُحدّث هذه الشروط من وقت لآخر، ويصلك إشعار داخل التطبيق قبل سريان أي تعديل جوهري بسبعة أيام.' }
+      ]
+    },
+    privacy: {
+      title: 'سياسة الخصوصية', updated: 'آخر تحديث: ١ أكتوبر ٢٠٢٦',
+      intro: 'نوضّح هنا البيانات التي نجمعها وكيف نستخدمها ونحميها، التزاماً بنظام حماية البيانات الشخصية في المملكة العربية السعودية.',
+      sections: [
+        { h: '١. ما الذي نجمعه', b: 'الاسم ورقم الجوال ورقم الهوية والعنوان، ومستندات التوثيق لمقدّمات الخدمة والمندوبات، وبيانات الموقع أثناء الطلب فقط، وسجل الطلبات والمدفوعات.' },
+        { h: '٢. لماذا نجمعه', b: 'للتحقق من الهوية، ومطابقة الطلب بأقرب مقدّمة خدمة، ومعالجة المدفوعات والتحويلات، وحلّ البلاغات والنزاعات، وتحسين جودة الخدمة.' },
+        { h: '٣. ما لا نفعله', b: 'لا نبيع بياناتك لأي طرف ثالث، ولا نشارك رقم جوالك مع العميلات أو مقدّمات الخدمة — الاتصال يتم عبر رقم وسيط داخل التطبيق.' },
+        { h: '٤. الموقع الجغرافي', b: 'يُستخدم الموقع أثناء الطلب النشط فقط لتتبّع الوصول، ويتوقف التتبّع فور اكتمال الطلب. يمكنك إيقاف إذن الموقع من إعدادات جهازك في أي وقت.' },
+        { h: '٥. مدة الحفظ', b: 'نحتفظ ببيانات الطلبات والفواتير عشر سنوات وفق المتطلبات النظامية، ويمكنك طلب حذف حسابك وبياناتك غير الملزِمة نظاماً عبر الدعم.' },
+        { h: '٦. حقوقك', b: 'لك حق الاطلاع على بياناتك وتصحيحها وطلب حذفها، وتقديم شكوى عبر الدعم. نستجيب لطلبك خلال ٣٠ يوماً كحد أقصى.' }
+      ]
+    }
+  };
+  SUP_TOPICS = ['الحجوزات والمواعيد', 'المستندات والتوثيق', 'التحويلات المالية', 'مشكلة تقنية', 'شكوى أو بلاغ', 'أخرى'];
+  SUP_FILES = [
+    { name: 'لقطة شاشة.png', kind: 'صورة', ic: 'camera' },
+    { name: 'إيصال التحويل.pdf', kind: 'ملف', ic: 'doc' },
+    { name: 'صورة المستند.jpg', kind: 'صورة', ic: 'camera' }
+  ];
+  roleGo(screen) {
+    const r = this.state.role;
+    if (r === 'provider') return this.pgo(screen);
+    if (r === 'driver') return this.dgo(screen);
+    return this.go(screen);
+  }
+  segBtn(on) {
+    return 'flex:1;min-height:46px;border-radius:16px;font-size:12.5px;font-weight:700;border:1.5px solid '
+      + (on ? '#6B3F9E;background:#6B3F9E;color:#fff;' : '#EDE3F5;background:#fff;color:#6B3F9E;');
+  }
+  roleReplace(screen) {
+    // يستبدل الشاشة الحالية؛ ولو كانت الوجهة هي نفسها آخر عنصر في المكدّس نسحبه
+    // حتى لا يحتاج زر الرجوع ضغطتين.
+    this.setState(st => {
+      const key = st.role === 'provider' ? 'pStack' : st.role === 'driver' ? 'dStack' : 'cStack';
+      const scr = st.role === 'provider' ? 'pScreen' : st.role === 'driver' ? 'dScreen' : 'cScreen';
+      const a = [...st[key]];
+      if (a.length && a[a.length - 1] === screen) a.pop();
+      return { [scr]: screen, [key]: a };
+    });
+  }
+  BANKS = ['مصرف الراجحي', 'البنك الأهلي', 'بنك الرياض', 'البنك السعودي الفرنسي', 'بنك الإنماء', 'البنك العربي الوطني'];
+  VEH_TYPES = ['دراجة نارية', 'سيارة صغيرة', 'سيارة عائلية'];
+
+  pAllSubs(catId) {
+    const own = this.state.pOwnSubs.filter(o => o.cat === catId);
+    return this.subsOf(catId).concat(own);
+  }
+  pFindSub(id) {
+    const own = this.state.pOwnSubs.find(o => o.id === id);
+    if (own) return own;
+    for (const c of this.CATS) { const f = c.subs.find(x => x.id === id); if (f) return f; }
+    return null;
+  }
+  svcNew() {
+    this.setState({ svcMode: 'new', svcEditId: null, svcErr: {}, svcForm: { cat: this.state.pSvcCat, name: '', desc: '', dur: '', base: '' } },
+      () => this.pgo('psvcnew'));
+  }
+  svcEdit(id) {
+    const o = this.state.pOwnSubs.find(x => x.id === id); if (!o) return;
+    this.setState({ svcMode: 'edit', svcEditId: id, svcErr: {}, svcForm: { cat: o.cat, name: o.name, desc: o.desc, dur: String(o.dur).replace(/[^0-9\u0660-\u0669]/g, ''), base: String(o.base) } },
+      () => this.pgo('psvcnew'));
+  }
+  svcDelete(id) {
+    this.setState(st => {
+      const cfg = { ...st.pSvcCfg }; delete cfg[id];
+      return { pOwnSubs: st.pOwnSubs.filter(o => o.id !== id), pSvcCfg: cfg, pSvcOpen: st.pSvcOpen === id ? null : st.pSvcOpen };
+    });
+    this.flash('تم حذف الخدمة من ملفك');
+  }
+  svcSubmit() {
+    const st = this.state, f = st.svcForm, e = {};
+    const dur = String(f.dur).replace(/[^0-9\u0660-\u0669]/g, '');
+    const base = Number(String(f.base).replace(/[^0-9]/g, '')) || 0;
+    if (!f.cat) e.cat = 'اختاري التصنيف';
+    if (f.name.trim().length < 3) e.name = 'اكتبي اسم الخدمة';
+    if (f.desc.trim().length < 10) e.desc = 'اكتبي وصفاً مختصراً (١٠ أحرف على الأقل)';
+    if (!dur) e.dur = 'أدخلي مدة الخدمة بالدقائق';
+    if (base < 1) e.base = 'أدخلي سعراً صحيحاً';
+    if (Object.keys(e).length) { this.setState({ svcErr: e }); return; }
+    if (st.svcMode === 'edit') {
+      this.setState(s2 => ({
+        svcErr: {},
+        pOwnSubs: s2.pOwnSubs.map(o => o.id === s2.svcEditId
+          ? { ...o, cat: f.cat, name: f.name.trim(), desc: f.desc.trim(), dur: this.ar(dur) + ' دقيقة', base: base } : o),
+        pSvcCat: f.cat
+      }), () => this.roleReplace('psvc'));
+      this.flash('تم حفظ تعديل الخدمة');
+    } else {
+      const id = 'own' + Date.now();
+      this.setState(s2 => ({
+        svcErr: {}, pSvcCat: f.cat, pSvcOpen: id,
+        pOwnSubs: [...s2.pOwnSubs, { id: id, cat: f.cat, name: f.name.trim(), desc: f.desc.trim(), dur: this.ar(dur) + ' دقيقة', base: base, options: [], own: true }],
+        pSvcCfg: { ...s2.pSvcCfg, [id]: { price: base, opts: {}, extra: [], hidden: [] } }
+      }), () => this.roleReplace('psvc'));
+      this.flash('تمت إضافة الخدمة وتفعيلها في ملفك');
+    }
+  }
+  optAdd(subId) {
+    const st = this.state, f = st.optForm, e = {};
+    const price = Number(String(f.price).replace(/[^0-9]/g, '')) || 0;
+    if (f.label.trim().length < 2) e.label = 'اكتبي اسم الإضافة';
+    if (Object.keys(e).length) { this.setState({ optErr: e }); return; }
+    this.setState(s2 => {
+      const cfg = s2.pSvcCfg[subId]; if (!cfg) return {};
+      const extra = [...(cfg.extra || []), { id: 'x' + Date.now(), label: f.label.trim(), price: price }];
+      return { optErr: {}, optForm: { label: '', price: '' }, pSvcCfg: { ...s2.pSvcCfg, [subId]: { ...cfg, extra: extra } } };
+    });
+    this.flash('تمت إضافة الإضافة');
+  }
+  optRemove(subId, xid) {
+    this.setState(st => {
+      const cfg = st.pSvcCfg[subId]; if (!cfg) return {};
+      return { pSvcCfg: { ...st.pSvcCfg, [subId]: { ...cfg, extra: (cfg.extra || []).filter(x => x.id !== xid) } } };
+    });
+  }
+  optSetPrice(subId, xid, v) {
+    const n = Number(String(v).replace(/[^0-9]/g, '')) || 0;
+    this.setState(st => {
+      const cfg = st.pSvcCfg[subId]; if (!cfg) return {};
+      return { pSvcCfg: { ...st.pSvcCfg, [subId]: { ...cfg, extra: (cfg.extra || []).map(x => x.id === xid ? { ...x, price: n } : x) } } };
+    });
+  }
+  optHide(subId, key) {
+    this.setState(st => {
+      const cfg = st.pSvcCfg[subId]; if (!cfg) return {};
+      return { pSvcCfg: { ...st.pSvcCfg, [subId]: { ...cfg, hidden: [...(cfg.hidden || []), key] } } };
+    });
+    this.flash('تم حذف الإضافة من خدمتك');
+  }
+  optRestore(subId) {
+    this.setState(st => {
+      const cfg = st.pSvcCfg[subId]; if (!cfg) return {};
+      return { pSvcCfg: { ...st.pSvcCfg, [subId]: { ...cfg, hidden: [] } } };
+    });
+    this.flash('تمت استعادة الإضافات المحذوفة');
+  }
+  bankSlot() { return this.state.role === 'driver' ? 'dBank' : 'pBank'; }
+  bankOf() { return this.state[this.bankSlot()]; }
+  ibanMask(v) {
+    const raw = String(v || '').replace(/\s/g, '');
+    if (raw.length < 8) return raw || '—';
+    return 'SA•• •••• •••• •••• ' + this.ar(raw.slice(-4));
+  }
+  bankAddNew() {
+    this.setState({ bankMode: 'new', bankErr: {}, bankForm: { holder: '', bank: '', iban: '' } }, () => this.roleGo('bankform'));
+  }
+  bankEdit() {
+    const b = this.bankOf() || {};
+    this.setState({ bankMode: 'edit', bankErr: {}, bankForm: { holder: b.holder || '', bank: b.bank || '', iban: b.iban || '' } }, () => this.roleGo('bankform'));
+  }
+  bankAutofill() {
+    const d = this.state.role === 'driver'
+      ? { holder: 'مها سعد الزهراني', bank: 'البنك الأهلي', iban: 'SA0310000000000000002341' }
+      : { holder: 'نورة محمد الشمري', bank: 'مصرف الراجحي', iban: 'SA4580000000608010167519' };
+    this.setState({ bankForm: d, bankErr: {} });
+    this.flash('تم تعبئة البيانات البنكية للتجربة');
+  }
+  bankSubmit() {
+    const st = this.state, f = st.bankForm, e = {};
+    const iban = String(f.iban || '').replace(/\s/g, '').toUpperCase();
+    if (f.holder.trim().length < 6) e.holder = 'اكتبي الاسم الثلاثي كما في الهوية';
+    if (!f.bank) e.bank = 'اختاري البنك';
+    if (!/^SA[0-9]{22}$/.test(iban)) e.iban = 'الآيبان يبدأ بـ SA ويتكوّن من ٢٤ خانة';
+    if (Object.keys(e).length) { this.setState({ bankErr: e }); return; }
+    const slot = this.bankSlot(), cur = this.state[slot];
+    const data = { holder: f.holder.trim(), bank: f.bank, iban: iban };
+    if (st.bankMode === 'new') {
+      this.setState({ bankErr: {}, [slot]: { ...data, status: 'pending', pend: null } }, () => this.roleReplace('bank'));
+      this.flash('تم إرسال الحساب البنكي للتوثيق');
+    } else {
+      this.setState({ bankErr: {}, [slot]: { ...cur, status: 'editing', pend: data } }, () => this.roleReplace('bank'));
+      this.flash('أُرسل طلب التعديل للدعم للمراجعة');
+    }
+  }
+  bankApprove() {
+    const slot = this.bankSlot(), cur = this.state[slot];
+    const next = cur.pend ? { ...cur, ...cur.pend, status: 'verified', pend: null } : { ...cur, status: 'verified', pend: null };
+    this.setState({ [slot]: next });
+    this.flash(cur.pend ? 'وصلت موافقة الدعم — سرى تعديل الحساب البنكي' : 'تم توثيق حسابك البنكي — ستصلك الأرباح عليه');
+  }
+  bankReset() {
+    this.setState({ [this.bankSlot()]: null });
+    this.flash('تمت محاكاة حساب جديد بلا بيانات بنكية');
+  }
+
+  vehAddNew() {
+    this.setState({ vehMode: 'new', vehErr: {}, vehForm: { type: '', model: '', year: '', color: '', plate: '' } }, () => this.roleGo('vehform'));
+  }
+  vehEdit() {
+    const v = this.state.dVeh || {};
+    this.setState({ vehMode: 'edit', vehErr: {}, vehForm: { type: v.type || '', model: v.model || '', year: v.year || '', color: v.color || '', plate: v.plate || '' } }, () => this.roleGo('vehform'));
+  }
+  vehAutofill() {
+    this.setState({ vehForm: { type: 'دراجة نارية', model: 'هوندا PCX ١٢٥', year: '٢٠٢٣', color: 'أبيض', plate: 'ر ن ب ٤٨٢١' }, vehErr: {} });
+    this.flash('تم تعبئة بيانات المركبة للتجربة');
+  }
+  vehSubmit() {
+    const st = this.state, f = st.vehForm, e = {};
+    if (!f.type) e.type = 'اختاري نوع المركبة';
+    if (f.model.trim().length < 3) e.model = 'اكتبي الطراز كما في الاستمارة';
+    if (!/^[0-9\u0660-\u0669]{4}$/.test(String(f.year).trim())) e.year = 'سنة الصنع ٤ أرقام';
+    if (!f.color.trim()) e.color = 'اكتبي لون المركبة';
+    if (String(f.plate).trim().length < 4) e.plate = 'أدخلي رقم اللوحة كاملاً';
+    if (Object.keys(e).length) { this.setState({ vehErr: e }); return; }
+    const data = { type: f.type, model: f.model.trim(), year: String(f.year).trim(), color: f.color.trim(), plate: String(f.plate).trim() };
+    if (st.vehMode === 'new') {
+      this.setState({ vehErr: {}, dVeh: { ...data, status: 'pending', pend: null } }, () => this.roleReplace('vehicle'));
+      this.flash('تم إرسال بيانات المركبة للاعتماد');
+    } else {
+      this.setState({ vehErr: {}, dVeh: { ...st.dVeh, status: 'editing', pend: data } }, () => this.roleReplace('vehicle'));
+      this.flash('أُرسل طلب تعديل المركبة للدعم');
+    }
+  }
+  vehApprove() {
+    const cur = this.state.dVeh;
+    const next = cur.pend ? { ...cur, ...cur.pend, status: 'verified', pend: null } : { ...cur, status: 'verified', pend: null };
+    this.setState({ dVeh: next });
+    this.flash(cur.pend ? 'وصلت موافقة الدعم — سرى تعديل بيانات المركبة' : 'تم اعتماد مركبتك — يمكنك استقبال الرحلات');
+  }
+  vehReset() { this.setState({ dVeh: null }); this.flash('تمت محاكاة حساب جديد بلا مركبة'); }
+
+  openLegal(which) { this.setState({ legalOpen: which }, () => this.roleGo('legal')); }
+  openFaq() { this.setState({ faqOpen: null }, () => this.roleGo('faq')); }
+  openSafety() { this.setState({ safeKind: '', safeText: '', safeErr: {}, safeRef: null }, () => this.roleGo('safety')); }
+  submitSafety() {
+    const st = this.state, e = {};
+    if (!st.safeKind) e.kind = 'اختاري نوع البلاغ';
+    if (st.safeText.trim().length < 10) e.text = 'اكتبي ما حدث (١٠ أحرف على الأقل)';
+    if (Object.keys(e).length) { this.setState({ safeErr: e }); return; }
+    const ref = 'SAFE-' + Math.floor(1000 + Math.random() * 8999);
+    this.setState({ safeErr: {}, safeRef: ref }, () => this.roleReplace('safetydone'));
+    this.flash('تم استلام بلاغ السلامة — فريق الطوارئ تواصل معك الآن');
+  }
+  openSupForm() {
+    this.setState({ supTopic: '', supText: '', supFiles: [], supErr: {}, supReplying: false }, () => this.roleGo('supform'));
+  }
+  supAddFile() {
+    const st = this.state;
+    if (st.supFiles.length >= 3) { this.flash('الحد الأقصى ٣ مرفقات'); return; }
+    const f = this.SUP_FILES[st.supFiles.length % this.SUP_FILES.length];
+    this.setState(s2 => ({ supFiles: [...s2.supFiles, { ...f, id: Date.now() + s2.supFiles.length }] }));
+    this.flash('تمت إضافة المرفق');
+  }
+  supRemoveFile(id) { this.setState(st => ({ supFiles: st.supFiles.filter(f => f.id !== id) })); }
+  submitSupTicket() {
+    const st = this.state, e = {};
+    if (!st.supTopic) e.topic = 'اختاري موضوع التذكرة';
+    if (st.supText.trim().length < 10) e.text = 'اكتبي تفاصيل المشكلة (١٠ أحرف على الأقل)';
+    if (Object.keys(e).length) { this.setState({ supErr: e }); return; }
+    const id = 'SUP-' + Math.floor(10000 + Math.random() * 89999);
+    this.setState({
+      supErr: {}, supReplying: true,
+      supTicket: { id: id, topic: st.supTopic, time: 'الآن', status: 'قيد المعالجة' },
+      supThread: [{ me: true, text: st.supText.trim(), time: 'الآن', files: st.supFiles }]
+    }, () => this.roleReplace('supthread'));
+    setTimeout(() => {
+      this.setState(s2 => ({
+        supReplying: false,
+        supTicket: s2.supTicket ? { ...s2.supTicket, status: 'تم الرد' } : s2.supTicket,
+        supThread: [...s2.supThread, {
+          me: false, time: 'الآن',
+          text: 'شكراً لتواصلك. استلمنا تذكرتك رقم ' + id + ' وفريق الدعم راجع التفاصيل والمرفقات. سنعالج الطلب خلال ٢٤ ساعة ونوافيك بالتحديث على رقم جوالك المسجّل. التذكرة مغلقة للرد — إن احتجتِ متابعة إضافية افتحي تذكرة جديدة.'
+        }]
+      }));
+    }, 2200);
+  }
   enterVisitor() { this.setState({ cAuth: 'guest', cScreen: 'home', cStack: [] }); this.flash('تتصفّحين جوشن كزائرة — التصفّح فقط'); }
 
   order() { return this.state.orders.find(o => o.id === this.state.orderSel) || this.state.orders[0]; }
@@ -4867,7 +5634,7 @@ class Component extends DCLogic {
       if (cur) { const n = { ...st.pSvcCfg }; delete n[sub.id]; return { pSvcCfg: n, pSvcOpen: st.pSvcOpen === sub.id ? null : st.pSvcOpen }; }
       const opts = {};
       (sub.options || []).forEach(g => { g.choices.forEach(c => { opts[g.id + '|' + c.label] = c.add; }); });
-      return { pSvcCfg: { ...st.pSvcCfg, [sub.id]: { price: sub.base, opts: opts } }, pSvcOpen: sub.id };
+      return { pSvcCfg: { ...st.pSvcCfg, [sub.id]: { price: sub.base, opts: opts, extra: [], hidden: [] } }, pSvcOpen: sub.id };
     });
   }
   pSetSvcPrice(id, v) {
@@ -5048,7 +5815,7 @@ class Component extends DCLogic {
       const isNow = this.state.bookMode === 'now';
       const bk = { id: order.id, svc: this.svc().name + (pkgQ > 1 ? ' · ' + this.peopleWord(pkgQ) : ''), svcBase: this.svc().name, who: 'لمار العتيبي', where: this.addr().district, when: when, time: isNow ? 'الآن' : (this.state.bookTime || '—'), price: price, status: isNow ? 'مؤكد' : 'مجدول', kind: isNow ? 'today' : 'next', ic: this.svc().icon, group: gsnap, people: isGroup ? this.state.gPeople.length : pkgQ, gDur: isGroup ? this.gDurLabel() : '', isPkg: isPkg, addrFull: this.addr().label + ' — ' + this.addr().district + '، ' + this.addr().street };
       const toProv = this.prov().id === 2;
-      this.setState(st => ({ payState: 'idle', cScreen: 'success', cStack: [], draft: null, coupon: null, couponInput: '', couponErr: '', orders: [order, ...st.orders.map(o => (o.kind === 'active' ? { ...o, kind: 'done', status: 'مكتمل' } : o))], orderSel: order.id, wallet: w, trackStage: 1, chatUnlocked: true, schedState: 'idle', pBookings: toProv ? [bk, ...st.pBookings] : st.pBookings, messages: [{ me: false, text: 'أهلاً بك، تم استلام طلبك وسأتواصل معك قبل الموعد.', time: 'الآن' }] }));
+      this.setState(st => ({ payState: 'idle', cScreen: 'success', cStack: [], draft: null, coupon: null, couponInput: '', couponErr: '', orders: [order, ...st.orders.filter(o => o.id !== st.schedReqId).map(o => (o.kind === 'active' ? { ...o, kind: 'done', status: 'مكتمل' } : o))], notifs: st.notifs.map(n => n.goPay === st.schedReqId ? { ...n, goPay: null, unread: false } : n), orderSel: order.id, wallet: w, trackStage: 1, chatUnlocked: true, schedState: 'idle', schedReqId: null, pBookings: toProv ? [bk, ...st.pBookings] : st.pBookings, messages: [{ me: false, text: 'أهلاً بك، تم استلام طلبك وسأتواصل معك قبل الموعد.', time: 'الآن' }] }));
     }, 1600);
   }
   sendMsg() {
@@ -5091,7 +5858,7 @@ class Component extends DCLogic {
   }
   autofillReg() {
     this.setState({
-      reg: { name: 'مها الزهراني', nid: '1098234571', phone: '0551234567', vehicle: 'تويوتا يارس — ح ب د ٤٥٢١' },
+      reg: { name: 'مها الزهراني', nid: '1098234571', phone: '0551234567', vType: 'سيارة صغيرة', vModel: 'تويوتا يارس ٢٠٢٢', plate: 'ح ب د ٤٥٢١' },
       regErrors: {}, docsError: false, docState: { id: 'uploading', license: 'uploading', vehicle: 'uploading' }
     });
     this.flash('تم تعبئة البيانات ورفع المستندات تلقائياً');
@@ -5215,17 +5982,32 @@ class Component extends DCLogic {
       wallet: ['المحفظة', 'الرصيد والحركات'], notifs: ['الإشعارات', 'آخر التحديثات'], rate: ['تقييم الخدمة', 'رأيك يهمنا'],
       profile: ['حسابي', 'الإعدادات والتفضيلات'],
       orderd: ['تفاصيل الطلب', (ordSel || {}).id || ''],
-      pedit: ['تعديل بياناتي', 'الاسم وبيانات التواصل']
+      pedit: ['تعديل بياناتي', 'الاسم وبيانات التواصل'],
+      notifprefs: ['تفضيلات الإشعارات', 'اختاري ما يصلك'],
+      supform: ['تذكرة دعم جديدة', 'صفي المشكلة وأرفقي ما يلزم'],
+      supthread: ['تذكرة الدعم', st.supTicket ? st.supTicket.id : ''],
+      legal: [(this.LEGAL[st.legalOpen] || this.LEGAL.terms).title, 'جوشن'],
+      faq: ['الأسئلة الشائعة', this.ar(this.FAQS.length) + ' سؤالاً'],
+      safety: ['بلاغ سلامة', 'عاجل · سرّي'],
+      safetydone: ['تم إرسال البلاغ', st.safeRef || '']
     };
     const dTitles = {
       reg: ['تسجيل مندوبة', 'أكملي بياناتك والمستندات'], pending: ['حالة الحساب', 'مراجعة المستندات'],
       trip: ['الرحلة الحالية', 'تابعي مراحل التوصيل'], history: ['سجل الرحلات', this.ar(st.trips.length) + ' رحلة'],
       earnings: ['الأرباح', 'التحصيل والتحويلات'], profile: ['حسابي', 'إعدادات المندوبة'],
       docs: ['المستندات', 'للعرض فقط'],
-      vehicle: ['المركبة', 'بيانات الاستمارة'],
-      bank: ['الحساب البنكي', 'للعرض فقط'],
+      vehicle: ['المركبة', st.dVeh ? (st.dVeh.status === 'verified' ? 'معتمدة' : 'قيد المراجعة') : 'غير مسجّلة'],
+      bank: ['الحساب البنكي', st.dBank ? (st.dBank.status === 'verified' ? 'موثّق' : 'قيد المراجعة') : 'غير مضاف'],
+      bankform: [st.bankMode === 'new' ? 'إضافة حساب بنكي' : 'تعديل الحساب البنكي', 'يراجعه الدعم قبل السريان'],
+      vehform: [st.vehMode === 'new' ? 'إضافة مركبة' : 'تعديل بيانات المركبة', 'يعتمدها الدعم قبل السريان'],
       reviews: ['تقييمات العميلات', 'للعرض فقط'],
       support: ['الدعم', 'المندوبات'],
+      supform: ['تذكرة دعم جديدة', 'صفي المشكلة وأرفقي ما يلزم'],
+      supthread: ['تذكرة الدعم', st.supTicket ? st.supTicket.id : ''],
+      legal: [(this.LEGAL[st.legalOpen] || this.LEGAL.terms).title, 'جوشن'],
+      faq: ['الأسئلة الشائعة', this.ar(this.FAQS.length) + ' سؤالاً'],
+      safety: ['بلاغ سلامة', 'عاجل · سرّي'],
+      safetydone: ['تم إرسال البلاغ', st.safeRef || ''],
       tripd: ['تفاصيل الرحلة', (st.trips.find(t2 => t2.id === st.tripSel) || {}).id || ''],
       dedit: ['تعديل بياناتي', 'الاسم وبيانات التواصل'],
       notifs: ['الإشعارات', 'آخر التحديثات']
@@ -5240,10 +6022,18 @@ class Component extends DCLogic {
       docs: ['المستندات والشهادات', 'للعرض فقط'],
       hours: ['أوقات العمل', 'قابلة للتعديل'],
       area: ['نطاق الخدمة', 'قابل للتعديل'],
-      bank: ['الحساب البنكي', 'للعرض فقط'],
+      bank: ['الحساب البنكي', st.pBank ? (st.pBank.status === 'verified' ? 'موثّق' : 'قيد المراجعة') : 'غير مضاف'],
+      bankform: [st.bankMode === 'new' ? 'إضافة حساب بنكي' : 'تعديل الحساب البنكي', 'يراجعه الدعم قبل السريان'],
       reviews: ['تقييمات العميلات', 'للعرض فقط'],
       support: ['الدعم', 'مقدّمات الخدمة'],
+      supform: ['تذكرة دعم جديدة', 'صفي المشكلة وأرفقي ما يلزم'],
+      supthread: ['تذكرة الدعم', st.supTicket ? st.supTicket.id : ''],
+      legal: [(this.LEGAL[st.legalOpen] || this.LEGAL.terms).title, 'جوشن'],
+      faq: ['الأسئلة الشائعة', this.ar(this.FAQS.length) + ' سؤالاً'],
+      safety: ['بلاغ سلامة', 'عاجل · سرّي'],
+      safetydone: ['تم إرسال البلاغ', st.safeRef || ''],
       psvc: ['خدماتي وأسعاري', 'الخدمات الفرعية والإضافات'],
+      psvcnew: [st.svcMode === 'edit' ? 'تعديل خدمة' : 'خدمة جديدة', 'تظهر للعميلات في ملفك'],
       boost: ['باقة التمييز', 'التوثيق والظهور الأول'],
       boostpay: ['الدفع', 'الاشتراك في باقة التمييز'],
       pedit: ['تعديل الملف الشخصي', 'البيانات وصور الأعمال'],
@@ -5347,6 +6137,209 @@ class Component extends DCLogic {
       titleStyle: 'font-weight:700;letter-spacing:-.4px;line-height:1.25;font-size:' + (tabRoot ? '26px' : '19px') + ';',
       canBack: isC ? st.cStack.length > 0 : isP ? st.pStack.length > 0 : st.dStack.length > 0, back: () => this.back(),
       showHeaderAction: isC && cs === 'addresses', headerAction: () => this.setState({ addrFormOpen: true, addrErrors: {}, addrPin: null, addrMapErr: false }),
+      icLock: this.icon('lock', 16),
+      icChevD: this.icon('back', 15, 2.2), icPhoneR: this.icon('phone', 18), icCheckBig: this.icon('check', 34, 2.4),
+
+      notifPrefsS: cur === 'notifprefs',
+      notifPrefRows: [
+        { k: 'orders', ic: 'receipt', label: 'حالة الطلبات', desc: 'قبول الطلب، التوجّه، الوصول، والاكتمال.' },
+        { k: 'chat', ic: 'chat', label: 'رسائل مقدّمة الخدمة', desc: 'الرسائل الجديدة داخل محادثة الطلب.' },
+        { k: 'reminders', ic: 'clock', label: 'تذكير بالمواعيد', desc: 'تنبيه قبل الموعد المجدول بساعة.' },
+        { k: 'offers', ic: 'gift', label: 'العروض والباقات', desc: 'الخصومات والباقات الجديدة القريبة منك.' },
+        { k: 'sms', ic: 'phone', label: 'رسائل SMS', desc: 'نسخة من الإشعارات المهمة كرسالة نصية.' }
+      ].map(r => ({
+        label: r.label, desc: r.desc, icon: this.icon(r.ic, 17), on: !!st.notifPrefs[r.k],
+        toggle: v => this.setState(s2 => ({ notifPrefs: { ...s2.notifPrefs, [r.k]: v } }))
+      })),
+      saveNotifPrefs: () => this.flash('تم حفظ تفضيلات الإشعارات'),
+      icTrashSm: this.icon('trash', 15), icTrashP: this.icon('trash', 15), icEditP: this.icon('edit', 15), icPlusW: this.icon('plus', 18, 2.4),
+      svcNew: () => this.svcNew(), svcSubmit: () => this.svcSubmit(),
+      svcFormS: cur === 'psvcnew',
+      svcFormHint: st.svcMode === 'edit' ? 'عدّلي تفاصيل خدمتك — تظهر التعديلات للعميلات فوراً بعد الحفظ.' : 'عرّفي خدمة جديدة من عندك غير الموجودة في قائمة جوشن، وحدّدي مدتها وسعرك لها.',
+      svcSubmitLabel: st.svcMode === 'edit' ? 'حفظ تعديل الخدمة' : 'إضافة الخدمة لملفي',
+      svcCatChoices: this.CATS.map(c => ({
+        label: c.name, style: this.chip(st.svcForm.cat === c.id),
+        pick: () => this.setState(s2 => ({ svcForm: { ...s2.svcForm, cat: c.id }, svcErr: { ...s2.svcErr, cat: '' } }))
+      })),
+      svcCatErr: !!st.svcErr.cat, svcCatErrText: st.svcErr.cat || '',
+      svcFields: [
+        { key: 'name', label: 'اسم الخدمة', placeholder: 'مثال: جلسة تنظيف بالبخار', kind: 'input' },
+        { key: 'desc', label: 'وصف مختصر', placeholder: 'ماذا تشمل الخدمة؟ اكتبي ما تراه العميلة قبل الحجز.', kind: 'area' },
+        { key: 'dur', label: 'المدة (بالدقائق)', placeholder: '٦٠', kind: 'input' },
+        { key: 'base', label: 'سعرك للخدمة (ر.س)', placeholder: '٢٥٠', kind: 'input' }
+      ].map(f => ({
+        label: f.label, placeholder: f.placeholder,
+        isArea: f.kind === 'area', isInput: f.kind === 'input',
+        value: st.svcForm[f.key] || '',
+        hasError: !!st.svcErr[f.key], error: st.svcErr[f.key] || '',
+        style: this.field(!!st.svcErr[f.key]),
+        areaStyle: 'width:100%;min-height:92px;padding:14px;border-radius:18px;border:1.5px solid ' + (st.svcErr[f.key] ? '#E8A8B4' : '#EDE3F5') + ';background:#FBF8FD;font-size:13px;line-height:1.9;color:#2C1745;resize:none;',
+        onChange: e => { const v = e.target.value; this.setState(s2 => ({ svcForm: { ...s2.svcForm, [f.key]: v }, svcErr: { ...s2.svcErr, [f.key]: '' } })); }
+      })),
+      optLabel: st.optForm.label, optPrice: st.optForm.price,
+      onOptLabel: e => { const v = e.target.value; this.setState(s2 => ({ optForm: { ...s2.optForm, label: v }, optErr: {} })); },
+      onOptPrice: e => { const v = e.target.value; this.setState(s2 => ({ optForm: { ...s2.optForm, price: v } })); },
+      optLabelStyle: this.field(!!st.optErr.label) + 'min-height:44px;font-size:12.5px;',
+      optPriceStyle: this.field(false) + 'min-height:44px;font-size:12.5px;',
+      optErrShow: !!st.optErr.label, optErrText: st.optErr.label || '',
+
+      icBankBig: this.icon('bank', 26), icMotoBig: this.icon('moto', 26), icBolt2: this.icon('bolt', 16),
+
+      bankS: cur === 'bank', bankFormS: cur === 'bankform',
+      bankEmpty: !this.bankOf(), bankHas: !!this.bankOf(),
+      bankRows: (() => {
+        const b = this.bankOf(); if (!b) return [];
+        const isD = st.role === 'driver';
+        return [
+          { k: 'اسم صاحبة الحساب', v: b.holder },
+          { k: 'البنك', v: b.bank },
+          { k: 'رقم الآيبان', v: this.ibanMask(b.iban) },
+          { k: 'دورة التحويل', v: isD ? 'أسبوعية — الأحد' : 'كل يوم أحد' },
+          { k: 'عمولة جوشن', v: isD ? '١٥٪ من قيمة الرحلة' : '٢٠٪ من قيمة الطلب' }
+        ];
+      })(),
+      bankStatusTitle: (() => { const b = this.bankOf() || {}; return b.status === 'verified' ? 'الحساب موثّق' : b.status === 'pending' ? 'بانتظار توثيق الدعم' : 'طلب التعديل قيد المراجعة'; })(),
+      bankStatusNote: (() => { const b = this.bankOf() || {}; return b.status === 'verified' ? 'تُحوّل أرباحك على هذا الحساب في موعد الدورة.' : b.status === 'pending' ? 'يراجع الدعم بياناتك خلال ٢٤ ساعة، ويصلك إشعار فور التوثيق.' : 'يسري التعديل بعد موافقة الدعم — حتى ذلك الحين تُحوّل الأرباح على الحساب الحالي.'; })(),
+      bankStatusIcon: (() => { const b = this.bankOf() || {}; return this.icon(b.status === 'verified' ? 'check' : 'hourglass', 17, b.status === 'verified' ? 2.4 : 1.8); })(),
+      bankStatusStyle: (() => { const b = this.bankOf() || {}; const ok = b.status === 'verified';
+        return 'border-radius:20px;padding:15px;display:flex;align-items:flex-start;gap:12px;background:' + (ok ? '#E6F5EE' : '#FFF6E6') + ';border:1px solid ' + (ok ? '#BFE6D3' : '#F3DFB4') + ';color:' + (ok ? '#2F7A5A' : '#9A6B12') + ';'; })(),
+      bankStatusIcoStyle: 'width:34px;height:34px;border-radius:12px;background:#fff;display:grid;place-items:center;flex:none;',
+      bankPending: (() => { const b = this.bankOf() || {}; return b.status === 'pending' || b.status === 'editing'; })(),
+      bankPendingTitle: (() => { const b = this.bankOf() || {}; return b.status === 'pending' ? 'محاكاة رد الدعم على التوثيق' : 'البيانات الجديدة بانتظار الموافقة'; })(),
+      bankPendingRows: (() => { const b = this.bankOf() || {}; const d = b.pend; if (!d) return [];
+        return [{ k: 'الاسم', v: d.holder }, { k: 'البنك', v: d.bank }, { k: 'الآيبان', v: this.ibanMask(d.iban) }]; })(),
+      bankApproveLabel: (() => { const b = this.bankOf() || {}; return b.status === 'pending' ? 'محاكاة وصول موافقة التوثيق' : 'محاكاة وصول موافقة التعديل'; })(),
+      bankNote: st.role === 'driver' ? 'تُحوّل أرباح التوصيل كل يوم أحد بعد خصم عمولة جوشن ١٥٪، وتصل خلال يوم عمل واحد.' : 'تُحوّل الأرباح كل يوم أحد بعد خصم عمولة جوشن ٢٠٪، وتصل خلال يوم عمل واحد.',
+      bankAddNew: () => this.bankAddNew(), bankEdit: () => this.bankEdit(), bankApprove: () => this.bankApprove(),
+      bankReset: () => this.bankReset(), bankAutofill: () => this.bankAutofill(), bankSubmit: () => this.bankSubmit(),
+      bankFormHint: st.bankMode === 'new' ? 'أدخلي بيانات حسابك البنكي كما تظهر في كشف الحساب. يُراجعها الدعم قبل التوثيق.' : 'عدّلي البيانات المطلوبة — يسري التعديل بعد موافقة الدعم فقط.',
+      bankSubmitLabel: st.bankMode === 'new' ? 'إرسال الحساب للتوثيق' : 'إرسال طلب التعديل',
+      bankFields: [
+        { key: 'holder', label: 'اسم صاحبة الحساب', placeholder: 'الاسم الثلاثي كما في الهوية', kind: 'text' },
+        { key: 'bank', label: 'البنك', kind: 'select', choices: this.BANKS },
+        { key: 'iban', label: 'رقم الآيبان', placeholder: 'SA0000000000000000000000', kind: 'text' }
+      ].map(f => ({
+        label: f.label, placeholder: f.placeholder || '',
+        isText: f.kind === 'text', isSelect: f.kind === 'select',
+        value: st.bankForm[f.key] || '',
+        hasError: !!st.bankErr[f.key], error: st.bankErr[f.key] || '',
+        style: this.field(!!st.bankErr[f.key]),
+        onChange: e => { const v = e.target.value; this.setState(s2 => ({ bankForm: { ...s2.bankForm, [f.key]: v }, bankErr: { ...s2.bankErr, [f.key]: '' } })); },
+        choices: (f.choices || []).map(c => ({
+          label: c, style: this.chip(st.bankForm[f.key] === c),
+          pick: () => this.setState(s2 => ({ bankForm: { ...s2.bankForm, [f.key]: c }, bankErr: { ...s2.bankErr, [f.key]: '' } }))
+        }))
+      })),
+
+      vehFormS: cur === 'vehform',
+      vehEmpty: !st.dVeh, vehHas: !!st.dVeh,
+      vehStatusTitle: (() => { const v = st.dVeh || {}; return v.status === 'verified' ? 'المركبة معتمدة' : v.status === 'pending' ? 'بانتظار اعتماد الدعم' : 'طلب التعديل قيد المراجعة'; })(),
+      vehStatusNote: (() => { const v = st.dVeh || {}; return v.status === 'verified' ? 'بياناتك مطابقة للاستمارة الموثّقة.' : v.status === 'pending' ? 'يراجع الدعم بيانات المركبة والاستمارة خلال ٢٤ ساعة.' : 'يسري التعديل بعد موافقة الدعم — البيانات الحالية هي السارية الآن.'; })(),
+      vehStatusIcon: (() => { const v = st.dVeh || {}; return this.icon(v.status === 'verified' ? 'check' : 'hourglass', 17, v.status === 'verified' ? 2.4 : 1.8); })(),
+      vehStatusStyle: (() => { const v = st.dVeh || {}; const ok = v.status === 'verified';
+        return 'border-radius:20px;padding:15px;display:flex;align-items:flex-start;gap:12px;background:' + (ok ? '#E6F5EE' : '#FFF6E6') + ';border:1px solid ' + (ok ? '#BFE6D3' : '#F3DFB4') + ';color:' + (ok ? '#2F7A5A' : '#9A6B12') + ';'; })(),
+      vehStatusIcoStyle: 'width:34px;height:34px;border-radius:12px;background:#fff;display:grid;place-items:center;flex:none;',
+      vehPending: (() => { const v = st.dVeh || {}; return v.status === 'pending' || v.status === 'editing'; })(),
+      vehPendingTitle: (() => { const v = st.dVeh || {}; return v.status === 'pending' ? 'محاكاة رد الدعم على الاعتماد' : 'البيانات الجديدة بانتظار الموافقة'; })(),
+      vehPendingRows: (() => { const v = st.dVeh || {}; const d = v.pend; if (!d) return [];
+        return [{ k: 'النوع', v: d.type }, { k: 'الطراز', v: d.model + ' · ' + d.year }, { k: 'اللوحة', v: d.plate }]; })(),
+      vehApproveLabel: (() => { const v = st.dVeh || {}; return v.status === 'pending' ? 'محاكاة وصول موافقة الاعتماد' : 'محاكاة وصول موافقة التعديل'; })(),
+      vehAddNew: () => this.vehAddNew(), vehEdit: () => this.vehEdit(), vehApprove: () => this.vehApprove(),
+      vehReset: () => this.vehReset(), vehAutofill: () => this.vehAutofill(), vehSubmit: () => this.vehSubmit(),
+      vehFormHint: st.vehMode === 'new' ? 'أدخلي بيانات مركبتك كما تظهر في الاستمارة ليتم اعتمادها.' : 'عدّلي بيانات المركبة — يسري التعديل بعد موافقة الدعم فقط.',
+      vehSubmitLabel: st.vehMode === 'new' ? 'إرسال المركبة للاعتماد' : 'إرسال طلب التعديل',
+      vehFields: [
+        { key: 'type', label: 'نوع المركبة', kind: 'select', choices: this.VEH_TYPES },
+        { key: 'model', label: 'الطراز', placeholder: 'مثال: هوندا PCX ١٢٥', kind: 'text' },
+        { key: 'year', label: 'سنة الصنع', placeholder: '٢٠٢٣', kind: 'text' },
+        { key: 'color', label: 'اللون', placeholder: 'أبيض', kind: 'text' },
+        { key: 'plate', label: 'رقم اللوحة', placeholder: 'ر ن ب ٤٨٢١', kind: 'text' }
+      ].map(f => ({
+        label: f.label, placeholder: f.placeholder || '',
+        isText: f.kind === 'text', isSelect: f.kind === 'select',
+        value: st.vehForm[f.key] || '',
+        hasError: !!st.vehErr[f.key], error: st.vehErr[f.key] || '',
+        style: this.field(!!st.vehErr[f.key]),
+        onChange: e => { const v = e.target.value; this.setState(s2 => ({ vehForm: { ...s2.vehForm, [f.key]: v }, vehErr: { ...s2.vehErr, [f.key]: '' } })); },
+        choices: (f.choices || []).map(c => ({
+          label: c, style: this.chip(st.vehForm[f.key] === c),
+          pick: () => this.setState(s2 => ({ vehForm: { ...s2.vehForm, [f.key]: c }, vehErr: { ...s2.vehErr, [f.key]: '' } }))
+        }))
+      })),
+
+      legalS: cur === 'legal', faqS: cur === 'faq', safetyS: cur === 'safety', safetyDoneS: cur === 'safetydone',
+      legalTitle: (this.LEGAL[st.legalOpen] || this.LEGAL.terms).title,
+      legalUpdated: (this.LEGAL[st.legalOpen] || this.LEGAL.terms).updated,
+      legalIntro: (this.LEGAL[st.legalOpen] || this.LEGAL.terms).intro,
+      legalSections: (this.LEGAL[st.legalOpen] || this.LEGAL.terms).sections,
+      legalGoTerms: () => this.setState({ legalOpen: 'terms' }),
+      legalGoPrivacy: () => this.setState({ legalOpen: 'privacy' }),
+      legalTermsStyle: this.segBtn(st.legalOpen !== 'privacy'),
+      legalPrivacyStyle: this.segBtn(st.legalOpen === 'privacy'),
+
+      faqRows: this.FAQS.map((f, i) => ({
+        q: f.q, a: f.a, open: st.faqOpen === i,
+        toggle: () => this.setState(s2 => ({ faqOpen: s2.faqOpen === i ? null : i })),
+        caret: 'width:26px;height:26px;border-radius:9px;background:#F6F1FB;color:#6B3F9E;display:grid;place-items:center;flex:none;transform:rotate(' + (st.faqOpen === i ? '90deg' : '-90deg') + ');transition-property:transform;transition-duration:160ms;'
+      })),
+
+      safeKinds: this.SAFE_KINDS.map(k => {
+        const on = st.safeKind === k.id;
+        return {
+          label: k.label, icon: this.icon(k.ic, 16),
+          pick: () => this.setState(s2 => ({ safeKind: k.id, safeErr: { ...s2.safeErr, kind: '' } })),
+          style: 'width:100%;display:flex;align-items:center;gap:11px;padding:13px;border-radius:18px;min-height:56px;background:' + (on ? '#FDECEF' : '#fff') + ';border:1.5px solid ' + (on ? '#C0364F' : '#F1E7F2') + ';',
+          iconStyle: 'width:34px;height:34px;border-radius:12px;display:grid;place-items:center;flex:none;background:' + (on ? '#fff' : '#F6F1FB') + ';color:' + (on ? '#C0364F' : '#6B3F9E') + ';',
+          tick: on ? this.icon('check', 13, 2.6) : '',
+          tickStyle: 'width:22px;height:22px;border-radius:50%;flex:none;display:grid;place-items:center;background:' + (on ? '#C0364F' : '#F4F0F6') + ';color:#fff;'
+        };
+      }),
+      safeKindErr: !!st.safeErr.kind, safeKindErrText: st.safeErr.kind || '',
+      safeText: st.safeText,
+      onSafeText: e => { const v = e.target.value; this.setState(s2 => ({ safeText: v, safeErr: { ...s2.safeErr, text: '' } })); },
+      safeTextStyle: 'width:100%;min-height:116px;padding:14px;border-radius:18px;border:1.5px solid ' + (st.safeErr.text ? '#E8A8B4' : '#EDE3F5') + ';background:#FBF8FD;font-size:13px;line-height:1.9;color:#2C1745;resize:none;',
+      safeTextErr: !!st.safeErr.text, safeTextErrText: st.safeErr.text || '',
+      safeCall: () => this.flash('جاري الاتصال بفريق طوارئ جوشن…'),
+      submitSafety: () => this.submitSafety(),
+      safeRef: st.safeRef || '',
+      safeKindLabel: (this.SAFE_KINDS.find(k => k.id === st.safeKind) || {}).label || '',
+      safeDone: () => { const r = st.role; this.setState(r === 'provider' ? { pScreen: 'profile', pStack: [] } : r === 'driver' ? { dScreen: 'profile', dStack: [] } : { cScreen: 'profile', cStack: [] }); },
+      openFaq: () => this.openFaq(), openSafety: () => this.openSafety(),
+
+      supFormS: cur === 'supform', supThreadS: cur === 'supthread',
+      supTopicChips: this.SUP_TOPICS.map(t => ({
+        label: t, pick: () => this.setState({ supTopic: t, supErr: { ...st.supErr, topic: '' } }),
+        style: 'font-size:12px;font-weight:700;padding:10px 14px;border-radius:999px;min-height:40px;border:1.5px solid '
+          + (st.supTopic === t ? '#6B3F9E;background:#6B3F9E;color:#fff;' : '#EDE3F5;background:#FBF8FD;color:#6B3F9E;')
+      })),
+      supTopicErr: !!st.supErr.topic, supTopicErrText: st.supErr.topic || '',
+      supText: st.supText,
+      onSupText: e => { const v = e.target.value; this.setState(s2 => ({ supText: v, supErr: { ...s2.supErr, text: '' } })); },
+      supTextStyle: 'width:100%;min-height:120px;padding:14px;border-radius:18px;border:1.5px solid '
+        + (st.supErr.text ? '#E8A8B4' : '#EDE3F5') + ';background:#FBF8FD;font-size:13px;line-height:1.9;color:#2C1745;resize:none;',
+      supTextErr: !!st.supErr.text, supTextErrText: st.supErr.text || '',
+      supFilesCount: this.ar(st.supFiles.length),
+      supFileRows: st.supFiles.map(f => ({ ...f, icon: this.icon(f.ic, 16), remove: () => this.supRemoveFile(f.id) })),
+      supAddFile: () => this.supAddFile(),
+      submitSupTicket: () => this.submitSupTicket(),
+      openSupForm: () => this.openSupForm(),
+      supReplying: st.supReplying,
+      supTicketId: st.supTicket ? st.supTicket.id : '',
+      supTicketTopic: st.supTicket ? st.supTicket.topic : '',
+      supTicketTime: st.supTicket ? st.supTicket.time : '',
+      supTicketStatus: st.supTicket ? st.supTicket.status : '',
+      supStatusStyle: 'font-size:11px;font-weight:700;padding:6px 11px;border-radius:999px;flex:none;'
+        + (st.supTicket && st.supTicket.status === 'تم الرد' ? 'background:#E6F5EE;color:#2F7A5A;' : 'background:#FFF6E6;color:#9A6B12;'),
+      supBubbles: st.supThread.map(b => ({
+        text: b.text, time: b.time, who: b.me ? 'رسالتك' : 'فريق دعم جوشن',
+        hasFiles: !!(b.files && b.files.length),
+        files: (b.files || []).map(f => ({ name: f.name, chipStyle: 'font-size:10.5px;font-weight:700;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.22);color:#fff;' })),
+        rowStyle: 'display:flex;justify-content:' + (b.me ? 'flex-end' : 'flex-start') + ';',
+        bubbleStyle: 'max-width:86%;padding:14px 16px;border-radius:' + (b.me ? '20px 20px 6px 20px' : '20px 20px 20px 6px') + ';'
+          + (b.me ? 'background:#6B3F9E;color:#fff;' : 'background:#F4F0F6;color:#2C1745;'),
+        whoStyle: 'font-size:10.5px;font-weight:700;margin-bottom:7px;opacity:' + (b.me ? '.8' : '.6') + ';',
+        timeStyle: 'font-size:10px;margin-top:9px;opacity:' + (b.me ? '.75' : '.55') + ';'
+      })),
       icBack: this.icon('back', 20, 2, true), icPlus: this.icon('plus', 16, 2.2), icBell: this.icon('bell', 20),
       icWallet: this.icon('wallet', 18), icSearch: this.icon('search', 18, 2), icCheck: this.icon('check', 16, 2.4),
 
@@ -5406,7 +6399,7 @@ class Component extends DCLogic {
       pDocsS: isP && pss === 'docs', pHoursS: isP && pss === 'hours', pAreaS: isP && pss === 'area',
       pBankS: isP && pss === 'bank', pReviewsS: isP && pss === 'reviews', pSupportS: isP && pss === 'support',
 
-      showNav: onboarding ? false : (isC ? ['home', 'orders', 'wallet', 'notifs', 'profile'].includes(cs) : isP ? (pApproved && ['pkgnew', 'pchat', 'prate'].indexOf(pss) < 0) : approved),
+      showNav: onboarding ? false : (nav.some(n => n.k === cur) && (isC ? true : isP ? pApproved : approved)),
       navIndex,
       navTabs: nav.map((n, i) => {
         const on = i === navIndex;
@@ -5573,6 +6566,7 @@ class Component extends DCLogic {
       icChevron: this.icon('back', 18, 2),
       icShieldDecl: this.icon('shield', 22, 1.9),
       icCheckBig: this.icon('check', 34, 2.6),
+      icCheckSm2: this.icon('check', 14, 2.6),
       icUsers: this.icon('users', 20), icUsersLg: this.icon('users', 24, 1.9), icUserPlus: this.icon('userPlus', 19),
       icUserSm: this.icon('user', 14),
       icTrashSm: this.icon('trash', 16), icUsersSm: this.icon('users', 15), icUsersMd: this.icon('users', 18),
@@ -5624,7 +6618,6 @@ class Component extends DCLogic {
       gProviders: this.availProviders().map(p => {
         const i = this.PROVIDERS.findIndex(x => x.id === p.id);
         const c = this.CATS.find(x => x.id === st.gCat) || this.CATS[0];
-        const min = Math.min.apply(null, c.subs.map(x => Math.round(x.base * p.factor)));
         const cnt = this.CATS.filter(x => (p.cats || []).includes(x.id)).reduce((a, x) => a + x.subs.length, 0);
         return {
           ...p, artBg: 'url(art/a' + (i + 1) + '.png)',
@@ -5633,8 +6626,6 @@ class Component extends DCLogic {
           cardStyle: 'display:flex;flex-direction:column;background:#fff;border:1.5px solid ' + (p.featured ? '#E9C6DC' : '#F1E7F2') + ';border-radius:22px;padding:14px;text-align:right;transition-property:translate,box-shadow;transition-duration:.18s;',
           distLabel: this.ar(p.dist) + ' كم من عنوانك',
           svcCountLabel: this.ar(cnt) + ' خدمة متاحة للحجز المجمّع',
-          priceNote: 'خدمات ' + c.name + ' تبدأ من',
-          svcPrice: this.sar(min),
           open: () => this.setState({ providerId: p.id }, () => this.go('provider'))
         };
       }),
@@ -5812,11 +6803,12 @@ class Component extends DCLogic {
       openInstantAlert: () => this.setState({ instantAlertOpen: true }),
       closeInstantAlert: () => this.setState({ instantAlertOpen: false }),
       confirmInstant: () => { this.setState({ instantAlertOpen: false }); this.go('pay'); },
-      sendSchedReq: () => { this.setState({ schedState: 'waiting' }); this.go('awaitp'); },
+      sendSchedReq: () => this.sendSchedReq(),
       schedWaiting: st.schedState === 'waiting', schedAccepted: st.schedState === 'accepted', schedRejected: st.schedState === 'rejected',
-      simAccept: () => { this.setState({ schedState: 'accepted' }); this.flash('قبلت ' + prov.name + ' طلب الحجز'); },
-      simReject: () => { this.setState({ schedState: 'rejected' }); this.flash('لم يُقبل طلب الحجز'); },
+      simAccept: () => this.schedAccept(),
+      simReject: () => this.schedReject(),
       goPayNow: () => this.setState(s2 => ({ cScreen: 'pay', cStack: [...s2.cStack, 'awaitp'] })),
+      awaitLater: () => this.setState({ cScreen: 'home', cStack: [], draft: null }),
       backToBook: () => this.setState({ cScreen: 'book', schedState: 'idle' }),
       backToProviders: () => this.setState({ cScreen: 'service', schedState: 'idle', providerId: null }),
       goPay: () => {
@@ -5846,9 +6838,11 @@ class Component extends DCLogic {
       orderSegments: ['الجارية', 'المكتملة', 'الملغاة'],
       orderPick: i => this.setState({ orderTab: i }),
       orderList: st.orders.filter(o => o.kind === ['active', 'done', 'cancelled'][st.orderTab]).map(o => ({
-        ...o, canTrack: o.kind === 'active', canRate: o.kind === 'done',
+        ...o, canTrack: o.kind === 'active' && !o.await && !o.accepted, canRate: o.kind === 'done',
+        isAwait: !!o.await, isAccepted: !!o.accepted,
+        resume: () => this.resumeReq(o),
         canRebook: o.kind !== 'active', rebook: () => this.rebook(o),
-        badge: 'font-size:11px;font-weight:700;padding:6px 11px;border-radius:999px;background:' + (o.kind === 'active' ? '#FFF6E6' : o.kind === 'done' ? '#E6F5EE' : '#FDECEF') + ';color:' + (o.kind === 'active' ? '#9A6B12' : o.kind === 'done' ? '#2F7A5A' : '#C0364F') + ';',
+        badge: 'font-size:11px;font-weight:700;padding:6px 11px;border-radius:999px;background:' + (o.await ? '#F1E9F7' : o.accepted ? '#E6F5EE' : o.kind === 'active' ? '#FFF6E6' : o.kind === 'done' ? '#E6F5EE' : '#FDECEF') + ';color:' + (o.await ? '#6B3F9E' : o.accepted ? '#2F7A5A' : o.kind === 'active' ? '#9A6B12' : o.kind === 'done' ? '#2F7A5A' : '#C0364F') + ';',
         track: () => { this.go('track'); this.startTrack(); }, rate: () => this.go('rate'),
         open: () => this.openOrder(o.id)
       })),
@@ -5879,7 +6873,9 @@ class Component extends DCLogic {
       txns: st.txns.map(t2 => ({ ...t2, icon: this.icon(t2.icon, 17), amtStyle: 'font-weight:700;font-size:13.5px;color:' + (t2.plus ? '#2F7A5A' : '#6B3F9E') + ';' })),
       walletNote: 'رصيد المحفظة يتكوّن من مبالغ الاسترجاع عند الإلغاء أو تعديل الطلب، ويُستخدم للدفع داخل جوشن فقط. لا يوجد شحن رصيد من العميلة.',
 
-      notifs: st.notifs.map(n => ({ ...n, icon: this.icon(n.icon, 17), card: 'display:flex;gap:12px;align-items:flex-start;background:' + (n.unread ? '#FDFAFC' : '#fff') + ';border:1px solid ' + (n.unread ? '#E7DAEA' : '#F1E7F2') + ';border-radius:20px;padding:15px;' })),
+      notifs: st.notifs.map(n => ({ ...n, icon: this.icon(n.icon, 17),
+        hasAct: !!n.goPay,
+        act: () => { const o = this.state.orders.find(x => x.id === n.goPay); if (o) this.resumeReq(o); }, card: 'display:flex;gap:12px;align-items:flex-start;background:' + (n.unread ? '#FDFAFC' : '#fff') + ';border:1px solid ' + (n.unread ? '#E7DAEA' : '#F1E7F2') + ';border-radius:20px;padding:15px;' })),
 
       stars: [1, 2, 3, 4, 5].map(n => ({
         label: 'تقييم ' + this.ar(n),
@@ -5980,16 +6976,21 @@ class Component extends DCLogic {
         { ic: 'pin', label: 'عناويني', value: this.ar(st.addresses.length), open: () => this.go('addresses') },
         { ic: 'wallet', label: 'المحفظة والمدفوعات', value: this.sar(st.wallet), open: () => this.goTab('wallet') },
         { ic: 'receipt', label: 'سجل الطلبات', value: this.ar(st.orders.length), open: () => this.goTab('orders') },
-        { ic: 'bell', label: 'تفضيلات الإشعارات', value: 'مفعّلة', open: () => this.flash('إعدادات الإشعارات — نموذج تجريبي') },
+        { ic: 'bell', label: 'تفضيلات الإشعارات', value: this.ar(Object.values(st.notifPrefs).filter(Boolean).length) + ' مفعّلة', open: () => this.go('notifprefs') },
         { ic: 'sparkle', label: 'إعادة عرض التعريف', value: '', open: () => this.setState({ onboarded: false, obIndex: 0, obAt: Date.now() }) },
-        { ic: 'headset', label: 'الدعم والمساعدة', value: '٢٤/٧', open: () => this.flash('فريق الدعم متاح على مدار الساعة') }
+        { ic: 'headset', label: 'الدعم والمساعدة', value: '٢٤/٧', open: () => this.openSupForm() },
+        { ic: 'doc', label: 'الأسئلة الشائعة', value: this.ar(this.FAQS.length) + ' سؤالاً', open: () => this.openFaq() },
+        { ic: 'shield', label: 'بلاغ سلامة', value: 'عاجل', open: () => this.openSafety() },
+        { ic: 'doc', label: 'الشروط والأحكام والخصوصية', value: '', open: () => this.openLegal('terms') }
       ].map(r => ({ ...r, icon: this.icon(r.ic, 17) })),
 
       regFields: [
         { key: 'name', label: 'الاسم الكامل', placeholder: 'مثال: مها الزهراني' },
         { key: 'nid', label: 'رقم الهوية الوطنية', placeholder: '١٠ أرقام' },
         { key: 'phone', label: 'رقم الجوال', placeholder: '05XXXXXXXX' },
-        { key: 'vehicle', label: 'المركبة', placeholder: 'مثال: تويوتا يارس — ح ب د ٤٥٢١' }
+        { key: 'vType', label: 'نوع المركبة', placeholder: 'سيارة صغيرة' },
+        { key: 'vModel', label: 'الموديل', placeholder: 'تويوتا يارس ٢٠٢٢' },
+        { key: 'plate', label: 'رقم اللوحة', placeholder: 'ح ب د ٤٥٢١' }
       ].map(f => ({
         ...f, value: st.reg[f.key], hasError: !!st.regErrors[f.key], error: st.regErrors[f.key] || '', style: this.field(!!st.regErrors[f.key]),
         onChange: e => { const v = e.target.value; this.setState(s2 => ({ reg: { ...s2.reg, [f.key]: v } })); }
@@ -6051,8 +7052,8 @@ class Component extends DCLogic {
       dProfileRows: [
         { ic: 'edit', label: 'تعديل بياناتي', value: '', open: () => { this.setState({ dEdit: { ...st.dProf } }); this.dgo('dedit'); } },
         { ic: 'idcard', label: 'المستندات', value: 'سارية', open: () => this.dgo('docs') },
-        { ic: 'car', label: 'المركبة', value: 'هوندا PCX', open: () => this.dgo('vehicle') },
-        { ic: 'bank', label: 'الحساب البنكي', value: '****٢٣٤١', open: () => this.dgo('bank') },
+        { ic: 'car', label: 'المركبة', value: st.dVeh ? (st.dVeh.status === 'verified' ? st.dVeh.model : 'قيد المراجعة') : 'غير مسجّلة', open: () => this.dgo('vehicle') },
+        { ic: 'bank', label: 'الحساب البنكي', value: st.dBank ? (st.dBank.status === 'verified' ? this.ibanMask(st.dBank.iban) : 'قيد المراجعة') : 'غير مضاف', open: () => this.dgo('bank') },
         { ic: 'star', label: 'تقييمات العميلات', value: '٤.٩', open: () => this.dgo('reviews') },
         { ic: 'chart', label: 'الأرباح', value: this.sar(340), open: () => this.dTab('earnings') },
         { ic: 'moto', label: 'سجل الرحلات', value: this.ar(st.trips.length), open: () => this.dTab('history') },
@@ -6068,24 +7069,15 @@ class Component extends DCLogic {
       ].map(d => ({ ...d, icon: this.icon(d.ic, 18), badge: 'font-size:11px;font-weight:700;padding:6px 11px;border-radius:999px;flex:none;background:' + (d.ok ? '#E6F5EE' : '#FFF6E6') + ';color:' + (d.ok ? '#2F7A5A' : '#9A6B12') + ';' })),
       dDocsAsk: () => this.flash('أُرسل طلب تحديث المستند للدعم'),
 
-      dVehName: 'هوندا PCX ١٢٥ — ٢٠٢٣', dVehPlate: 'لوحة ر ن ب · ٤٨٢١',
-      dVehRows: [
-        { k: 'نوع المركبة', v: 'دراجة نارية' },
-        { k: 'الطراز', v: 'هوندا PCX ١٢٥' },
-        { k: 'سنة الصنع', v: '٢٠٢٣' },
-        { k: 'اللون', v: 'أبيض' },
-        { k: 'صندوق التوصيل', v: 'معتمد من جوشن' }
-      ],
-      dVehAsk: () => this.flash('أُرسل طلب تغيير المركبة للدعم'),
-
-      dBankRows: [
-        { k: 'اسم صاحبة الحساب', v: 'مها سعد الزهراني' },
-        { k: 'البنك', v: 'البنك الأهلي' },
-        { k: 'الآيبان', v: 'SA•• •••• •••• •••• ٢٣٤١' },
-        { k: 'دورة التحويل', v: 'أسبوعية — الأحد' },
-        { k: 'عمولة جوشن', v: '١٥٪ من قيمة الرحلة' }
-      ],
-      dBankAsk: () => this.flash('أُرسل طلب تعديل الحساب البنكي للدعم'),
+      dVehName: st.dVeh ? (st.dVeh.model + ' — ' + st.dVeh.year) : 'لا توجد مركبة',
+      dVehPlate: st.dVeh ? ('لوحة ' + st.dVeh.plate) : '',
+      dVehRows: st.dVeh ? [
+        { k: 'نوع المركبة', v: st.dVeh.type },
+        { k: 'الطراز', v: st.dVeh.model },
+        { k: 'سنة الصنع', v: st.dVeh.year },
+        { k: 'اللون', v: st.dVeh.color },
+        { k: 'رقم اللوحة', v: st.dVeh.plate }
+      ] : [],
 
       dRevAvg: '٤.٩', dRevCount: '٢٤٧ تقييم',
       dRevBars: [[5, 214], [4, 24], [3, 6], [2, 2], [1, 1]].map(b => ({ star: this.ar(b[0]), count: this.ar(b[1]), style: 'display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,#5A3486,#9166C2);width:' + Math.round(b[1] / 247 * 100) + '%;' })),
@@ -6096,10 +7088,11 @@ class Component extends DCLogic {
         { who: 'رهف المالكي', svc: 'توصيل أدوات', when: '٢٦ أغسطس', stars: '٤.٥', text: 'تأخر بضع دقائق بسبب الازدحام لكنه اعتذر وأبلغني مسبقاً.' }
       ],
       dSupportRows: [
-        { ic: 'chat', label: 'محادثة الدعم', value: 'رد خلال دقيقتين', open: () => this.flash('فتحنا محادثة مع فريق الدعم') },
+        { ic: 'chat', label: 'فتح تذكرة دعم', value: 'رد خلال ٢٤ ساعة', open: () => this.openSupForm() },
         { ic: 'phone', label: 'اتصال هاتفي', value: '٨٠٠ ٢٠٠ ٢٠٠', open: () => this.flash('جاري الاتصال بدعم المندوبات…') },
-        { ic: 'shield', label: 'بلاغ سلامة', value: 'عاجل', open: () => this.flash('تم فتح بلاغ سلامة — سنتواصل معك فوراً') },
-        { ic: 'doc', label: 'الشروط والأحكام', value: '', open: () => this.flash('الشروط والأحكام — نموذج تجريبي') }
+        { ic: 'doc', label: 'الأسئلة الشائعة', value: this.ar(this.FAQS.length) + ' سؤالاً', open: () => this.openFaq() },
+        { ic: 'shield', label: 'بلاغ سلامة', value: 'عاجل', open: () => this.openSafety() },
+        { ic: 'doc', label: 'الشروط والأحكام والخصوصية', value: '', open: () => this.openLegal('terms') }
       ].map(r => ({ ...r, icon: this.icon(r.ic, 17) })),
 
       pRegFields: [
@@ -6236,7 +7229,7 @@ class Component extends DCLogic {
         { ic: 'idcard', label: 'المستندات والشهادات', value: 'للعرض فقط', open: () => this.pgo('docs') },
         { ic: 'calendar', label: 'أوقات العمل', value: this.hoursLabel(), open: () => this.pgo('hours') },
         { ic: 'pin', label: 'نطاق الخدمة', value: this.RADII[st.pArea.radius], open: () => this.pgo('area') },
-        { ic: 'bank', label: 'الحساب البنكي', value: '****٨٨١٢', open: () => this.pgo('bank') },
+        { ic: 'bank', label: 'الحساب البنكي', value: st.pBank ? (st.pBank.status === 'verified' ? this.ibanMask(st.pBank.iban) : 'قيد المراجعة') : 'غير مضاف', open: () => this.pgo('bank') },
         { ic: 'star', label: 'تقييمات العميلات', value: '٤.٨', open: () => this.pgo('reviews') },
         { ic: 'headset', label: 'دعم مقدّمات الخدمة', value: '٢٤/٧', open: () => this.pgo('support') }
       ].map(r => ({ ...r, icon: this.icon(r.ic, 17) })),
@@ -6338,14 +7331,6 @@ class Component extends DCLogic {
       pAreaNote: 'تستقبلين الحجوزات الفورية داخل ' + this.RADII[st.pArea.radius] + ' من موقعك وفي ' + (st.pArea.districts.length ? this.ar(st.pArea.districts.length) + ' أحياء محددة' : 'لا أحياء — اختاري حيّاً واحداً على الأقل') + '. رسوم توصيل المندوبة تحتسب على العميلة حسب المسافة.',
       savePArea: () => this.flash('تم حفظ نطاق الخدمة'),
 
-      pBankRows: [
-        { k: 'اسم صاحبة الحساب', v: 'نورة محمد الشمري' },
-        { k: 'البنك', v: 'مصرف الراجحي' },
-        { k: 'رقم الآيبان', v: 'SA٫٫ •••• ٨٨١٢' },
-        { k: 'دورة التحويل', v: 'كل يوم أحد' },
-        { k: 'آخر تحويل', v: '٣١ أغسطس · ' + this.sar(3860) }
-      ],
-      pBankAsk: () => this.flash('أُرسل طلب تعديل الحساب للدعم للتحقق من الهوية'),
 
       pRevAvg: '٤.٨', pRevCount: '١٨٦ تقييم',
       pRevBars: [[5, 142], [4, 31], [3, 9], [2, 3], [1, 1]].map(b => ({ star: this.ar(b[0]), count: this.ar(b[1]), style: 'display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,#D9AAC6,#A9628A);width:' + Math.round((b[1] / 186) * 100) + '%;' })),
@@ -6357,10 +7342,11 @@ class Component extends DCLogic {
       ],
 
       pSupportRows: [
-        { ic: 'chat', label: 'محادثة الدعم', value: 'رد خلال دقيقتين', open: () => this.flash('فتحنا محادثة مع فريق الدعم') },
+        { ic: 'chat', label: 'فتح تذكرة دعم', value: 'رد خلال ٢٤ ساعة', open: () => this.openSupForm() },
         { ic: 'phone', label: 'اتصال هاتفي', value: '٨٠٠ ٢٠٠ ٢٠٠', open: () => this.flash('جاري الاتصال بدعم مقدّمات الخدمة…') },
-        { ic: 'doc', label: 'الأسئلة الشائعة', value: '١٨ موضوعاً', open: () => this.flash('مركز المساعدة — نموذج تجريبي') },
-        { ic: 'shield', label: 'الإبلاغ عن حادثة أو مخالفة', value: 'عاجل', open: () => this.flash('فتح نموذج الإبلاغ العاجل') }
+        { ic: 'doc', label: 'الأسئلة الشائعة', value: this.ar(this.FAQS.length) + ' سؤالاً', open: () => this.openFaq() },
+        { ic: 'shield', label: 'بلاغ سلامة أو مخالفة', value: 'عاجل', open: () => this.openSafety() },
+        { ic: 'doc', label: 'الشروط والأحكام والخصوصية', value: '', open: () => this.openLegal('terms') }
       ].map(r => ({ ...r, icon: this.icon(r.ic, 17) })),
 
       headerIcons: (() => {
@@ -6596,12 +7582,27 @@ class Component extends DCLogic {
 
       goPSvc: () => this.pgo('psvc'),
       pSvcCats: this.CATS.map(c => ({ label: c.name, style: this.chip(st.pSvcCat === c.id), pick: () => this.setState({ pSvcCat: c.id, pSvcOpen: null }) })),
-      pSvcSubs: this.subsOf(st.pSvcCat).map(s2 => {
+      pSvcSubs: this.pAllSubs(st.pSvcCat).map(s2 => {
         const cfg = st.pSvcCfg[s2.id];
         const open = st.pSvcOpen === s2.id && !!cfg;
+        const hidden = (cfg && cfg.hidden) || [];
+        const extra = (cfg && cfg.extra) || [];
         return {
           name: s2.name, desc: s2.desc, dur: s2.dur, on: !!cfg, open: open,
-          refLabel: 'السعر المرجعي ' + this.sar(s2.base),
+          own: !!s2.own,
+          edit: () => this.svcEdit(s2.id),
+          del: () => this.svcDelete(s2.id),
+          addOpt: () => this.optAdd(s2.id),
+          hasExtra: extra.length > 0,
+          extras: extra.map(x => ({
+            label: x.label, value: String(x.price),
+            style: this.field(false) + 'min-height:44px;font-size:12.5px;',
+            onChange: e => this.optSetPrice(s2.id, x.id, e.target.value),
+            remove: () => this.optRemove(s2.id, x.id)
+          })),
+          hasHidden: hidden.length > 0, hiddenCount: this.ar(hidden.length),
+          restore: () => this.optRestore(s2.id),
+          refLabel: s2.own ? 'سعرك ' + this.sar(s2.base) : 'السعر المرجعي ' + this.sar(s2.base),
           cardStyle: 'background:#fff;border:1.5px solid ' + (cfg ? '#A9628A' : '#F1E7F2') + ';border-radius:20px;padding:15px;display:flex;flex-direction:column;gap:12px;',
           toggle: () => this.pToggleSvc(s2),
           expand: () => this.setState(s3 => ({ pSvcOpen: s3.pSvcOpen === s2.id ? null : s2.id })),
@@ -6609,16 +7610,17 @@ class Component extends DCLogic {
           price: cfg ? String(cfg.price) : '',
           priceStyle: this.field(false) + 'min-height:46px;',
           onPrice: e => this.pSetSvcPrice(s2.id, e.target.value),
-          hasOpts: (s2.options || []).length > 0,
+          hasOpts: (s2.options || []).some(g => g.choices.some(c => hidden.indexOf(g.id + '|' + c.label) < 0)),
           optGroups: (s2.options || []).map(g => ({
             label: g.label,
-            choices: g.choices.map(c => ({
+            choices: g.choices.filter(c => hidden.indexOf(g.id + '|' + c.label) < 0).map(c => ({
               label: c.label,
               value: cfg ? String(cfg.opts[g.id + '|' + c.label] != null ? cfg.opts[g.id + '|' + c.label] : c.add) : '',
               style: this.field(false) + 'min-height:44px;font-size:12.5px;',
-              onChange: e => this.pSetOptPrice(s2.id, g.id + '|' + c.label, e.target.value)
+              onChange: e => this.pSetOptPrice(s2.id, g.id + '|' + c.label, e.target.value),
+              remove: () => this.optHide(s2.id, g.id + '|' + c.label)
             }))
-          }))
+          })).filter(g => g.choices.length > 0)
         };
       }),
       pSvcCount: this.ar(Object.keys(st.pSvcCfg).length) + ' خدمة فرعية مسعّرة',
@@ -6740,12 +7742,21 @@ class Component extends DCLogic {
       dBackStep1: () => this.setState({ dRegStep: 0, dOtpSent: false }),
       dRegFields2: [
         { key: 'name', label: 'الاسم الكامل', placeholder: 'مثال: مها الزهراني' },
-        { key: 'nid', label: 'رقم الهوية الوطنية', placeholder: '١٠ أرقام' },
-        { key: 'vehicle', label: 'المركبة', placeholder: 'مثال: تويوتا يارس — ح ب د ٤٥٢١' }
+        { key: 'nid', label: 'رقم الهوية الوطنية', placeholder: '١٠ أرقام' }
       ].map(f => ({
         ...f, value: st.reg[f.key], style: this.field(false),
         onChange: e => { const v = e.target.value; this.setState(s2 => ({ reg: { ...s2.reg, [f.key]: v } })); }
       })),
+      dVehFields: [
+        { key: 'vType', label: 'نوع المركبة', placeholder: 'سيارة صغيرة' },
+        { key: 'vModel', label: 'الموديل', placeholder: 'تويوتا يارس ٢٠٢٢' }
+      ].map(f => ({
+        ...f, value: st.reg[f.key], style: this.field(false),
+        onChange: e => { const v = e.target.value; this.setState(s2 => ({ reg: { ...s2.reg, [f.key]: v } })); }
+      })),
+      dPlateValue: st.reg.plate,
+      dPlateStyle: this.field(false),
+      onDPlate: e => { const v = e.target.value; this.setState(s2 => ({ reg: { ...s2.reg, plate: v } })); },
       pRegFields2: (st.pRegKind === 'org' ? [
         { key: 'cr', label: 'رقم السجل التجاري', placeholder: '١٠ أرقام' },
         { key: 'vat', label: 'الرقم الضريبي (اختياري)', placeholder: '١٥ رقم' },
